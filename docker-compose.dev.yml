@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Frontend Vue.js - Desenvolvimento com hot reload
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: doe-me-frontend-dev
+    ports:
+      - "3000:5173"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000/api
+      - VITE_HMR_HOST=localhost
+      - VITE_HMR_PORT=3000
+    networks:
+      - doe-me-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  doe-me-network:
+    driver: bridge
+    name: doe-me-network
+
+volumes:
+  node_modules:
+    driver: local
+

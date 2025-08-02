@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Frontend Vue.js - Produção
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: doe-me-frontend-prod
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=${API_URL:-http://localhost:8000/api}
+    networks:
+      - doe-me-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Nginx Load Balancer (para múltiplas instâncias)
+  nginx:
+    image: nginx:alpine
+    container_name: doe-me-nginx-lb
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx-lb.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+    networks:
+      - doe-me-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  doe-me-network:
+    driver: bridge
+    name: doe-me-network
+
