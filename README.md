@@ -1,5 +1,7 @@
 # Doe Me - Aplicação Web Híbrida
 
+[![doe-me-logo.png](https://i.postimg.cc/6QQb85mQ/doe-me-logo.png)](https://postimg.cc/4YrQMZZC)
+
 Uma aplicação web moderna e responsiva para doações, construída com Vue.js 3, TypeScript e Tailwind CSS. Projetada para ser uma PWA (Progressive Web App) e facilmente convertível para aplicativo móvel.
 
 ## 🌟 Características Principais
