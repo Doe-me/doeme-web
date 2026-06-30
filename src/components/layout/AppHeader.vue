@@ -8,7 +8,7 @@
             <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
               <HeartIcon class="w-5 h-5 text-white" />
             </div>
-            <span class="text-xl font-bold text-gray-900 hidden sm:block">Doe Me</span>
+            <span class="text-xl font-bold text-gray-900 hidden sm:block">{{ $t('common.appName') }}</span>
           </router-link>
         </div>
 
@@ -16,12 +16,12 @@
         <nav class="hidden md:flex space-x-8">
           <router-link
             v-for="item in navigation"
-            :key="item.name"
+            :key="item.href"
             :to="item.href"
             class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
             :class="{ 'text-primary-600 bg-primary-50': $route.path === item.href }"
           >
-            {{ item.name }}
+            {{ item.label }}
           </router-link>
         </nav>
 
@@ -35,11 +35,14 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar itens..."
+              :placeholder="$t('nav.searchPlaceholder')"
               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
               @keyup.enter="handleSearch"
             />
           </div>
+
+          <!-- Idioma -->
+          <LanguageSwitcher />
 
           <!-- Notificações -->
           <button
@@ -47,7 +50,7 @@
             type="button"
             class="relative p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 rounded-full"
           >
-            <span class="sr-only">Ver notificações</span>
+            <span class="sr-only">{{ $t('nav.viewNotifications') }}</span>
             <BellIcon class="h-6 w-6" />
             <span
               v-if="unreadNotifications > 0"
@@ -60,7 +63,7 @@
             <Menu as="div" class="relative inline-block text-left">
               <div>
                 <MenuButton class="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                  <span class="sr-only">Abrir menu do usuário</span>
+                  <span class="sr-only">{{ $t('nav.openUserMenu') }}</span>
                   <div
                     v-if="user?.avatar"
                     class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden"
@@ -88,7 +91,7 @@
               >
                 <MenuItems class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div class="py-1">
-                    <MenuItem v-for="item in userMenuItems" :key="item.name" v-slot="{ active }">
+                    <MenuItem v-for="item in userMenuItems" :key="item.href || item.label" v-slot="{ active }">
                       <router-link
                         v-if="item.href"
                         :to="item.href"
@@ -98,7 +101,7 @@
                         ]"
                       >
                         <component :is="item.icon" class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-                        {{ item.name }}
+                        {{ item.label }}
                       </router-link>
                       <button
                         v-else
@@ -109,7 +112,7 @@
                         ]"
                       >
                         <component :is="item.icon" class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-                        {{ item.name }}
+                        {{ item.label }}
                       </button>
                     </MenuItem>
                   </div>
@@ -124,13 +127,13 @@
               to="/login"
               class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
             >
-              Entrar
+              {{ $t('nav.login') }}
             </router-link>
             <router-link
               to="/register"
               class="btn-primary"
             >
-              Cadastrar
+              {{ $t('nav.register') }}
             </router-link>
           </div>
 
@@ -141,7 +144,7 @@
               type="button"
               class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
             >
-              <span class="sr-only">Abrir menu principal</span>
+              <span class="sr-only">{{ $t('nav.openMainMenu') }}</span>
               <Bars3Icon v-if="!mobileMenuOpen" class="block h-6 w-6" />
               <XMarkIcon v-else class="block h-6 w-6" />
             </button>
@@ -162,7 +165,7 @@
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar itens..."
+              :placeholder="$t('nav.searchPlaceholder')"
               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
               @keyup.enter="handleSearch"
             />
@@ -172,13 +175,13 @@
         <!-- Navegação Mobile -->
         <router-link
           v-for="item in navigation"
-          :key="item.name"
+          :key="item.href"
           :to="item.href"
           class="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
           :class="{ 'text-primary-600 bg-primary-50': $route.path === item.href }"
           @click="mobileMenuOpen = false"
         >
-          {{ item.name }}
+          {{ item.label }}
         </router-link>
       </div>
     </div>
@@ -188,6 +191,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import {
   HeartIcon,
@@ -203,9 +207,11 @@ import {
   ChatBubbleLeftRightIcon
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
+import LanguageSwitcher from '@/components/common/LanguageSwitcher.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 // State
 const searchQuery = ref('')
@@ -218,21 +224,21 @@ const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
 
 // Navigation items
-const navigation = [
-  { name: 'Início', href: '/' },
-  { name: 'Doações', href: '/donations' },
-  { name: 'Categorias', href: '/categories' },
-  { name: 'Como Funciona', href: '/how-it-works' },
-]
+const navigation = computed(() => [
+  { label: t('nav.home'), href: '/' },
+  { label: t('nav.donations'), href: '/donations' },
+  { label: t('nav.categories'), href: '/categories' },
+  { label: t('nav.howItWorks'), href: '/how-it-works' },
+])
 
 // User menu items
 const userMenuItems = computed(() => [
-  { name: 'Meu Perfil', href: '/profile', icon: UserIcon },
-  { name: 'Minhas Doações', href: '/my-donations', icon: HeartIcon },
-  { name: 'Conversas', href: '/chats', icon: ChatBubbleLeftRightIcon },
-  { name: 'Criar Doação', href: '/donations/create', icon: PlusIcon },
-  { name: 'Configurações', href: '/settings', icon: Cog6ToothIcon },
-  { name: 'Sair', action: handleLogout, icon: ArrowRightOnRectangleIcon },
+  { label: t('nav.myProfile'), href: '/profile', icon: UserIcon },
+  { label: t('nav.myDonations'), href: '/my-donations', icon: HeartIcon },
+  { label: t('nav.chats'), href: '/chats', icon: ChatBubbleLeftRightIcon },
+  { label: t('nav.createDonation'), href: '/donations/create', icon: PlusIcon },
+  { label: t('nav.settings'), href: '/settings', icon: Cog6ToothIcon },
+  { label: t('nav.logout'), action: handleLogout, icon: ArrowRightOnRectangleIcon },
 ])
 
 // Methods

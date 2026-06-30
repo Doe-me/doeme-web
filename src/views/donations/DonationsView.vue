@@ -5,17 +5,17 @@
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Doações Disponíveis</h1>
-            <p class="mt-2 text-gray-600">Encontre itens incríveis doados pela comunidade</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.list.title') }}</h1>
+            <p class="mt-2 text-gray-600">{{ $t('donations.list.subtitle') }}</p>
           </div>
-          
+
           <div class="mt-4 sm:mt-0">
             <router-link
               to="/donations/create"
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105"
             >
               <PlusIcon class="w-4 h-4 mr-2" />
-              Fazer uma doação
+              {{ $t('donations.list.makeADonation') }}
             </router-link>
           </div>
         </div>
@@ -31,19 +31,19 @@
               <input
                 v-model="filters.search"
                 type="text"
-                placeholder="Buscar itens..."
+                :placeholder="$t('donations.list.searchPlaceholder')"
                 class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
-          
+
           <!-- Category Filter -->
           <div>
             <select
               v-model="filters.category_id"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">Todas as categorias</option>
+              <option value="">{{ $t('donations.list.allCategories') }}</option>
               <option
                 v-for="category in categories"
                 :key="category.id"
@@ -53,22 +53,22 @@
               </option>
             </select>
           </div>
-          
+
           <!-- Condition Filter -->
           <div>
             <select
               v-model="filters.condition"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">Todas as condições</option>
-              <option value="new">Novo</option>
-              <option value="like_new">Seminovo</option>
-              <option value="good">Bom estado</option>
-              <option value="fair">Estado regular</option>
+              <option value="">{{ $t('donations.list.allConditions') }}</option>
+              <option value="new">{{ $t('donations.list.conditionNew') }}</option>
+              <option value="like_new">{{ $t('donations.list.conditionLikeNew') }}</option>
+              <option value="good">{{ $t('donations.list.conditionGood') }}</option>
+              <option value="fair">{{ $t('donations.list.conditionFair') }}</option>
             </select>
           </div>
         </div>
-        
+
         <!-- Advanced Filters -->
         <div class="mt-4 pt-4 border-t border-gray-200">
           <div class="flex flex-wrap items-center gap-4">
@@ -80,10 +80,10 @@
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label for="nearby" class="ml-2 text-sm text-gray-700">
-                Próximo a mim
+                {{ $t('donations.list.nearMe') }}
               </label>
             </div>
-            
+
             <div class="flex items-center">
               <input
                 id="available-only"
@@ -92,25 +92,25 @@
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label for="available-only" class="ml-2 text-sm text-gray-700">
-                Apenas disponíveis
+                {{ $t('donations.list.availableOnly') }}
               </label>
             </div>
-            
+
             <select
               v-model="filters.sort_by"
               class="px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             >
-              <option value="created_at">Mais recentes</option>
-              <option value="title">Nome A-Z</option>
-              <option value="distance">Mais próximos</option>
+              <option value="created_at">{{ $t('donations.list.sortRecent') }}</option>
+              <option value="title">{{ $t('donations.list.sortNameAZ') }}</option>
+              <option value="distance">{{ $t('donations.list.sortNearest') }}</option>
             </select>
-            
+
             <button
               v-if="hasActiveFilters"
               @click="clearFilters"
               class="text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
-              Limpar filtros
+              {{ $t('donations.list.clearFilters') }}
             </button>
           </div>
         </div>
@@ -124,43 +124,43 @@
               <GiftIcon class="h-8 w-8 text-blue-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Total de Itens</p>
+              <p class="text-sm font-medium text-gray-500">{{ $t('donations.list.statTotal') }}</p>
               <p class="text-2xl font-semibold text-gray-900">{{ stats.total }}</p>
             </div>
           </div>
         </div>
-        
+
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div class="flex items-center">
             <div class="flex-shrink-0">
               <CheckCircleIcon class="h-8 w-8 text-green-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Disponíveis</p>
+              <p class="text-sm font-medium text-gray-500">{{ $t('donations.list.statAvailable') }}</p>
               <p class="text-2xl font-semibold text-gray-900">{{ stats.available }}</p>
             </div>
           </div>
         </div>
-        
+
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div class="flex items-center">
             <div class="flex-shrink-0">
               <ClockIcon class="h-8 w-8 text-yellow-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Reservados</p>
+              <p class="text-sm font-medium text-gray-500">{{ $t('donations.list.statReserved') }}</p>
               <p class="text-2xl font-semibold text-gray-900">{{ stats.reserved }}</p>
             </div>
           </div>
         </div>
-        
+
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div class="flex items-center">
             <div class="flex-shrink-0">
               <HeartIcon class="h-8 w-8 text-red-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Doados</p>
+              <p class="text-sm font-medium text-gray-500">{{ $t('donations.list.statDonated') }}</p>
               <p class="text-2xl font-semibold text-gray-900">{{ stats.donated }}</p>
             </div>
           </div>
@@ -198,12 +198,12 @@
       <div v-else class="text-center py-12">
         <GiftIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
         <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ hasActiveFilters ? 'Nenhum item encontrado' : 'Nenhuma doação disponível' }}
+          {{ hasActiveFilters ? $t('donations.list.noItemsFound') : $t('donations.list.noDonationsAvailable') }}
         </h3>
         <p class="text-gray-600 mb-6">
-          {{ hasActiveFilters 
-            ? 'Tente ajustar seus filtros de busca.' 
-            : 'Seja o primeiro a fazer uma doação!' 
+          {{ hasActiveFilters
+            ? $t('donations.list.tryAdjustFilters')
+            : $t('donations.list.beFirstToDonate')
           }}
         </p>
         <div class="space-x-3">
@@ -212,14 +212,14 @@
             @click="clearFilters"
             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            Limpar filtros
+            {{ $t('donations.list.clearFilters') }}
           </button>
           <router-link
             to="/donations/create"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
             <PlusIcon class="w-4 h-4 mr-2" />
-            Fazer uma doação
+            {{ $t('donations.list.makeADonation') }}
           </router-link>
         </div>
       </div>
@@ -232,7 +232,7 @@
           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
         >
           <span v-if="loadingMore" class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></span>
-          {{ loadingMore ? 'Carregando...' : 'Carregar mais itens' }}
+          {{ loadingMore ? $t('donations.list.loading') : $t('donations.list.loadMore') }}
         </button>
       </div>
     </div>

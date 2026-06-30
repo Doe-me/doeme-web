@@ -3,7 +3,7 @@
     <div class="grid grid-cols-5 h-16">
       <router-link
         v-for="item in navigationItems"
-        :key="item.name"
+        :key="item.href"
         :to="item.href"
         class="flex flex-col items-center justify-center space-y-1 text-xs font-medium transition-colors duration-200"
         :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-gray-700'"
@@ -13,7 +13,7 @@
           class="h-6 w-6"
           :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-400'"
         />
-        <span>{{ item.name }}</span>
+        <span>{{ item.label }}</span>
         
         <!-- Badge para notificações -->
         <div
@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import {
   HomeIcon,
   HeartIcon,
@@ -50,34 +51,35 @@ import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 // Computed
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const navigationItems = computed(() => [
   {
-    name: 'Início',
+    label: t('mobileNav.home'),
     href: '/',
     icon: isActive('/') ? HomeIconSolid : HomeIcon,
   },
   {
-    name: 'Doações',
+    label: t('mobileNav.donations'),
     href: '/donations',
     icon: isActive('/donations') ? HeartIconSolid : HeartIcon,
   },
   {
-    name: 'Criar',
+    label: t('mobileNav.create'),
     href: isAuthenticated.value ? '/donations/create' : '/login',
     icon: isActive('/donations/create') ? PlusIconSolid : PlusIcon,
   },
   {
-    name: 'Chat',
+    label: t('mobileNav.chat'),
     href: isAuthenticated.value ? '/chats' : '/login',
     icon: isActive('/chats') ? ChatBubbleLeftRightIconSolid : ChatBubbleLeftRightIcon,
     badge: 0, // TODO: Implementar contagem de mensagens não lidas
   },
   {
-    name: 'Perfil',
+    label: t('mobileNav.profile'),
     href: isAuthenticated.value ? '/profile' : '/login',
     icon: isActive('/profile') ? UserIconSolid : UserIcon,
   },
