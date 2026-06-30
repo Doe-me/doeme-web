@@ -4,16 +4,16 @@
       <div class="text-center">
         <router-link to="/" class="inline-flex items-center">
           <span class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Doe Me
+            {{ $t('common.appName') }}
           </span>
         </router-link>
         <h2 class="mt-6 text-3xl font-bold text-gray-900">
-          Entre na sua conta
+          {{ $t('auth.login.title') }}
         </h2>
         <p class="mt-2 text-sm text-gray-600">
-          Ou
+          {{ $t('auth.login.or') }}
           <router-link to="/auth/register" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-            crie uma nova conta
+            {{ $t('auth.login.createAccount') }}
           </router-link>
         </p>
       </div>
@@ -22,7 +22,7 @@
         <div class="space-y-4">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-              E-mail
+              {{ $t('auth.login.email') }}
             </label>
             <input
               id="email"
@@ -30,7 +30,7 @@
               type="email"
               required
               class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-colors"
-              placeholder="seu@email.com"
+              :placeholder="$t('auth.login.emailPlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }"
             />
             <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
@@ -38,7 +38,7 @@
 
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-              Senha
+              {{ $t('auth.login.password') }}
             </label>
             <div class="relative">
               <input
@@ -47,7 +47,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 required
                 class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-colors"
-                placeholder="Sua senha"
+                :placeholder="$t('auth.login.passwordPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password }"
               />
               <button
@@ -72,13 +72,13 @@
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-              Lembrar de mim
+              {{ $t('auth.login.rememberMe') }}
             </label>
           </div>
 
           <div class="text-sm">
             <a href="#" class="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-              Esqueceu sua senha?
+              {{ $t('auth.login.forgotPassword') }}
             </a>
           </div>
         </div>
@@ -92,7 +92,7 @@
             <span v-if="loading" class="absolute left-0 inset-y-0 flex items-center pl-3">
               <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
             </span>
-            {{ loading ? 'Entrando...' : 'Entrar' }}
+            {{ loading ? $t('auth.login.submitting') : $t('auth.login.submit') }}
           </button>
         </div>
 
@@ -102,7 +102,7 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-white text-gray-500">Ou continue com</span>
+              <span class="px-2 bg-white text-gray-500">{{ $t('auth.login.orContinueWith') }}</span>
             </div>
           </div>
 
@@ -141,6 +141,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import { useToast } from 'vue-toastification'
@@ -148,6 +149,7 @@ import { useToast } from 'vue-toastification'
 const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToast()
+const { t } = useI18n()
 
 const loading = ref(false)
 const showPassword = ref(false)
@@ -168,22 +170,22 @@ const validateForm = () => {
   errors.password = ''
 
   if (!form.email) {
-    errors.email = 'E-mail é obrigatório'
+    errors.email = t('auth.login.emailRequired')
     return false
   }
 
   if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'E-mail inválido'
+    errors.email = t('auth.login.emailInvalid')
     return false
   }
 
   if (!form.password) {
-    errors.password = 'Senha é obrigatória'
+    errors.password = t('auth.login.passwordRequired')
     return false
   }
 
   if (form.password.length < 6) {
-    errors.password = 'Senha deve ter pelo menos 6 caracteres'
+    errors.password = t('auth.login.passwordMinLength')
     return false
   }
 
@@ -202,11 +204,11 @@ const handleLogin = async () => {
       remember: form.remember
     })
 
-    toast.success('Login realizado com sucesso!')
+    toast.success(t('auth.login.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || 'Erro ao fazer login')
-    
+    toast.error(error.message || t('auth.login.error'))
+
     if (error.errors) {
       Object.assign(errors, error.errors)
     }
@@ -218,10 +220,10 @@ const handleLogin = async () => {
 const handleSocialLogin = async (provider: 'google' | 'facebook') => {
   try {
     await authStore.socialLogin(provider)
-    toast.success('Login realizado com sucesso!')
+    toast.success(t('auth.login.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || `Erro ao fazer login com ${provider}`)
+    toast.error(error.message || t('auth.login.error'))
   }
 }
 </script>

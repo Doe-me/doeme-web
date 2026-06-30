@@ -4,16 +4,16 @@
       <div class="text-center">
         <router-link to="/" class="inline-flex items-center">
           <span class="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            Doe Me
+            {{ $t('common.appName') }}
           </span>
         </router-link>
         <h2 class="mt-6 text-3xl font-bold text-gray-900">
-          Crie sua conta
+          {{ $t('auth.register.title') }}
         </h2>
         <p class="mt-2 text-sm text-gray-600">
-          Ou
+          {{ $t('auth.register.or') }}
           <router-link to="/auth/login" class="font-medium text-green-600 hover:text-green-500 transition-colors">
-            entre na sua conta existente
+            {{ $t('auth.register.loginInstead') }}
           </router-link>
         </p>
       </div>
@@ -22,7 +22,7 @@
         <div class="space-y-4">
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-              Nome completo
+              {{ $t('auth.register.fullName') }}
             </label>
             <input
               id="name"
@@ -30,7 +30,7 @@
               type="text"
               required
               class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
-              placeholder="Seu nome completo"
+              :placeholder="$t('auth.register.fullNamePlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.name }"
             />
             <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
@@ -38,7 +38,7 @@
 
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-              E-mail
+              {{ $t('auth.register.email') }}
             </label>
             <input
               id="email"
@@ -46,7 +46,7 @@
               type="email"
               required
               class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
-              placeholder="seu@email.com"
+              :placeholder="$t('auth.register.emailPlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }"
             />
             <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
@@ -54,14 +54,14 @@
 
           <div>
             <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
-              Telefone
+              {{ $t('auth.register.phone') }}
             </label>
             <input
               id="phone"
               v-model="form.phone"
               type="tel"
               class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
-              placeholder="(11) 99999-9999"
+              :placeholder="$t('auth.register.phonePlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.phone }"
             />
             <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone }}</p>
@@ -69,7 +69,7 @@
 
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-              Senha
+              {{ $t('auth.register.password') }}
             </label>
             <div class="relative">
               <input
@@ -78,7 +78,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 required
                 class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
-                placeholder="Mínimo 8 caracteres"
+                :placeholder="$t('auth.register.passwordPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password }"
               />
               <button
@@ -95,7 +95,7 @@
 
           <div>
             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
-              Confirmar senha
+              {{ $t('auth.register.passwordConfirmation') }}
             </label>
             <div class="relative">
               <input
@@ -104,7 +104,7 @@
                 :type="showPasswordConfirmation ? 'text' : 'password'"
                 required
                 class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
-                placeholder="Confirme sua senha"
+                :placeholder="$t('auth.register.passwordConfirmationPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password_confirmation }"
               />
               <button
@@ -129,13 +129,13 @@
             class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
           />
           <label for="terms" class="ml-2 block text-sm text-gray-900">
-            Eu aceito os
+            {{ $t('auth.register.termsAccept') }}
             <router-link to="/terms" class="text-green-600 hover:text-green-500 font-medium">
-              Termos de Uso
+              {{ $t('auth.register.termsOfUse') }}
             </router-link>
-            e a
+            {{ $t('auth.register.and') }}
             <router-link to="/privacy" class="text-green-600 hover:text-green-500 font-medium">
-              Política de Privacidade
+              {{ $t('auth.register.privacyPolicy') }}
             </router-link>
           </label>
         </div>
@@ -149,7 +149,7 @@
             <span v-if="loading" class="absolute left-0 inset-y-0 flex items-center pl-3">
               <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
             </span>
-            {{ loading ? 'Criando conta...' : 'Criar conta' }}
+            {{ loading ? $t('auth.register.submitting') : $t('auth.register.submit') }}
           </button>
         </div>
 
@@ -159,7 +159,7 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-white text-gray-500">Ou registre-se com</span>
+              <span class="px-2 bg-white text-gray-500">{{ $t('auth.register.orRegisterWith') }}</span>
             </div>
           </div>
 
@@ -198,6 +198,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import { useToast } from 'vue-toastification'
@@ -205,6 +206,7 @@ import { useToast } from 'vue-toastification'
 const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToast()
+const { t } = useI18n()
 
 const loading = ref(false)
 const showPassword = ref(false)
@@ -236,31 +238,31 @@ const validateForm = () => {
   let isValid = true
 
   if (!form.name.trim()) {
-    errors.name = 'Nome é obrigatório'
+    errors.name = t('auth.register.nameRequired')
     isValid = false
   }
 
   if (!form.email) {
-    errors.email = 'E-mail é obrigatório'
+    errors.email = t('auth.register.emailRequired')
     isValid = false
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'E-mail inválido'
+    errors.email = t('auth.register.emailInvalid')
     isValid = false
   }
 
   if (!form.password) {
-    errors.password = 'Senha é obrigatória'
+    errors.password = t('auth.register.passwordRequired')
     isValid = false
   } else if (form.password.length < 8) {
-    errors.password = 'Senha deve ter pelo menos 8 caracteres'
+    errors.password = t('auth.register.passwordMinLength')
     isValid = false
   }
 
   if (!form.password_confirmation) {
-    errors.password_confirmation = 'Confirmação de senha é obrigatória'
+    errors.password_confirmation = t('auth.register.passwordConfirmationRequired')
     isValid = false
   } else if (form.password !== form.password_confirmation) {
-    errors.password_confirmation = 'Senhas não coincidem'
+    errors.password_confirmation = t('auth.register.passwordMismatch')
     isValid = false
   }
 
@@ -281,11 +283,11 @@ const handleRegister = async () => {
       password_confirmation: form.password_confirmation
     })
 
-    toast.success('Conta criada com sucesso!')
+    toast.success(t('auth.register.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || 'Erro ao criar conta')
-    
+    toast.error(error.message || t('auth.register.error'))
+
     if (error.errors) {
       Object.assign(errors, error.errors)
     }
@@ -297,10 +299,10 @@ const handleRegister = async () => {
 const handleSocialLogin = async (provider: 'google' | 'facebook') => {
   try {
     await authStore.socialLogin(provider)
-    toast.success('Conta criada com sucesso!')
+    toast.success(t('auth.register.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || `Erro ao registrar com ${provider}`)
+    toast.error(error.message || t('auth.register.error'))
   }
 }
 </script>

@@ -43,6 +43,8 @@
     "lint:check": "eslint .",
     "format": "prettier --write src/",
     "format:check": "prettier --check src/",
+    "i18n:extract": "vue-i18n-extract --vueFiles './src/**/*.vue' --languageFiles './src/locales/*.json' --output i18n-extract-report.json",
+    "i18n:add": "node scripts/i18n-add-locale.js",
     "clean": "rm -rf dist node_modules/.vite",
     "analyze": "vite build --mode analyze",
     "serve": "vite preview --port 4173",
@@ -77,6 +79,7 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "vue": "^3.5.18",
+    "vue-i18n": "^11.4.2",
     "vue-router": "^4.5.1",
     "vue-toastification": "^2.0.0-rc.5"
   },
@@ -100,6 +103,7 @@
     "vite": "^7.0.6",
     "vite-plugin-vue-devtools": "^8.0.0",
     "vitest": "^3.2.4",
+    "vue-i18n-extract": "^2.0.7",
     "vue-tsc": "^3.0.4"
   }
 }

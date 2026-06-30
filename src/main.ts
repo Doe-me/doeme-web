@@ -5,6 +5,7 @@ import 'vue-toastification/dist/index.css'
 
 import App from './App.vue'
 import router from './router'
+import i18n from './locales'
 
 import './assets/main.css'
 
@@ -15,6 +16,9 @@ app.use(createPinia())
 
 // Vue Router
 app.use(router)
+
+// i18n (pt-BR padrão, en-US, es-ES)
+app.use(i18n)
 
 // Toast notifications
 app.use(Toast, {

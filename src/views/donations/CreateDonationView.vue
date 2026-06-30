@@ -11,11 +11,11 @@
             <ArrowLeftIcon class="w-5 h-5" />
           </button>
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Fazer uma Doação</h1>
-            <p class="mt-2 text-gray-600">Compartilhe um item que você não usa mais</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.create.title') }}</h1>
+            <p class="mt-2 text-gray-600">{{ $t('donations.create.subtitle') }}</p>
           </div>
         </div>
-        
+
         <!-- Progress Steps -->
         <div class="flex items-center justify-center mb-8">
           <div class="flex items-center space-x-4">
@@ -23,21 +23,21 @@
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">
                 1
               </div>
-              <span class="ml-2 text-sm font-medium text-blue-600">Informações</span>
+              <span class="ml-2 text-sm font-medium text-blue-600">{{ $t('donations.create.stepInfo') }}</span>
             </div>
             <div class="w-16 h-0.5 bg-gray-300"></div>
             <div class="flex items-center">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
                 2
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">Fotos</span>
+              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepPhotos') }}</span>
             </div>
             <div class="w-16 h-0.5 bg-gray-300"></div>
             <div class="flex items-center">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
                 3
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">Localização</span>
+              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepLocation') }}</span>
             </div>
           </div>
         </div>
@@ -46,13 +46,13 @@
       <form @submit.prevent="handleSubmit" class="space-y-8">
         <!-- Basic Information -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Informações Básicas</h2>
-          
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ $t('donations.create.basicInfo') }}</h2>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Title -->
             <div class="md:col-span-2">
               <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
-                Título da doação *
+                {{ $t('donations.create.donationTitle') }} *
               </label>
               <input
                 id="title"
@@ -60,7 +60,7 @@
                 type="text"
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Ex: Sofá 3 lugares em bom estado"
+                :placeholder="$t('donations.create.donationTitlePlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.title }"
               />
               <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
@@ -69,7 +69,7 @@
             <!-- Category -->
             <div>
               <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
-                Categoria *
+                {{ $t('donations.create.category') }} *
               </label>
               <select
                 id="category"
@@ -78,7 +78,7 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.category_id }"
               >
-                <option value="">Selecione uma categoria</option>
+                <option value="">{{ $t('donations.create.selectCategory') }}</option>
                 <option
                   v-for="category in categories"
                   :key="category.id"
@@ -93,7 +93,7 @@
             <!-- Condition -->
             <div>
               <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
-                Estado do item *
+                {{ $t('donations.create.condition') }} *
               </label>
               <select
                 id="condition"
@@ -102,11 +102,11 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
               >
-                <option value="">Selecione o estado</option>
-                <option value="new">Novo</option>
-                <option value="like_new">Seminovo</option>
-                <option value="good">Bom estado</option>
-                <option value="fair">Estado regular</option>
+                <option value="">{{ $t('donations.create.selectCondition') }}</option>
+                <option value="new">{{ $t('donations.list.conditionNew') }}</option>
+                <option value="like_new">{{ $t('donations.list.conditionLikeNew') }}</option>
+                <option value="good">{{ $t('donations.list.conditionGood') }}</option>
+                <option value="fair">{{ $t('donations.list.conditionFair') }}</option>
               </select>
               <p v-if="errors.condition" class="mt-1 text-sm text-red-600">{{ errors.condition }}</p>
             </div>
@@ -114,7 +114,7 @@
             <!-- Description -->
             <div class="md:col-span-2">
               <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                Descrição *
+                {{ $t('donations.create.description') }} *
               </label>
               <textarea
                 id="description"
@@ -122,18 +122,18 @@
                 rows="4"
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Descreva o item, suas características, motivo da doação, etc."
+                :placeholder="$t('donations.create.descriptionPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
               ></textarea>
               <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
-              <p class="mt-1 text-sm text-gray-500">Mínimo 20 caracteres</p>
+              <p class="mt-1 text-sm text-gray-500">{{ $t('donations.create.descriptionMinLength') }}</p>
             </div>
           </div>
         </div>
 
         <!-- Images -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Fotos do Item</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ $t('donations.create.photosTitle') }}</h2>
           
           <!-- Image Upload Area -->
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
