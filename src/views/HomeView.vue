@@ -1,36 +1,38 @@
 <template>
   <div class="home">
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white">
-      <div class="absolute inset-0 bg-black opacity-10"></div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div class="text-center">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-shadow-lg">
-            Doe com o
-            <span class="text-yellow-300">❤️</span>
+    <!-- Hero Section: amber brand surface, no gradient -->
+    <section class="bg-brand-400">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+        <div class="text-center max-w-3xl mx-auto">
+          <h1 class="font-display text-gray-900 mb-6 leading-none tracking-tight"
+              style="font-size: clamp(2.5rem, 6vw, 4.5rem)">
+            Doe com o coração
           </h1>
-          <p class="text-xl sm:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
-            Conecte-se com pessoas da sua comunidade e transforme vidas através da generosidade.
-            Doe o que não usa mais e ajude quem precisa.
+          <p class="text-lg sm:text-xl text-gray-800 mb-3 max-w-2xl mx-auto leading-relaxed">
+            Conecte-se com pessoas da sua comunidade. Doe o que não usa mais
+            e ajude quem precisa — simples assim.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <p class="text-sm text-gray-700 mb-10">
+            Mais de {{ stats[0].value }} itens já encontraram novo lar na vizinhança.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <router-link
               to="/donations"
-              class="btn bg-white text-primary-600 hover:bg-gray-100 text-lg px-8 py-3 font-semibold"
+              class="inline-flex items-center justify-center rounded-lg bg-gray-900 text-white text-base font-semibold px-7 py-3 hover:bg-gray-800 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
             >
               Ver Doações
             </router-link>
             <router-link
               v-if="isAuthenticated"
               to="/donations/create"
-              class="btn bg-yellow-400 text-gray-900 hover:bg-yellow-300 text-lg px-8 py-3 font-semibold"
+              class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-50 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-400"
             >
               Fazer Doação
             </router-link>
             <router-link
               v-else
               to="/register"
-              class="btn bg-yellow-400 text-gray-900 hover:bg-yellow-300 text-lg px-8 py-3 font-semibold"
+              class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-50 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-400"
             >
               Começar Agora
             </router-link>
@@ -39,75 +41,61 @@
       </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="py-16 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-          <div v-for="stat in stats" :key="stat.label" class="fade-in">
-            <div class="text-3xl lg:text-4xl font-bold text-primary-600 mb-2">
-              {{ stat.value }}
-            </div>
-            <div class="text-gray-600 font-medium">{{ stat.label }}</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="py-20 bg-gray-50">
+    <!-- How It Works Section: flow without number badges -->
+    <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
             Como Funciona
           </h2>
-          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-            Doar nunca foi tão simples. Siga estes passos e faça a diferença na vida de alguém.
+          <p class="text-lg text-gray-600 max-w-xl mx-auto">
+            Três passos e um item que estava parado começa uma nova história.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
-          <div v-for="(step, index) in howItWorksSteps" :key="step.title" class="text-center fade-in">
-            <div class="relative mb-6">
-              <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <component :is="step.icon" class="w-8 h-8 text-primary-600" />
-              </div>
-              <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                {{ index + 1 }}
-              </div>
+        <div class="grid md:grid-cols-3 gap-10 lg:gap-16 relative">
+          <!-- Connector line (desktop only) -->
+          <div class="hidden md:block absolute top-8 left-1/3 right-1/3 h-px bg-gray-200" aria-hidden="true"></div>
+
+          <div v-for="step in howItWorksSteps" :key="step.title" class="flex flex-col items-center text-center fade-in">
+            <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mb-5 shrink-0 relative z-10">
+              <component :is="step.icon" class="w-7 h-7 text-brand-700" />
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ step.title }}</h3>
-            <p class="text-gray-600">{{ step.description }}</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ step.title }}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed max-w-xs">{{ step.description }}</p>
           </div>
         </div>
 
         <div class="text-center mt-12">
           <router-link
             to="/how-it-works"
-            class="btn-primary text-lg px-8 py-3"
+            class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm gap-1 transition-colors"
           >
-            Saiba Mais
+            Saiba mais
+            <span aria-hidden="true">→</span>
           </router-link>
         </div>
       </div>
     </section>
 
     <!-- Featured Donations -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-gray-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center mb-12">
+        <div class="flex justify-between items-end mb-10">
           <div>
-            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
               Doações em Destaque
             </h2>
-            <p class="text-xl text-gray-600">
-              Veja alguns itens disponíveis para doação
+            <p class="text-gray-600">
+              Itens disponíveis agora perto de você
             </p>
           </div>
           <router-link
             to="/donations"
-            class="btn-outline hidden sm:inline-flex"
+            class="hidden sm:inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm gap-1 transition-colors"
           >
-            Ver Todas
+            Ver todas
+            <span aria-hidden="true">→</span>
           </router-link>
         </div>
 
@@ -166,13 +154,13 @@
     </section>
 
     <!-- Categories Section -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
             Categorias Populares
           </h2>
-          <p class="text-xl text-gray-600">
+          <p class="text-gray-600">
             Encontre doações por categoria
           </p>
         </div>
@@ -196,10 +184,10 @@
             class="card hover:shadow-md transition-shadow duration-200 fade-in"
           >
             <div class="card-body text-center">
-              <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <div class="w-12 h-12 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-3">
                 <span class="text-2xl">{{ category.icon || '📦' }}</span>
               </div>
-              <h3 class="font-medium text-gray-900">{{ category.name }}</h3>
+              <h3 class="font-medium text-gray-900 text-sm">{{ category.name }}</h3>
             </div>
           </router-link>
         </div>
@@ -215,26 +203,26 @@
       </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 bg-primary-600 text-white">
-      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+    <!-- CTA Section: dark surface instead of corporate blue -->
+    <section class="py-20 bg-gray-900 text-white">
+      <div class="max-w-2xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl lg:text-3xl font-bold mb-4">
           Pronto para Fazer a Diferença?
         </h2>
-        <p class="text-xl mb-8 text-primary-100">
-          Junte-se à nossa comunidade e ajude a criar um mundo mais generoso e sustentável.
+        <p class="text-gray-400 mb-8 text-lg leading-relaxed">
+          Junte-se à nossa comunidade e ajude a criar um bairro mais generoso.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <router-link
             v-if="!isAuthenticated"
             to="/register"
-            class="btn bg-white text-primary-600 hover:bg-gray-100 text-lg px-8 py-3 font-semibold"
+            class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-100 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             Criar Conta Grátis
           </router-link>
           <router-link
             to="/donations/create"
-            class="btn bg-yellow-400 text-gray-900 hover:bg-yellow-300 text-lg px-8 py-3 font-semibold"
+            class="inline-flex items-center justify-center rounded-lg bg-brand-400 text-gray-900 text-base font-semibold px-7 py-3 hover:bg-brand-500 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
           >
             {{ isAuthenticated ? 'Fazer Doação' : 'Começar Agora' }}
           </router-link>
@@ -279,17 +267,17 @@ const stats = [
 const howItWorksSteps = [
   {
     title: 'Cadastre seu Item',
-    description: 'Tire fotos e descreva o item que você quer doar. É rápido e fácil!',
+    description: 'Tire fotos e descreva o item que você quer doar. É rápido e fácil.',
     icon: CameraIcon,
   },
   {
     title: 'Conecte-se',
-    description: 'Pessoas interessadas entrarão em contato através do nosso chat.',
+    description: 'Pessoas interessadas entram em contato pelo chat integrado.',
     icon: ChatBubbleLeftRightIcon,
   },
   {
     title: 'Faça a Diferença',
-    description: 'Combine a entrega e veja o impacto positivo da sua generosidade.',
+    description: 'Combine a entrega e veja o impacto da sua generosidade.',
     icon: StarIcon,
   },
 ]
@@ -311,7 +299,7 @@ const loadCategories = async () => {
   try {
     loadingCategories.value = true
     const response = await categoriesApi.getAll(false) as Category[]
-    categories.value = response.slice(0, 6) // Mostrar apenas 6 categorias
+    categories.value = response.slice(0, 6)
   } catch (error) {
     console.error('Erro ao carregar categorias:', error)
   } finally {
@@ -328,13 +316,13 @@ onMounted(() => {
 
 <style scoped>
 .fade-in {
-  animation: fadeIn 0.6s ease-in-out;
+  animation: fadeIn 0.5s ease-out both;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -342,8 +330,9 @@ onMounted(() => {
   }
 }
 
-.text-shadow-lg {
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none;
+  }
 }
 </style>
-
