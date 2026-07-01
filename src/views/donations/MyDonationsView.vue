@@ -109,27 +109,28 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
 
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="loadData"
+      />
+
       <!-- Empty State -->
-      <div v-else-if="filteredDonations.length === 0" class="text-center py-12">
-        <GiftIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ donations.length === 0 ? 'Nenhuma doação encontrada' : 'Nenhum item corresponde aos filtros' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ donations.length === 0 ? 'Comece criando sua primeira doação!' : 'Tente ajustar os filtros de busca.' }}
-        </p>
-        <router-link
-          v-if="donations.length === 0"
-          to="/donations/create"
-          class="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-flex items-center"
-        >
-          <PlusIcon class="h-5 w-5 mr-2" />
-          Criar Primeira Doação
-        </router-link>
-      </div>
+      <EmptyState
+        v-else-if="filteredDonations.length === 0"
+        :title="donations.length === 0 ? 'Nenhuma doação ainda' : 'Nenhum item corresponde aos filtros'"
+        :description="donations.length === 0 ? 'Comece criando sua primeira doação!' : 'Tente ajustar os filtros de busca.'"
+        :action-text="donations.length === 0 ? 'Criar Primeira Doação' : undefined"
+        :action-to="donations.length === 0 ? '/donations/create' : undefined"
+      >
+        <template #icon>
+          <GiftIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Donations Grid -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -300,6 +301,10 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useDonationsStore } from '@/stores/donations'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   PlusIcon,
   GiftIcon,
@@ -323,8 +328,10 @@ import type { DonationItem, Category } from '@/types'
 const authStore = useAuthStore()
 const donationsStore = useDonationsStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
+const errorMessage = ref('')
 const donations = ref<DonationItem[]>([])
 const categories = ref<Category[]>([])
 const currentPage = ref(1)
@@ -466,52 +473,52 @@ const loadData = async () => {
       }
     ]
 
-    const mockCategories = ref([
-      { 
-        id: 1, 
+    categories.value = [
+      {
+        id: 1,
         name: 'Móveis',
         slug: 'moveis',
         active: true,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z'
       },
-      { 
-        id: 2, 
+      {
+        id: 2,
         name: 'Livros',
         slug: 'livros',
         active: true,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z'
       },
-      { 
-        id: 3, 
+      {
+        id: 3,
         name: 'Roupas',
         slug: 'roupas',
         active: true,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z'
       },
-      { 
-        id: 4, 
+      {
+        id: 4,
         name: 'Eletrônicos',
         slug: 'eletronicos',
         active: true,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z'
       },
-      { 
-        id: 5, 
+      {
+        id: 5,
         name: 'Brinquedos',
         slug: 'brinquedos',
         active: true,
         created_at: '2024-01-01T00:00:00Z',
         updated_at: '2024-01-01T00:00:00Z'
       }
-    ])
+    ]
     
   } catch (error) {
-    console.error('Erro ao carregar dados:', error)
-    toast.error('Erro ao carregar suas doações')
+    handleError(error, 'Erro ao carregar suas doações')
+    errorMessage.value = 'Não foi possível carregar suas doações.'
   } finally {
     loading.value = false
   }
@@ -538,8 +545,7 @@ const deleteDonation = async () => {
     toast.success('Doação excluída com sucesso!')
     
   } catch (error) {
-    console.error('Erro ao excluir doação:', error)
-    toast.error('Erro ao excluir doação')
+    handleError(error, 'Erro ao excluir doação')
   } finally {
     showDeleteModal.value = false
     donationToDelete.value = null

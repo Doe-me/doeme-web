@@ -94,30 +94,28 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
 
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="loadData"
+      />
+
       <!-- Empty State -->
-      <div v-else-if="currentReviews.length === 0" class="text-center py-12">
-        <StarIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ activeTab === 'received' ? 'Nenhuma avaliação recebida' : 'Nenhuma avaliação feita' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ activeTab === 'received' 
-            ? 'Quando outros usuários avaliarem você, as avaliações aparecerão aqui.' 
-            : 'Avalie outros usuários após receber doações para ajudar a comunidade!' 
-          }}
-        </p>
-        <router-link
-          v-if="activeTab === 'given'"
-          to="/donations"
-          class="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-flex items-center"
-        >
-          <GiftIcon class="h-5 w-5 mr-2" />
-          Explorar Doações
-        </router-link>
-      </div>
+      <EmptyState
+        v-else-if="currentReviews.length === 0"
+        :title="activeTab === 'received' ? 'Nenhuma avaliação recebida' : 'Nenhuma avaliação feita'"
+        :description="activeTab === 'received' ? 'Quando outros usuários avaliarem você, as avaliações aparecerão aqui.' : 'Avalie outros usuários após receber doações para ajudar a comunidade!'"
+        :action-text="activeTab === 'given' ? 'Explorar Doações' : undefined"
+        :action-to="activeTab === 'given' ? '/donations' : undefined"
+      >
+        <template #icon>
+          <StarIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Reviews List -->
       <div v-else class="space-y-6">
@@ -311,6 +309,10 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useReviewsStore } from '@/stores/reviews'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   StarIcon,
   ChatBubbleLeftRightIcon,
@@ -331,8 +333,10 @@ const router = useRouter()
 const authStore = useAuthStore()
 const reviewsStore = useReviewsStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
+const errorMessage = ref('')
 const activeTab = ref<'received' | 'given'>('received')
 const showDeleteModal = ref(false)
 const reviewToDelete = ref<Review | null>(null)
@@ -376,15 +380,16 @@ onMounted(async () => {
 const loadData = async () => {
   try {
     loading.value = true
-    
+    errorMessage.value = ''
+
     await Promise.all([
       loadReceivedReviews(),
       loadReviewStats()
     ])
-    
+
   } catch (error) {
-    console.error('Erro ao carregar dados:', error)
-    toast.error('Erro ao carregar avaliações')
+    handleError(error, 'Erro ao carregar avaliações')
+    errorMessage.value = 'Não foi possível carregar suas avaliações.'
   } finally {
     loading.value = false
   }
@@ -538,14 +543,13 @@ const confirmDeleteReview = (review: Review) => {
 
 const deleteReview = async () => {
   if (!reviewToDelete.value) return
-  
+
   try {
     // Simular exclusão
     givenReviews.value = givenReviews.value.filter(r => r.id !== reviewToDelete.value?.id)
     toast.success('Avaliação excluída com sucesso!')
   } catch (error) {
-    console.error('Erro ao excluir avaliação:', error)
-    toast.error('Erro ao excluir avaliação')
+    handleError(error, 'Erro ao excluir avaliação')
   } finally {
     showDeleteModal.value = false
     reviewToDelete.value = null
