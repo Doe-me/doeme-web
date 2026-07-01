@@ -33,16 +33,16 @@
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div v-for="i in 8" :key="i" class="animate-pulse">
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="w-12 h-12 bg-gray-200 rounded-lg mb-4"></div>
-            <div class="h-4 bg-gray-200 rounded mb-2"></div>
-            <div class="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </div>
+      <div v-if="loading" class="flex justify-center items-center py-16">
+        <LoadingSpinner size="lg" />
       </div>
+
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="onMounted"
+      />
 
       <!-- Categories Grid -->
       <div v-else-if="filteredCategories.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -89,20 +89,17 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12">
-        <FolderIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma categoria encontrada</h3>
-        <p class="text-gray-600 mb-6">
-          {{ searchQuery ? 'Tente ajustar sua busca.' : 'Não há categorias disponíveis no momento.' }}
-        </p>
-        <button
-          v-if="searchQuery"
-          @click="searchQuery = ''"
-          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-        >
-          Limpar busca
-        </button>
-      </div>
+      <EmptyState
+        v-else
+        :title="searchQuery ? 'Nenhuma categoria encontrada' : 'Sem categorias disponíveis'"
+        :description="searchQuery ? 'Tente ajustar sua busca.' : 'Não há categorias disponíveis no momento.'"
+        :action-text="searchQuery ? 'Limpar busca' : undefined"
+        :action-click="searchQuery ? () => { searchQuery = '' } : undefined"
+      >
+        <template #icon>
+          <FolderIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Popular Categories Section -->
       <div v-if="!searchQuery && popularCategories.length > 0" class="mt-16">
@@ -113,25 +110,18 @@
             v-for="category in popularCategories"
             :key="category.id"
             @click="goToCategory(category)"
-            class="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white cursor-pointer hover:shadow-lg transition-all duration-200 group overflow-hidden"
+            class="bg-primary-600 rounded-lg p-6 text-white cursor-pointer hover:bg-primary-700 hover:shadow-lg transition-all duration-200 group"
           >
-            <!-- Background Pattern -->
-            <div class="absolute inset-0 opacity-10">
-              <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23ffffff\" fill-opacity=\"0.1\"><circle cx=\"30\" cy=\"30\" r=\"4\"/></g></g></svg>')"></div>
+            <div class="flex items-center justify-between mb-4">
+              <component
+                :is="getCategoryIcon(category.icon)"
+                class="w-8 h-8 group-hover:scale-110 transition-transform duration-200"
+              />
+              <span class="text-2xl font-bold">{{ category.items_count }}</span>
             </div>
-            
-            <div class="relative">
-              <div class="flex items-center justify-between mb-4">
-                <component
-                  :is="getCategoryIcon(category.icon)"
-                  class="w-8 h-8 group-hover:scale-110 transition-transform duration-200"
-                />
-                <span class="text-2xl font-bold">{{ category.items_count }}</span>
-              </div>
-              
-              <h3 class="text-xl font-semibold mb-2">{{ category.name }}</h3>
-              <p class="text-blue-100 text-sm">{{ category.items_count }} itens disponíveis</p>
-            </div>
+
+            <h3 class="text-xl font-semibold mb-2">{{ category.name }}</h3>
+            <p class="text-primary-100 text-sm">{{ category.items_count }} itens disponíveis</p>
           </div>
         </div>
       </div>
@@ -143,6 +133,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCategoriesStore } from '@/stores/categories'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   MagnifyingGlassIcon,
   GiftIcon,
@@ -160,8 +154,10 @@ import {
 
 const router = useRouter()
 const categoriesStore = useCategoriesStore()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
+const errorMessage = ref('')
 const searchQuery = ref('')
 const sortBy = ref('name')
 
@@ -226,7 +222,8 @@ onMounted(async () => {
   try {
     await categoriesStore.fetchCategories()
   } catch (error) {
-    console.error('Error loading categories:', error)
+    handleError(error, 'Erro ao carregar categorias')
+    errorMessage.value = 'Não foi possível carregar as categorias.'
   } finally {
     loading.value = false
   }

@@ -83,7 +83,10 @@
     >
       <!-- Loading de mensagens antigas -->
       <div v-if="loadingOlderMessages" class="text-center py-2">
-        <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+        <svg class="animate-spin h-6 w-6 text-primary-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
       </div>
       
       <!-- Mensagens -->
@@ -282,12 +285,14 @@ import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useChatsStore } from '@/stores/chats'
 import { useAuthStore } from '@/stores/auth'
+import { useErrorHandler } from '@/utils/errorHandler'
 import type { Chat, ChatMessage, User } from '@/types'
 
 const route = useRoute()
 const toast = useToast()
 const chatsStore = useChatsStore()
 const authStore = useAuthStore()
+const { handleError } = useErrorHandler()
 
 const chat = ref<Chat | null>(null)
 const messages = ref<ChatMessage[]>([])
@@ -327,7 +332,7 @@ const loadChat = async () => {
     const chatId = route.params.id as string
     chat.value = await chatsStore.fetchChat(chatId)
   } catch (error) {
-    toast.error('Erro ao carregar conversa')
+    handleError(error, 'Erro ao carregar conversa')
   }
 }
 
@@ -336,24 +341,24 @@ const loadMessages = async () => {
     const chatId = route.params.id as string
     messages.value = await chatsStore.fetchMessages(chatId)
   } catch (error) {
-    toast.error('Erro ao carregar mensagens')
+    handleError(error, 'Erro ao carregar mensagens')
   }
 }
 
 const sendMessage = async () => {
   if (!newMessage.value.trim() || !chat.value) return
-  
+
   isSending.value = true
-  
+
   try {
     const message = await chatsStore.sendMessage(chat.value.id, newMessage.value.trim())
     messages.value.push(message)
     newMessage.value = ''
-    
+
     await nextTick()
     scrollToBottom()
   } catch (error) {
-    toast.error('Erro ao enviar mensagem')
+    handleError(error, 'Erro ao enviar mensagem')
   } finally {
     isSending.value = false
   }

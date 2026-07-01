@@ -2,21 +2,15 @@
   <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
-      <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+      <LoadingSpinner size="xl" />
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="container mx-auto px-4 py-8">
-      <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <h2 class="text-xl font-semibold text-red-800 mb-2">Erro ao carregar doação</h2>
-        <p class="text-red-600 mb-4">{{ error }}</p>
-        <button 
-          @click="$router.go(-1)"
-          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-        >
-          Voltar
-        </button>
-      </div>
+      <ErrorState
+        :description="error"
+        @retry="loadDonation"
+      />
     </div>
 
     <!-- Main Content -->
@@ -265,6 +259,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useDonationsStore } from '@/stores/donations'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   ArrowLeftIcon,
   HeartIcon,
@@ -290,6 +287,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const donationsStore = useDonationsStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
 const error = ref('')
@@ -394,8 +392,8 @@ const loadDonation = async () => {
     ]
     
   } catch (err) {
-    error.value = 'Não foi possível carregar os detalhes da doação'
-    console.error('Erro ao carregar doação:', err)
+    handleError(err, 'Erro ao carregar doação')
+    error.value = 'Não foi possível carregar os detalhes da doação.'
   } finally {
     loading.value = false
   }
