@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Functional blue — interactive states, links, focus rings, product UI
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -20,6 +21,24 @@ export default {
           900: '#0c4a6e',
           950: '#082f49',
         },
+        // Brand amber — the Doe Me identity color (generous corner aesthetic)
+        // Strategy: "committed" — amber carries brand moments, CTAs, highlights
+        // OKLCH canonical values documented in DESIGN.md
+        brand: {
+          50:  'oklch(0.987 0.022 95)',
+          100: 'oklch(0.962 0.059 95)',
+          200: 'oklch(0.924 0.120 95)',
+          300: 'oklch(0.879 0.169 91)',
+          400: 'oklch(0.829 0.198 84)',
+          500: 'oklch(0.769 0.188 74)',
+          600: 'oklch(0.692 0.159 55)',
+          700: 'oklch(0.594 0.134 41)',
+          800: 'oklch(0.484 0.104 31)',
+          900: 'oklch(0.398 0.081 26)',
+          950: 'oklch(0.285 0.065 22)',
+        },
+        // Deprecated: secondary (fuchsia) has no defined role in the Doe Me system.
+        // Do not use in new components. Will be removed in a future cleanup pass.
         secondary: {
           50: '#fdf4ff',
           100: '#fae8ff',
@@ -75,6 +94,8 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+        // Display serif for brand/marketing headings — contrast axis: serif display + sans body
+        display: ['Instrument Serif', 'Georgia', 'ui-serif', 'serif'],
       },
       spacing: {
         '18': '4.5rem',

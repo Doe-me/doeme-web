@@ -72,7 +72,7 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Heroes de página, títulos de seções de impacto. Máximo um por tela." },
+      "display": { "displayName": "Display — Instrument Serif", "purpose": "Heroes de página, títulos de campanhas de marketing. Máximo um por tela. Instrument Serif 400 (use font-display). Italic disponível para expressão de voz." },
       "headline": { "displayName": "Headline", "purpose": "H2 de seções, cabeçalhos de views principais." },
       "title": { "displayName": "Title", "purpose": "Títulos de cards, sidebars, modais, itens de lista." },
       "body": { "displayName": "Body", "purpose": "Todo texto de parágrafo. Max 70ch por coluna." },

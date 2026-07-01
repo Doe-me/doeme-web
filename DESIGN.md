@@ -17,9 +17,9 @@ colors:
   secondary: "#d946ef"
 typography:
   display:
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Instrument Serif, Georgia, ui-serif, serif"
     fontSize: "clamp(2rem, 5vw, 3.5rem)"
-    fontWeight: 700
+    fontWeight: 400
     lineHeight: 1.1
     letterSpacing: "-0.02em"
   headline:
@@ -161,12 +161,13 @@ O amarelo dourado do `accent` é o único elemento cromático com temperatura. O
 
 ## 3. Typography
 
-**Display/Body Font:** Inter (weights 100–900), com fallback system-ui, sans-serif.
+**Display Font:** Instrument Serif (weight 400, italic variant disponível), com fallback Georgia, ui-serif, serif.
+**Body Font:** Inter (weights 400–700), com fallback ui-sans-serif, system-ui, sans-serif.
 
-**Character:** Limpo e funcional. Inter no peso correto faz o trabalho de hierarquia sem precisar de fonte display. Quando uma segunda família for adicionada (TCK-018), deverá criar eixo de contraste genuíno — serif/sans — não apenas outra sans.
+**Character:** Eixo de contraste serif + sans: Instrument Serif carrega o gesto humano das headlines de marketing; Inter carrega a clareza funcional do produto. Instrument Serif em weight 400 tem presença suficiente — não forçar bold em display. O italic é uma ferramenta válida para expressão de voz, não meramente decorativo.
 
 ### Hierarchy
-- **Display** (700, clamp(2rem, 5vw, 3.5rem), line-height 1.1, letter-spacing -0.02em): Heroes de página, títulos de campanhas. Máximo um por tela.
+- **Display** (Instrument Serif 400, clamp(2rem, 5vw, 3.5rem), line-height 1.1, letter-spacing -0.02em): Heroes de página, títulos de campanhas. Máximo um por tela. Usar `font-display` do Tailwind.
 - **Headline** (700, clamp(1.5rem, 3vw, 2.25rem), line-height 1.2, letter-spacing -0.01em): H2 de seções, títulos de views principais.
 - **Title** (600, 1.125rem/18px, line-height 1.4): Títulos de cards, sidebars, modais. O peso 600 distingue sem precisar de tamanho grande.
 - **Body** (400, 0.9375rem/15px, line-height 1.6): Todo texto de parágrafo. Line-length máximo: 70ch em colunas de conteúdo.
