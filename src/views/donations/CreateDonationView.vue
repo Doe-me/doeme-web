@@ -133,63 +133,21 @@
 
         <!-- Images -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ $t('donations.create.photosTitle') }}</h2>
-          
-          <!-- Image Upload Area -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <!-- Existing Images -->
-            <div
-              v-for="(image, index) in form.images"
-              :key="index"
-              class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group"
-            >
-              <img
-                :src="getImageUrl(image)"
-                :alt="`Imagem ${index + 1}`"
-                class="w-full h-full object-cover"
-              />
-              <button
-                type="button"
-                @click="removeImage(index)"
-                class="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <XMarkIcon class="w-4 h-4" />
-              </button>
-            </div>
-            
-            <!-- Upload Button -->
-            <button
-              v-if="form.images.length < 5"
-              type="button"
-              @click="triggerFileUpload"
-              class="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:text-gray-600 hover:border-gray-400 transition-colors"
-            >
-              <CameraIcon class="w-8 h-8 mb-2" />
-              <span class="text-sm font-medium">Adicionar foto</span>
-            </button>
-          </div>
-          
-          <input
-            ref="fileInput"
-            type="file"
-            accept="image/*"
-            multiple
-            @change="handleImageUpload"
-            class="hidden"
-          />
-          
-          <p class="text-sm text-gray-500">
+          <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('donations.create.photosTitle') }}</h2>
+          <p class="text-sm text-gray-500 mb-4">
             Adicione até 5 fotos. A primeira foto será a principal.
           </p>
-          <p v-if="errors.images" class="mt-1 text-sm text-red-600">{{ errors.images }}</p>
+
+          <ImageUpload v-model="selectedFiles" :max-files="5" :max-size-mb="5" />
+
+          <p v-if="errors.images" class="mt-2 text-sm text-red-600">{{ errors.images }}</p>
         </div>
 
         <!-- Location -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-6">Localização</h2>
-          
+
           <div class="space-y-4">
-            <!-- Address -->
             <div>
               <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
                 Endereço *
@@ -206,7 +164,6 @@
               <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
             </div>
 
-            <!-- Use Current Location -->
             <div class="flex items-center">
               <button
                 type="button"
@@ -219,7 +176,6 @@
               </button>
             </div>
 
-            <!-- Map Preview (placeholder) -->
             <div class="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
               <div class="text-center text-gray-500">
                 <MapIcon class="w-12 h-12 mx-auto mb-2" />
@@ -232,7 +188,7 @@
         <!-- Additional Options -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-6">Opções Adicionais</h2>
-          
+
           <div class="space-y-4">
             <div class="flex items-center">
               <input
@@ -245,7 +201,7 @@
                 Permitir retirada no local
               </label>
             </div>
-            
+
             <div class="flex items-center">
               <input
                 id="allow-delivery"
@@ -272,10 +228,18 @@
           <button
             type="submit"
             :disabled="loading"
-            class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+            class="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 transition-colors"
           >
             <span v-if="loading" class="inline-flex items-center">
-              <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+              <svg
+                class="animate-spin w-4 h-4 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
               Publicando...
             </span>
             <span v-else>Publicar Doação</span>
@@ -292,29 +256,29 @@ import { useRouter } from 'vue-router'
 import { useDonationsStore } from '@/stores/donations'
 import { useCategoriesStore } from '@/stores/categories'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
 import {
   ArrowLeftIcon,
-  CameraIcon,
-  XMarkIcon,
   MapPinIcon,
   MapIcon
 } from '@heroicons/vue/24/outline'
+import ImageUpload from '@/components/donations/ImageUpload.vue'
 
 const router = useRouter()
 const donationsStore = useDonationsStore()
 const categoriesStore = useCategoriesStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(false)
 const gettingLocation = ref(false)
-const fileInput = ref<HTMLInputElement>()
+const selectedFiles = ref<File[]>([])
 
 const form = reactive({
   title: '',
   description: '',
   category_id: '',
   condition: '',
-  images: [] as (File | string)[],
   location: {
     address: '',
     latitude: 0,
@@ -336,7 +300,6 @@ const errors = reactive({
 const categories = computed(() => categoriesStore.categories)
 
 const validateForm = () => {
-  // Reset errors
   Object.keys(errors).forEach(key => {
     errors[key as keyof typeof errors] = ''
   })
@@ -366,7 +329,7 @@ const validateForm = () => {
     isValid = false
   }
 
-  if (form.images.length === 0) {
+  if (selectedFiles.value.length === 0) {
     errors.images = 'Pelo menos uma foto é obrigatória'
     isValid = false
   }
@@ -379,38 +342,6 @@ const validateForm = () => {
   return isValid
 }
 
-const triggerFileUpload = () => {
-  fileInput.value?.click()
-}
-
-const handleImageUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const files = Array.from(target.files || [])
-  
-  if (files.length + form.images.length > 5) {
-    toast.error('Máximo de 5 fotos permitidas')
-    return
-  }
-  
-  form.images.push(...files)
-  
-  // Reset input
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
-}
-
-const removeImage = (index: number) => {
-  form.images.splice(index, 1)
-}
-
-const getImageUrl = (image: File | string) => {
-  if (typeof image === 'string') {
-    return image
-  }
-  return URL.createObjectURL(image)
-}
-
 const getCurrentLocation = () => {
   if (!navigator.geolocation) {
     toast.error('Geolocalização não é suportada pelo seu navegador')
@@ -420,20 +351,16 @@ const getCurrentLocation = () => {
   gettingLocation.value = true
 
   navigator.geolocation.getCurrentPosition(
-    async (position) => {
+    (position) => {
       form.location.latitude = position.coords.latitude
       form.location.longitude = position.coords.longitude
-      
-      // Here you would typically reverse geocode to get the address
-      // For now, we'll just show a placeholder
       form.location.address = `Lat: ${position.coords.latitude.toFixed(6)}, Lng: ${position.coords.longitude.toFixed(6)}`
-      
       gettingLocation.value = false
       toast.success('Localização obtida com sucesso!')
     },
-    (error) => {
+    (geoError) => {
       gettingLocation.value = false
-      toast.error('Erro ao obter localização: ' + error.message)
+      toast.error('Erro ao obter localização: ' + geoError.message)
     }
   )
 }
@@ -444,35 +371,44 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
+    // Step 1: create item without images
     const formData = new FormData()
-    
-    // Add basic fields
     formData.append('title', form.title)
     formData.append('description', form.description)
     formData.append('category_id', form.category_id)
     formData.append('condition', form.condition)
-    formData.append('location[address]', form.location.address)
-    formData.append('location[latitude]', form.location.latitude.toString())
-    formData.append('location[longitude]', form.location.longitude.toString())
+    formData.append('location', form.location.address)
+    if (form.location.latitude) {
+      formData.append('latitude', form.location.latitude.toString())
+    }
+    if (form.location.longitude) {
+      formData.append('longitude', form.location.longitude.toString())
+    }
     formData.append('allow_pickup', form.allow_pickup.toString())
     formData.append('allow_delivery', form.allow_delivery.toString())
-    
-    // Add images
-    form.images.forEach((image, index) => {
-      if (image instanceof File) {
-        formData.append(`images[${index}]`, image)
-      }
-    })
 
-    await donationsStore.createItem(formData)
-    
+    const newItem = await donationsStore.createItem(formData)
+
+    // Step 2: upload images to dedicated endpoint
+    if (selectedFiles.value.length > 0) {
+      try {
+        await donationsStore.uploadImages(newItem.id, selectedFiles.value)
+      } catch (uploadErr) {
+        toast.warning('Doação criada, mas houve um erro ao enviar as fotos. Você pode adicioná-las editando a doação.')
+        handleError(uploadErr, 'Erro ao enviar fotos')
+        router.push('/donations')
+        return
+      }
+    }
+
     toast.success('Doação publicada com sucesso!')
     router.push('/donations')
-  } catch (error: any) {
-    toast.error(error.message || 'Erro ao publicar doação')
-    
-    if (error.errors) {
-      Object.assign(errors, error.errors)
+  } catch (error) {
+    handleError(error, 'Erro ao publicar doação')
+
+    const apiError = error as { errors?: Record<string, string> }
+    if (apiError.errors) {
+      Object.assign(errors, apiError.errors)
     }
   } finally {
     loading.value = false
