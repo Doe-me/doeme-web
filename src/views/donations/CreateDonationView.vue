@@ -103,10 +103,10 @@
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
               >
                 <option value="">{{ $t('donations.create.selectCondition') }}</option>
-                <option value="new">{{ $t('donations.list.conditionNew') }}</option>
-                <option value="like_new">{{ $t('donations.list.conditionLikeNew') }}</option>
-                <option value="good">{{ $t('donations.list.conditionGood') }}</option>
-                <option value="fair">{{ $t('donations.list.conditionFair') }}</option>
+                <option value="Novo">{{ $t('donations.list.conditionNew') }}</option>
+                <option value="Usado - Excelente estado">{{ $t('donations.list.conditionLikeNew') }}</option>
+                <option value="Usado - Bom estado">{{ $t('donations.list.conditionGood') }}</option>
+                <option value="Usado - Estado regular">{{ $t('donations.list.conditionFair') }}</option>
               </select>
               <p v-if="errors.condition" class="mt-1 text-sm text-red-600">{{ errors.condition }}</p>
             </div>
@@ -272,10 +272,10 @@
           <button
             type="submit"
             :disabled="loading"
-            class="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+            class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
           >
             <span v-if="loading" class="inline-flex items-center">
-              <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
               Publicando...
             </span>
             <span v-else>Publicar Doação</span>

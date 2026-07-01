@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="loading" class="flex justify-center items-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <svg class="animate-spin h-12 w-12 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
     </div>
 
     <div v-else-if="donation" class="bg-white rounded-lg shadow-md p-6">
@@ -75,10 +75,10 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecione o estado</option>
-            <option value="novo">Novo</option>
-            <option value="seminovo">Seminovo</option>
-            <option value="usado">Usado</option>
-            <option value="precisa_reparo">Precisa de reparo</option>
+            <option value="Novo">Novo</option>
+            <option value="Usado - Excelente estado">Seminovo / Excelente estado</option>
+            <option value="Usado - Bom estado">Bom estado</option>
+            <option value="Usado - Estado regular">Estado regular</option>
           </select>
         </div>
 
@@ -273,23 +273,23 @@ onMounted(async () => {
 const loadDonation = async () => {
   try {
     const donationId = route.params.id as string
-    donation.value = await donationsStore.fetchDonation(donationId)
-    
+    await donationsStore.fetchItem(donationId)
+    donation.value = donationsStore.currentItem
+
     if (donation.value) {
-      // Preencher formulário com dados existentes
       form.value = {
         title: donation.value.title,
         description: donation.value.description,
         category_id: donation.value.category_id.toString(),
         condition: donation.value.condition,
-        images: [...donation.value.images],
+        images: [...(donation.value.images ?? [])],
         city: donation.value.city,
         state: donation.value.state,
         notes: donation.value.notes || '',
         status: donation.value.status
       }
     }
-  } catch (error) {
+  } catch {
     toast.error('Erro ao carregar doação')
     router.push('/donations')
   } finally {
@@ -333,23 +333,29 @@ const removeImage = (index: number) => {
 
 const updateDonation = async () => {
   if (!donation.value) return
-  
+
   isSubmitting.value = true
-  
+
   try {
     const updatedData = {
-      ...form.value,
-      category_id: parseInt(form.value.category_id)
+      title: form.value.title,
+      description: form.value.description,
+      category_id: parseInt(form.value.category_id),
+      condition: form.value.condition,
+      city: form.value.city,
+      state: form.value.state,
+      notes: form.value.notes,
+      status: form.value.status
     }
-    
-    await donationsStore.updateDonation(donation.value.id, updatedData)
+
+    await donationsStore.updateItem(donation.value.id, updatedData)
     toast.success('Doação atualizada com sucesso!')
     
     router.push({ 
       name: 'donation-details', 
       params: { id: donation.value.id } 
     })
-  } catch (error) {
+  } catch {
     toast.error('Erro ao atualizar doação')
   } finally {
     isSubmitting.value = false
