@@ -61,10 +61,10 @@
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">{{ $t('donations.list.allConditions') }}</option>
-              <option value="new">{{ $t('donations.list.conditionNew') }}</option>
-              <option value="like_new">{{ $t('donations.list.conditionLikeNew') }}</option>
-              <option value="good">{{ $t('donations.list.conditionGood') }}</option>
-              <option value="fair">{{ $t('donations.list.conditionFair') }}</option>
+              <option value="Novo">{{ $t('donations.list.conditionNew') }}</option>
+              <option value="Usado - Excelente estado">{{ $t('donations.list.conditionLikeNew') }}</option>
+              <option value="Usado - Bom estado">{{ $t('donations.list.conditionGood') }}</option>
+              <option value="Usado - Estado regular">{{ $t('donations.list.conditionFair') }}</option>
             </select>
           </div>
         </div>
@@ -231,7 +231,7 @@
           :disabled="loadingMore"
           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
         >
-          <span v-if="loadingMore" class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></span>
+          <svg v-if="loadingMore" class="animate-spin h-4 w-4 mr-2 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
           {{ loadingMore ? $t('donations.list.loading') : $t('donations.list.loadMore') }}
         </button>
       </div>
