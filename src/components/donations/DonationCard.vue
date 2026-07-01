@@ -14,7 +14,7 @@
       >
         <PhotoIcon class="w-12 h-12 text-gray-400" />
       </div>
-      
+
       <!-- Status Badge -->
       <div class="absolute top-3 left-3">
         <span
@@ -24,12 +24,31 @@
           {{ statusText }}
         </span>
       </div>
-      
+
       <!-- Condition Badge -->
       <div class="absolute top-3 right-3">
         <span class="badge-gray text-xs">
           {{ donation.condition }}
         </span>
+      </div>
+
+      <!-- Actions overlay — restrito à imagem pelo overflow-hidden do container -->
+      <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+        <div class="flex space-x-2">
+          <button
+            @click.stop="toggleFavorite"
+            class="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors duration-200"
+            :class="{ 'text-red-500': isFavorited, 'text-gray-600': !isFavorited }"
+          >
+            <HeartIcon class="w-5 h-5" :class="{ 'fill-current': isFavorited }" />
+          </button>
+          <button
+            @click.stop="shareItem"
+            class="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors duration-200 text-gray-600"
+          >
+            <ShareIcon class="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
 
@@ -39,18 +58,18 @@
       <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors duration-200">
         {{ donation.title }}
       </h3>
-      
+
       <!-- Description -->
       <p class="text-gray-600 text-sm mb-3 line-clamp-2">
         {{ donation.description }}
       </p>
-      
+
       <!-- Location -->
       <div class="flex items-center text-gray-500 text-sm mb-3">
         <MapPinIcon class="w-4 h-4 mr-1" />
         <span class="truncate">{{ donation.location }}</span>
       </div>
-      
+
       <!-- User Info -->
       <div class="flex items-center justify-between">
         <div class="flex items-center">
@@ -80,30 +99,11 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Time -->
         <span class="text-xs text-gray-500">
           {{ timeAgo }}
         </span>
-      </div>
-    </div>
-    
-    <!-- Actions (visible on hover) -->
-    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
-      <div class="flex space-x-2">
-        <button
-          @click.stop="toggleFavorite"
-          class="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors duration-200"
-          :class="{ 'text-red-500': isFavorited, 'text-gray-600': !isFavorited }"
-        >
-          <HeartIcon class="w-5 h-5" :class="{ 'fill-current': isFavorited }" />
-        </button>
-        <button
-          @click.stop="shareItem"
-          class="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors duration-200 text-gray-600"
-        >
-          <ShareIcon class="w-5 h-5" />
-        </button>
       </div>
     </div>
   </div>
