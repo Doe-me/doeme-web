@@ -1,359 +1,420 @@
 <template>
-  <div class="container mx-auto p-4 max-w-4xl">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold mb-2">Editar Doação</h1>
-      <p class="text-gray-600">Atualize as informações da sua doação</p>
-    </div>
-
-    <div v-if="loading" class="flex justify-center items-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-    </div>
-
-    <div v-else-if="donation" class="bg-white rounded-lg shadow-md p-6">
-      <form @submit.prevent="updateDonation" class="space-y-6">
-        <!-- Título -->
+  <div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="mb-8 flex items-center">
+        <button
+          @click="$router.go(-1)"
+          class="mr-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <ArrowLeftIcon class="w-5 h-5" />
+        </button>
         <div>
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
-            Título da Doação *
-          </label>
-          <input
-            id="title"
-            v-model="form.title"
-            type="text"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Ex: Sofá em bom estado"
-          />
+          <h1 class="text-3xl font-bold text-gray-900">Editar Doação</h1>
+          <p class="mt-1 text-gray-600">Atualize as informações da sua doação</p>
         </div>
+      </div>
 
-        <!-- Categoria -->
-        <div>
-          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
-            Categoria *
-          </label>
-          <select
-            id="category"
-            v-model="form.category_id"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Selecione uma categoria</option>
-            <option
-              v-for="category in categories"
-              :key="category.id"
-              :value="category.id"
-            >
-              {{ category.name }}
-            </option>
-          </select>
-        </div>
+      <!-- Loading -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <svg
+          class="animate-spin w-10 h-10 text-primary-600"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+      </div>
 
-        <!-- Descrição -->
-        <div>
-          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-            Descrição *
-          </label>
-          <textarea
-            id="description"
-            v-model="form.description"
-            required
-            rows="4"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Descreva o item, seu estado de conservação e outras informações importantes..."
-          ></textarea>
-        </div>
+      <!-- Not found -->
+      <div v-else-if="!donation" class="text-center py-20">
+        <p class="text-gray-500 mb-4">Doação não encontrada.</p>
+        <router-link
+          to="/donations"
+          class="inline-block bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors"
+        >
+          Ver Todas as Doações
+        </router-link>
+      </div>
 
-        <!-- Condição -->
-        <div>
-          <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
-            Estado de Conservação *
-          </label>
-          <select
-            id="condition"
-            v-model="form.condition"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Selecione o estado</option>
-            <option value="novo">Novo</option>
-            <option value="seminovo">Seminovo</option>
-            <option value="usado">Usado</option>
-            <option value="precisa_reparo">Precisa de reparo</option>
-          </select>
-        </div>
+      <!-- Form -->
+      <form v-else @submit.prevent="handleSubmit" class="space-y-8">
+        <!-- Basic Information -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Informações Básicas</h2>
 
-        <!-- Imagens -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
-            Fotos do Item
-          </label>
-          <p class="text-sm text-gray-500 mb-3">
-            Adicione até 5 fotos para mostrar melhor o item
-          </p>
-          
-          <!-- Imagens existentes -->
-          <div v-if="form.images.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
-            <div
-              v-for="(image, index) in form.images"
-              :key="index"
-              class="relative group"
-            >
-              <img
-                :src="image"
-                :alt="`Imagem ${index + 1}`"
-                class="w-full h-24 object-cover rounded-md border"
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Title -->
+            <div class="md:col-span-2">
+              <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+                Título da Doação *
+              </label>
+              <input
+                id="title"
+                v-model="form.title"
+                type="text"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Ex: Sofá em bom estado"
+                :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.title }"
               />
-              <button
-                type="button"
-                @click="removeImage(index)"
-                class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+              <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
+            </div>
+
+            <!-- Category -->
+            <div>
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+                Categoria *
+              </label>
+              <select
+                id="category"
+                v-model="form.category_id"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.category_id }"
               >
-                ×
-              </button>
+                <option value="">Selecione uma categoria</option>
+                <option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+              <p v-if="errors.category_id" class="mt-1 text-sm text-red-600">{{ errors.category_id }}</p>
+            </div>
+
+            <!-- Condition -->
+            <div>
+              <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
+                Estado de Conservação *
+              </label>
+              <select
+                id="condition"
+                v-model="form.condition"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
+              >
+                <option value="">Selecione o estado</option>
+                <option value="Novo">Novo</option>
+                <option value="Usado - Excelente estado">Usado — Excelente estado</option>
+                <option value="Usado - Bom estado">Usado — Bom estado</option>
+                <option value="Usado - Estado regular">Usado — Estado regular</option>
+              </select>
+              <p v-if="errors.condition" class="mt-1 text-sm text-red-600">{{ errors.condition }}</p>
+            </div>
+
+            <!-- Description -->
+            <div class="md:col-span-2">
+              <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                Descrição *
+              </label>
+              <textarea
+                id="description"
+                v-model="form.description"
+                rows="4"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Descreva o item, seu estado de conservação e outras informações importantes..."
+                :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
+              ></textarea>
+              <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
             </div>
           </div>
+        </div>
 
-          <!-- Upload de novas imagens -->
-          <div
-            v-if="form.images.length < 5"
-            @click="$refs.imageInput.click()"
-            @dragover.prevent
-            @drop.prevent="handleImageDrop"
-            class="border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-blue-400 transition-colors"
-          >
-            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <p class="mt-2 text-sm text-gray-600">
-              <span class="font-medium">Clique para adicionar</span> ou arraste imagens aqui
+        <!-- Images -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-2">Fotos</h2>
+
+          <!-- Existing saved images (read-only) -->
+          <div v-if="existingImages.length > 0" class="mb-6">
+            <p class="text-sm font-medium text-gray-700 mb-3">
+              Fotos já salvas ({{ existingImages.length }})
             </p>
-            <p class="text-xs text-gray-500">PNG, JPG até 5MB cada</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              <div
+                v-for="(img, index) in existingImages"
+                :key="img.id"
+                class="relative aspect-square rounded-lg overflow-hidden bg-gray-100"
+              >
+                <img
+                  :src="img.url || img.path"
+                  :alt="`Foto salva ${index + 1}`"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <p class="mt-2 text-xs text-gray-500">
+              A remoção individual de fotos já salvas estará disponível em breve.
+            </p>
           </div>
 
-          <input
-            ref="imageInput"
-            type="file"
-            multiple
-            accept="image/*"
-            @change="handleImageUpload"
-            class="hidden"
-          />
+          <!-- New images upload -->
+          <div>
+            <p class="text-sm font-medium text-gray-700 mb-3">
+              Adicionar novas fotos
+              <span v-if="slotsRemaining < 5" class="text-gray-400 font-normal">
+                ({{ slotsRemaining }} slot(s) disponível/disponíveis)
+              </span>
+            </p>
+            <ImageUpload
+              v-model="newImages"
+              :max-files="slotsRemaining"
+              :max-size-mb="5"
+            />
+            <p v-if="errors.images" class="mt-2 text-sm text-red-600">{{ errors.images }}</p>
+          </div>
         </div>
 
-        <!-- Localização -->
-        <div class="grid md:grid-cols-2 gap-4">
+        <!-- Location -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Localização</h2>
+
           <div>
-            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
-              Cidade *
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">
+              Endereço *
             </label>
             <input
-              id="city"
-              v-model="form.city"
+              id="location"
+              v-model="form.location"
               type="text"
               required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Ex: São Paulo"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Rua, número, bairro, cidade"
+              :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.location }"
             />
-          </div>
-          
-          <div>
-            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">
-              Estado *
-            </label>
-            <input
-              id="state"
-              v-model="form.state"
-              type="text"
-              required
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Ex: SP"
-            />
+            <p v-if="errors.location" class="mt-1 text-sm text-red-600">{{ errors.location }}</p>
           </div>
         </div>
 
-        <!-- Observações -->
-        <div>
-          <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">
-            Observações Adicionais
-          </label>
-          <textarea
-            id="notes"
-            v-model="form.notes"
-            rows="3"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Informações sobre retirada, horários disponíveis, etc."
-          ></textarea>
+        <!-- Additional Options -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Opções Adicionais</h2>
+
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <input
+                id="allow-pickup"
+                v-model="form.allow_pickup"
+                type="checkbox"
+                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label for="allow-pickup" class="ml-2 text-sm text-gray-700">
+                Permitir retirada no local
+              </label>
+            </div>
+
+            <div class="flex items-center">
+              <input
+                id="allow-delivery"
+                v-model="form.allow_delivery"
+                type="checkbox"
+                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              />
+              <label for="allow-delivery" class="ml-2 text-sm text-gray-700">
+                Posso entregar (raio de até 10km)
+              </label>
+            </div>
+          </div>
         </div>
 
-        <!-- Status -->
-        <div>
-          <label for="status" class="block text-sm font-medium text-gray-700 mb-1">
-            Status da Doação
-          </label>
-          <select
-            id="status"
-            v-model="form.status"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <!-- Submit -->
+        <div class="flex justify-end space-x-4">
+          <button
+            type="button"
+            @click="$router.go(-1)"
+            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <option value="available">Disponível</option>
-            <option value="reserved">Reservado</option>
-            <option value="donated">Doado</option>
-          </select>
-        </div>
-
-        <!-- Botões -->
-        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+            Cancelar
+          </button>
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 transition-colors"
           >
-            {{ isSubmitting ? 'Salvando...' : 'Salvar Alterações' }}
+            <span v-if="isSubmitting" class="inline-flex items-center">
+              <svg
+                class="animate-spin w-4 h-4 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Salvando...
+            </span>
+            <span v-else>Salvar Alterações</span>
           </button>
-          
-          <router-link
-            :to="{ name: 'donation-details', params: { id: donation.id } }"
-            class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-md hover:bg-gray-400 text-center"
-          >
-            Cancelar
-          </router-link>
         </div>
       </form>
-    </div>
-
-    <div v-else class="text-center py-12">
-      <p class="text-gray-500">Doação não encontrada</p>
-      <router-link
-        to="/donations"
-        class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
-      >
-        Ver Todas as Doações
-      </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useDonationsStore } from '@/stores/donations'
 import { useCategoriesStore } from '@/stores/categories'
-import type { DonationItem } from '@/types'
+import { useErrorHandler } from '@/utils/errorHandler'
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import ImageUpload from '@/components/donations/ImageUpload.vue'
+import type { DonationItem, DonationImage } from '@/types'
 
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 const donationsStore = useDonationsStore()
 const categoriesStore = useCategoriesStore()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
 const isSubmitting = ref(false)
 const donation = ref<DonationItem | null>(null)
+const newImages = ref<File[]>([])
 
-const form = ref({
+const form = reactive({
+  title: '',
+  description: '',
+  category_id: '' as string | number,
+  condition: '',
+  location: '',
+  allow_pickup: true,
+  allow_delivery: false
+})
+
+const errors = reactive({
   title: '',
   description: '',
   category_id: '',
   condition: '',
-  images: [] as string[],
-  city: '',
-  state: '',
-  notes: '',
-  status: 'available'
+  location: '',
+  images: ''
 })
 
 const categories = computed(() => categoriesStore.categories)
 
-onMounted(async () => {
-  await loadDonation()
-  await categoriesStore.fetchCategories()
-})
+const existingImages = computed<DonationImage[]>(() =>
+  donation.value?.donation_images ?? []
+)
 
-const loadDonation = async () => {
+const slotsRemaining = computed(() =>
+  Math.max(0, 5 - existingImages.value.length)
+)
+
+const validateForm = () => {
+  Object.keys(errors).forEach(k => {
+    errors[k as keyof typeof errors] = ''
+  })
+
+  let valid = true
+
+  if (!form.title.trim()) {
+    errors.title = 'Título é obrigatório'
+    valid = false
+  }
+
+  if (!form.description.trim()) {
+    errors.description = 'Descrição é obrigatória'
+    valid = false
+  } else if (form.description.length < 20) {
+    errors.description = 'Descrição deve ter pelo menos 20 caracteres'
+    valid = false
+  }
+
+  if (!form.category_id) {
+    errors.category_id = 'Categoria é obrigatória'
+    valid = false
+  }
+
+  if (!form.condition) {
+    errors.condition = 'Estado do item é obrigatório'
+    valid = false
+  }
+
+  if (!form.location.trim()) {
+    errors.location = 'Endereço é obrigatório'
+    valid = false
+  }
+
+  return valid
+}
+
+onMounted(async () => {
   try {
-    const donationId = route.params.id as string
-    donation.value = await donationsStore.fetchDonation(donationId)
-    
+    const id = route.params.id as string
+    await Promise.all([
+      donationsStore.fetchItem(id),
+      categoriesStore.fetchCategories()
+    ])
+    donation.value = donationsStore.currentItem
+
     if (donation.value) {
-      // Preencher formulário com dados existentes
-      form.value = {
-        title: donation.value.title,
-        description: donation.value.description,
-        category_id: donation.value.category_id.toString(),
-        condition: donation.value.condition,
-        images: [...donation.value.images],
-        city: donation.value.city,
-        state: donation.value.state,
-        notes: donation.value.notes || '',
-        status: donation.value.status
-      }
+      form.title = donation.value.title
+      form.description = donation.value.description
+      form.category_id = donation.value.category_id
+      form.condition = donation.value.condition
+      form.location = donation.value.location ?? ''
+      form.allow_pickup = donation.value.allow_pickup ?? true
+      form.allow_delivery = donation.value.allow_delivery ?? false
     }
   } catch (error) {
-    toast.error('Erro ao carregar doação')
+    handleError(error, 'Erro ao carregar doação')
     router.push('/donations')
   } finally {
     loading.value = false
   }
-}
+})
 
-const handleImageUpload = (event: Event) => {
-  const files = (event.target as HTMLInputElement).files
-  if (files) {
-    Array.from(files).forEach(file => {
-      if (form.value.images.length < 5) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          form.value.images.push(e.target?.result as string)
-        }
-        reader.readAsDataURL(file)
-      }
-    })
-  }
-}
-
-const handleImageDrop = (event: DragEvent) => {
-  const files = event.dataTransfer?.files
-  if (files) {
-    Array.from(files).forEach(file => {
-      if (form.value.images.length < 5 && file.type.startsWith('image/')) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          form.value.images.push(e.target?.result as string)
-        }
-        reader.readAsDataURL(file)
-      }
-    })
-  }
-}
-
-const removeImage = (index: number) => {
-  form.value.images.splice(index, 1)
-}
-
-const updateDonation = async () => {
+const handleSubmit = async () => {
+  if (!validateForm()) return
   if (!donation.value) return
-  
+
   isSubmitting.value = true
-  
+
   try {
-    const updatedData = {
-      ...form.value,
-      category_id: parseInt(form.value.category_id)
+    const payload = {
+      title: form.title,
+      description: form.description,
+      category_id: form.category_id,
+      condition: form.condition,
+      location: form.location,
+      allow_pickup: form.allow_pickup,
+      allow_delivery: form.allow_delivery
     }
-    
-    await donationsStore.updateDonation(donation.value.id, updatedData)
+
+    await donationsStore.updateItem(String(donation.value.id), payload)
+
+    // Upload new images if any
+    if (newImages.value.length > 0) {
+      try {
+        await donationsStore.uploadImages(donation.value.id, newImages.value)
+      } catch (uploadErr) {
+        toast.warning('Dados salvos, mas houve um erro ao enviar as novas fotos.')
+        handleError(uploadErr, 'Erro ao enviar fotos')
+        router.push({ name: 'donation-details', params: { id: String(donation.value.id) } })
+        return
+      }
+    }
+
     toast.success('Doação atualizada com sucesso!')
-    
-    router.push({ 
-      name: 'donation-details', 
-      params: { id: donation.value.id } 
-    })
+    router.push({ name: 'donation-details', params: { id: String(donation.value.id) } })
   } catch (error) {
-    toast.error('Erro ao atualizar doação')
+    handleError(error, 'Erro ao atualizar doação')
+
+    const apiError = error as { errors?: Record<string, string> }
+    if (apiError.errors) {
+      Object.assign(errors, apiError.errors)
+    }
   } finally {
     isSubmitting.value = false
   }
 }
 </script>
-
