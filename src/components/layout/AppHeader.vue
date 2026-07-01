@@ -1,5 +1,13 @@
 <template>
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+  <!-- Offline Banner -->
+  <div
+    v-if="!isOnline"
+    class="bg-yellow-500 text-white text-center text-sm py-1.5 px-4 sticky top-0 z-50"
+  >
+    Você está offline. Algumas funcionalidades podem estar indisponíveis.
+  </div>
+
+  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50" :class="{ 'top-8': !isOnline }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Logo e Nome -->
@@ -40,6 +48,17 @@
               @keyup.enter="handleSearch"
             />
           </div>
+
+          <!-- Instalar PWA -->
+          <button
+            v-if="isInstallable"
+            @click="install"
+            class="hidden sm:flex items-center space-x-1 text-primary-600 hover:text-primary-700 text-sm font-medium border border-primary-300 rounded-md px-2 py-1 transition-colors"
+            title="Instalar app"
+          >
+            <ArrowDownTrayIcon class="h-4 w-4" />
+            <span>Instalar</span>
+          </button>
 
           <!-- Idioma -->
           <LanguageSwitcher />
@@ -204,14 +223,19 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   PlusIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
 import LanguageSwitcher from '@/components/common/LanguageSwitcher.vue'
+import { useInstallPrompt } from '@/composables/useInstallPrompt'
+import { useNetworkStatus } from '@/composables/useNetworkStatus'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const { t } = useI18n()
+const { isInstallable, install } = useInstallPrompt()
+const { isOnline } = useNetworkStatus()
 
 // State
 const searchQuery = ref('')
