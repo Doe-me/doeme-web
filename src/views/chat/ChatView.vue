@@ -2,21 +2,15 @@
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
-      <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+      <LoadingSpinner size="lg" />
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="container mx-auto px-4 py-8">
-      <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <h2 class="text-xl font-semibold text-red-800 mb-2">Erro ao carregar conversa</h2>
-        <p class="text-red-600 mb-4">{{ error }}</p>
-        <button
-          @click="$router.go(-1)"
-          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-        >
-          Voltar
-        </button>
-      </div>
+      <ErrorState
+        :description="error"
+        @retry="loadChat"
+      />
     </div>
 
     <!-- Chat Interface -->
@@ -182,7 +176,9 @@ import { ref, computed, onMounted, nextTick, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useChatsStore } from '@/stores/chats'
-import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   ArrowLeftIcon,
   GiftIcon,
@@ -194,7 +190,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const chatsStore = useChatsStore()
-const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const newMessage = ref('')
 const hasMoreMessages = ref(false)
@@ -250,7 +246,7 @@ const loadChat = async () => {
     await nextTick()
     scrollToBottom()
   } catch (err) {
-    console.error('Erro ao carregar chat:', err)
+    handleError(err, 'Erro ao carregar conversa')
   }
 }
 
@@ -261,8 +257,7 @@ const loadMoreMessages = async () => {
     messagesPage.value += 1
     hasMoreMessages.value = result.hasMore
   } catch (err) {
-    console.error('Erro ao carregar mensagens antigas:', err)
-    toast.error('Erro ao carregar mensagens antigas')
+    handleError(err, 'Erro ao carregar mensagens antigas')
   } finally {
     loadingMore.value = false
   }
@@ -279,8 +274,7 @@ const handleSendMessage = async () => {
     await nextTick()
     scrollToBottom()
   } catch (err) {
-    console.error('Erro ao enviar mensagem:', err)
-    toast.error('Erro ao enviar mensagem')
+    handleError(err, 'Erro ao enviar mensagem')
     newMessage.value = messageText
   }
 }

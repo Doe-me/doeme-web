@@ -140,6 +140,10 @@ export interface FilterOptions {
   search?: string
   page?: number
   per_page?: number
+  latitude?: number
+  longitude?: number
+  radius?: number
+  sort_by?: string
 }
 
 export interface ReviewStats {
