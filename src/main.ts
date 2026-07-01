@@ -1,13 +1,29 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import Toast from 'vue-toastification'
+import Toast, { useToast } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import { registerSW } from 'virtual:pwa-register'
 
 import App from './App.vue'
 import router from './router'
 import i18n from './locales'
 
 import './assets/main.css'
+
+registerSW({
+  onNeedRefresh() {
+    const toast = useToast()
+    toast.info('Nova versão disponível! Recarregue para atualizar.', {
+      timeout: false,
+      closeOnClick: false,
+      onClick: () => window.location.reload(),
+    })
+  },
+  onOfflineReady() {
+    const toast = useToast()
+    toast.success('App pronto para uso offline.')
+  },
+})
 
 const app = createApp(App)
 
