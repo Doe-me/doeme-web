@@ -11,6 +11,12 @@ export interface Category {
   updated_at: string
 }
 
+export interface DonationImage {
+  id: number
+  path: string
+  url?: string
+}
+
 export interface DonationItem {
   id: number
   user_id: number
@@ -18,10 +24,13 @@ export interface DonationItem {
   title: string
   description: string
   images?: string[]
+  donation_images?: DonationImage[]
   condition: 'Novo' | 'Usado - Excelente estado' | 'Usado - Bom estado' | 'Usado - Estado regular'
   location: string
   latitude?: number
   longitude?: number
+  allow_pickup?: boolean
+  allow_delivery?: boolean
   status: 'available' | 'reserved' | 'donated'
   donated_at?: string
   donated_to_user_id?: number
