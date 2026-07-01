@@ -360,15 +360,6 @@ export const useDonationsStore = defineStore('donations', () => {
     }
   }
 
-  const uploadImages = async (itemId: string | number, files: File[]) => {
-    const formData = new FormData()
-    files.forEach(file => formData.append('images[]', file))
-    const response = await api.post(`/donation-items/${itemId}/images`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-    return response.data.data || response.data
-  }
-
   const fetchStats = async () => {
     try {
       const response = await api.get('/donation-items/stats')
@@ -416,7 +407,6 @@ export const useDonationsStore = defineStore('donations', () => {
     fetchItem,
     createItem,
     updateItem,
-    uploadImages,
     deleteItem,
     fetchCategoryItems,
     loadMoreCategoryItems,
