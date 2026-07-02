@@ -10,7 +10,7 @@ export interface ApiError {
 export const useErrorHandler = () => {
   const toast = useToast()
 
-  const handleError = (error: AxiosError | Error | any, defaultMessage = 'Erro inesperado') => {
+  const handleError = (error: AxiosError | Error, defaultMessage = 'Erro inesperado') => {
     console.error('Error:', error)
 
     if (error.response) {
@@ -61,7 +61,7 @@ export const useErrorHandler = () => {
     }
   }
 
-  const getErrorMessage = (error: AxiosError | Error | any, defaultMessage = 'Erro inesperado'): string => {
+  const getErrorMessage = (error: AxiosError | Error, defaultMessage = 'Erro inesperado'): string => {
     if (error.response?.data?.message) {
       return error.response.data.message
     }
@@ -78,7 +78,7 @@ export const useErrorHandler = () => {
     return defaultMessage
   }
 
-  const getValidationErrors = (error: AxiosError | any): Record<string, string[]> | null => {
+  const getValidationErrors = (error: AxiosError | Error): Record<string, string[]> | null => {
     if (error.response?.status === 422 && error.response?.data?.errors) {
       return error.response.data.errors
     }
@@ -113,7 +113,7 @@ export const withRetry = async <T>(
   maxRetries = 3,
   delay = 1000
 ): Promise<T> => {
-  let lastError: any
+  let lastError: unknown
 
   for (let i = 0; i <= maxRetries; i++) {
     try {

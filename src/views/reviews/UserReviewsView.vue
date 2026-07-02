@@ -307,7 +307,6 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useReviewsStore } from '@/stores/reviews'
 import { useToast } from 'vue-toastification'
 import { useErrorHandler } from '@/utils/errorHandler'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -327,11 +326,10 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import type { Review } from '@/types'
+import type { Review, ReviewStats } from '@/types'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const reviewsStore = useReviewsStore()
 const toast = useToast()
 const { handleError } = useErrorHandler()
 
@@ -343,7 +341,7 @@ const reviewToDelete = ref<Review | null>(null)
 
 const receivedReviews = ref<Review[]>([])
 const givenReviews = ref<Review[]>([])
-const reviewStats = ref<any>(null)
+const reviewStats = ref<ReviewStats | null>(null)
 
 const currentReviews = computed(() => {
   return activeTab.value === 'received' ? receivedReviews.value : givenReviews.value
@@ -556,7 +554,7 @@ const deleteReview = async () => {
   }
 }
 
-const respondToReview = (review: Review) => {
+const respondToReview = () => {
   toast.info('Funcionalidade de responder avaliação será implementada')
 }
 </script>

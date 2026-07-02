@@ -1,3 +1,13 @@
+export interface UserAddress {
+  zip_code?: string
+  street?: string
+  number?: string
+  complement?: string
+  neighborhood?: string
+  city?: string
+  state?: string
+}
+
 export interface User {
   id: number
   name: string
@@ -5,8 +15,15 @@ export interface User {
   avatar?: string
   phone?: string
   location?: string
+  bio?: string
+  birth_date?: string
+  address?: UserAddress
+  city?: string
+  state?: string
   average_rating?: number
   total_reviews?: number
+  donations_count?: number
+  received_count?: number
   email_verified_at?: string
   created_at: string
   updated_at: string

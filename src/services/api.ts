@@ -11,7 +11,6 @@ import type {
   ChatMessage,
   Review,
   PaginatedResponse,
-  ApiResponse,
   FilterOptions,
   ReviewStats,
   UpdateProfileData
@@ -57,7 +56,7 @@ api.interceptors.response.use(
     // Handle different error types
     if (error.response) {
       const status = error.response.status
-      const data = error.response.data as any
+      const data = error.response.data as { errors?: Record<string, string[]>; message?: string }
       
       switch (status) {
         case 401:
@@ -142,6 +141,28 @@ export const authApi = {
   updateProfile: async (data: UpdateProfileData): Promise<User> => {
     const response: AxiosResponse<{ user: User }> = await api.put('/auth/profile', data)
     return response.data.user
+  },
+
+  updateAddress: async (data: {
+    zip_code?: string
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    state?: string
+  }): Promise<User> => {
+    const response: AxiosResponse<{ user: User }> = await api.put('/auth/address', data)
+    return response.data.user
+  },
+
+  changePassword: async (data: {
+    current_password: string
+    password: string
+    password_confirmation: string
+  }): Promise<{ message: string }> => {
+    const response = await api.post('/auth/change-password', data)
+    return handleApiResponse(response)
   },
 
   // Social auth

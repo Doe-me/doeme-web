@@ -503,7 +503,7 @@ const updateProfile = async () => {
   try {
     await authStore.updateProfile(profileForm.value)
     toast.success('Perfil atualizado com sucesso!')
-  } catch (error) {
+  } catch {
     toast.error('Erro ao atualizar perfil')
   } finally {
     isUpdating.value = false
@@ -526,7 +526,7 @@ const changePassword = async () => {
       newPassword: '',
       confirmPassword: ''
     }
-  } catch (error) {
+  } catch {
     toast.error('Erro ao alterar senha')
   } finally {
     isUpdating.value = false
@@ -539,7 +539,7 @@ const updateNotifications = async () => {
     // Simular atualização
     await new Promise(resolve => setTimeout(resolve, 500))
     toast.success('Preferências de notificação atualizadas!')
-  } catch (error) {
+  } catch {
     toast.error('Erro ao atualizar preferências')
   } finally {
     isUpdating.value = false
@@ -552,7 +552,7 @@ const updatePrivacy = async () => {
     // Simular atualização
     await new Promise(resolve => setTimeout(resolve, 500))
     toast.success('Configurações de privacidade atualizadas!')
-  } catch (error) {
+  } catch {
     toast.error('Erro ao atualizar configurações')
   } finally {
     isUpdating.value = false
@@ -566,7 +566,7 @@ const deleteAccount = async () => {
     toast.success('Conta excluída com sucesso')
     await authStore.logout()
     // Redirecionar para home
-  } catch (error) {
+  } catch {
     toast.error('Erro ao excluir conta')
   }
   showDeleteModal.value = false

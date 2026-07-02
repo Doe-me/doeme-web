@@ -214,7 +214,7 @@ const getCategoryIcon = (iconName: string) => {
   return iconMap[iconName as keyof typeof iconMap] || GiftIcon
 }
 
-const goToCategory = (category: any) => {
+const goToCategory = (category: { id: number }) => {
   router.push(`/categories/${category.id}`)
 }
 
