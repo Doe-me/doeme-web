@@ -22,7 +22,7 @@
                 />
                 <div
                   v-else
-                  class="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                  class="w-24 h-24 rounded-full bg-primary-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
                 >
                   {{ user?.name?.charAt(0).toUpperCase() }}
                 </div>
