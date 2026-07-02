@@ -20,7 +20,7 @@ export const useDonationsStore = defineStore('donations', () => {
 
   // Getters
   const getItemById = computed(() => {
-    return (id: string) => items.value.find(item => item.id === id)
+    return (id: string | number) => items.value.find(item => String(item.id) === String(id))
   })
 
   const availableItems = computed(() => {

@@ -131,7 +131,7 @@
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-2">Fotos</h2>
 
-          <!-- Existing saved images (read-only) -->
+          <!-- Existing saved images -->
           <div v-if="existingImages.length > 0" class="mb-6">
             <p class="text-sm font-medium text-gray-700 mb-3">
               Fotos já salvas ({{ existingImages.length }})
@@ -140,18 +140,28 @@
               <div
                 v-for="(img, index) in existingImages"
                 :key="img.id"
-                class="relative aspect-square rounded-lg overflow-hidden bg-gray-100"
+                class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 group"
               >
                 <img
                   :src="img.url || img.path"
                   :alt="`Foto salva ${index + 1}`"
                   class="w-full h-full object-cover"
                 />
+                <button
+                  type="button"
+                  @click="deleteExistingImage(img)"
+                  :disabled="deletingImageId === img.id"
+                  class="absolute top-1 right-1 p-1 bg-gray-900 bg-opacity-60 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-40"
+                  aria-label="Remover foto"
+                >
+                  <svg v-if="deletingImageId === img.id" class="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                  </svg>
+                  <XMarkIcon v-else class="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
-            <p class="mt-2 text-xs text-gray-600">
-              A remoção individual de fotos já salvas estará disponível em breve.
-            </p>
           </div>
 
           <!-- New images upload -->
@@ -264,7 +274,8 @@ import { useToast } from 'vue-toastification'
 import { useDonationsStore } from '@/stores/donations'
 import { useCategoriesStore } from '@/stores/categories'
 import { useErrorHandler } from '@/utils/errorHandler'
-import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { donationItemsApi } from '@/services/api'
+import { ArrowLeftIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import ImageUpload from '@/components/donations/ImageUpload.vue'
 import type { DonationItem, DonationImage } from '@/types'
 
@@ -279,6 +290,8 @@ const loading = ref(true)
 const isSubmitting = ref(false)
 const donation = ref<DonationItem | null>(null)
 const newImages = ref<File[]>([])
+const existingImages = ref<DonationImage[]>([])
+const deletingImageId = ref<number | null>(null)
 
 const form = reactive({
   title: '',
@@ -300,10 +313,6 @@ const errors = reactive({
 })
 
 const categories = computed(() => categoriesStore.categories)
-
-const existingImages = computed<DonationImage[]>(() =>
-  donation.value?.donation_images ?? []
-)
 
 const slotsRemaining = computed(() =>
   Math.max(0, 5 - existingImages.value.length)
@@ -364,6 +373,7 @@ onMounted(async () => {
       form.location = donation.value.location ?? ''
       form.allow_pickup = donation.value.allow_pickup ?? true
       form.allow_delivery = donation.value.allow_delivery ?? false
+      existingImages.value = donation.value.donation_images ?? []
     }
   } catch (error) {
     handleError(error, 'Erro ao carregar doação')
@@ -372,6 +382,19 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+const deleteExistingImage = async (img: DonationImage) => {
+  if (!donation.value) return
+  deletingImageId.value = img.id
+  try {
+    await donationItemsApi.deleteImage(donation.value.id, img.url ?? img.path)
+    existingImages.value = existingImages.value.filter(i => i.id !== img.id)
+  } catch (err) {
+    handleError(err, 'Erro ao remover foto')
+  } finally {
+    deletingImageId.value = null
+  }
+}
 
 const handleSubmit = async () => {
   if (!validateForm()) return
