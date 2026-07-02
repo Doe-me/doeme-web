@@ -168,12 +168,12 @@
               {{ donation.description }}
             </p>
 
-            <div class="flex items-center text-sm text-gray-500 mb-4">
+            <div class="flex items-center text-sm text-gray-600 mb-4">
               <MapPinIcon class="h-4 w-4 mr-1" />
               {{ donation.location }}
             </div>
 
-            <div class="flex items-center justify-between text-sm text-gray-500 mb-6">
+            <div class="flex items-center justify-between text-sm text-gray-600 mb-6">
               <span>{{ formatDate(donation.created_at) }}</span>
               <span>{{ donation.views || 0 }} visualizações</span>
             </div>
@@ -209,7 +209,7 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
@@ -221,7 +221,7 @@
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima
           </button>
@@ -265,7 +265,7 @@
                       Excluir doação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Tem certeza que deseja excluir "{{ donationToDelete?.title }}"? Esta ação não pode ser desfeita.
                       </p>
                     </div>

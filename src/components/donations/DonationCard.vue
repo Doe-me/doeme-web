@@ -6,11 +6,11 @@
         v-if="donation.images && donation.images.length > 0"
         :src="donation.images[0]"
         :alt="donation.title"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+        class="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
       />
       <div
         v-else
-        class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200"
+        class="w-full h-full flex items-center justify-center bg-gray-100"
       >
         <PhotoIcon class="w-12 h-12 text-gray-400" />
       </div>

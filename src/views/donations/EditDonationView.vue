@@ -30,7 +30,7 @@
 
       <!-- Not found -->
       <div v-else-if="!donation" class="text-center py-20">
-        <p class="text-gray-500 mb-4">Doação não encontrada.</p>
+        <p class="text-gray-600 mb-4">Doação não encontrada.</p>
         <router-link
           to="/donations"
           class="inline-block bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors"
@@ -149,7 +149,7 @@
                 />
               </div>
             </div>
-            <p class="mt-2 text-xs text-gray-500">
+            <p class="mt-2 text-xs text-gray-600">
               A remoção individual de fotos já salvas estará disponível em breve.
             </p>
           </div>
@@ -158,7 +158,7 @@
           <div>
             <p class="text-sm font-medium text-gray-700 mb-3">
               Adicionar novas fotos
-              <span v-if="slotsRemaining < 5" class="text-gray-400 font-normal">
+              <span v-if="slotsRemaining < 5" class="text-gray-600 font-normal">
                 ({{ slotsRemaining }} slot(s) disponível/disponíveis)
               </span>
             </p>

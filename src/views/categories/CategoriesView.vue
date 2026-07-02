@@ -74,7 +74,7 @@
               
               <!-- Stats -->
               <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center text-gray-500">
+                <div class="flex items-center text-gray-600">
                   <GiftIcon class="w-4 h-4 mr-1" />
                   <span>{{ category.items_count }} itens</span>
                 </div>

@@ -27,7 +27,7 @@
           
           <div>
             <h2 class="font-semibold text-gray-900">{{ otherUser?.name }}</h2>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-600">
               {{ otherUser?.isOnline ? 'Online' : `Visto por último ${formatLastSeen(otherUser?.lastSeen)}` }}
             </p>
           </div>
@@ -110,7 +110,7 @@
           <div
             :class="[
               'flex items-center justify-between mt-1 text-xs',
-              message.sender_id === currentUserId ? 'text-blue-100' : 'text-gray-500'
+              message.sender_id === currentUserId ? 'text-blue-100' : 'text-gray-600'
             ]"
           >
             <span>{{ formatMessageTime(message.created_at) }}</span>
@@ -151,9 +151,9 @@
       <div v-if="isTyping" class="flex justify-start">
         <div class="bg-white border rounded-lg px-4 py-2 max-w-xs">
           <div class="flex space-x-1">
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
           </div>
         </div>
       </div>
@@ -228,7 +228,7 @@
             class="w-20 h-20 rounded-full object-cover mx-auto mb-3"
           />
           <h4 class="text-lg font-semibold">{{ otherUser.name }}</h4>
-          <p class="text-sm text-gray-500">{{ otherUser.email }}</p>
+          <p class="text-sm text-gray-600">{{ otherUser.email }}</p>
         </div>
         
         <div class="space-y-3">

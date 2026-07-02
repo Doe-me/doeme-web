@@ -126,7 +126,7 @@
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
               ></textarea>
               <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
-              <p class="mt-1 text-sm text-gray-500">{{ $t('donations.create.descriptionMinLength') }}</p>
+              <p class="mt-1 text-sm text-gray-600">{{ $t('donations.create.descriptionMinLength') }}</p>
             </div>
           </div>
         </div>
@@ -134,7 +134,7 @@
         <!-- Images -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('donations.create.photosTitle') }}</h2>
-          <p class="text-sm text-gray-500 mb-4">
+          <p class="text-sm text-gray-600 mb-4">
             Adicione até 5 fotos. A primeira foto será a principal.
           </p>
 
@@ -177,7 +177,7 @@
             </div>
 
             <div class="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div class="text-center text-gray-500">
+              <div class="text-center text-gray-600">
                 <MapIcon class="w-12 h-12 mx-auto mb-2" />
                 <p>Prévia do mapa será exibida aqui</p>
               </div>

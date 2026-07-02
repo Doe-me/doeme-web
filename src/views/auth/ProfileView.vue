@@ -22,7 +22,7 @@
                 />
                 <div
                   v-else
-                  class="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                  class="w-24 h-24 rounded-full bg-primary-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
                 >
                   {{ user?.name?.charAt(0).toUpperCase() }}
                 </div>
@@ -250,7 +250,7 @@
                       <LockClosedIcon class="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <p class="font-medium text-gray-900">Alterar Senha</p>
-                        <p class="text-sm text-gray-500">Última alteração há 30 dias</p>
+                        <p class="text-sm text-gray-600">Última alteração há 30 dias</p>
                       </div>
                     </div>
                     <ChevronRightIcon class="w-5 h-5 text-gray-400" />
@@ -263,7 +263,7 @@
                       <ShieldCheckIcon class="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <p class="font-medium text-gray-900">Autenticação em Duas Etapas</p>
-                        <p class="text-sm text-gray-500">Adicione uma camada extra de segurança</p>
+                        <p class="text-sm text-gray-600">Adicione uma camada extra de segurança</p>
                       </div>
                     </div>
                     <ChevronRightIcon class="w-5 h-5 text-gray-400" />

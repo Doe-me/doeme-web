@@ -146,7 +146,7 @@
                     </router-link>
                   </p>
                 </div>
-                <span class="text-sm text-gray-500">
+                <span class="text-sm text-gray-600">
                   {{ formatDate(review.created_at) }}
                 </span>
               </div>
@@ -259,7 +259,7 @@
                       Excluir avaliação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.
                       </p>
                     </div>
