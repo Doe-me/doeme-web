@@ -97,7 +97,7 @@ onMounted(async () => {
       router.push('/')
     }, 2000)
     
-  } catch (error: any) {
+  } catch (error) {
     success.value = false
     title.value = 'Erro na Autenticação'
     message.value = error.message || 'Ocorreu um erro durante a autenticação. Tente novamente.'

@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(response.user))
       
       return response
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao fazer login'
       throw err
     } finally {
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(response.user))
       
       return response
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar conta'
       throw err
     } finally {
@@ -103,7 +103,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(userData))
       
       return userData
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar dados do usuário'
       
       // If unauthorized, clear auth data
@@ -128,7 +128,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(updatedUser))
       
       return updatedUser
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao atualizar perfil'
       throw err
     } finally {
@@ -147,7 +147,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(updatedUser))
       
       return updatedUser
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao atualizar avatar'
       throw err
     } finally {
@@ -162,7 +162,7 @@ export const useAuthStore = defineStore('auth', () => {
       
       const response = await authApi.forgotPassword(email)
       return response
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao enviar email de recuperação'
       throw err
     } finally {
@@ -182,7 +182,7 @@ export const useAuthStore = defineStore('auth', () => {
       
       const response = await authApi.resetPassword(data)
       return response
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao redefinir senha'
       throw err
     } finally {
@@ -205,7 +205,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('user', JSON.stringify(response.user))
       
       return response
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro na autenticação social'
       throw err
     } finally {
@@ -221,7 +221,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       // Redirecionar para o endpoint de OAuth
       window.location.href = getSocialAuthUrl(provider)
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || `Erro ao fazer login com ${provider}`
       throw err
     }
@@ -239,7 +239,7 @@ export const useAuthStore = defineStore('auth', () => {
         
         // Verify token is still valid by fetching user data
         await fetchUser()
-      } catch (err) {
+      } catch {
         // Token is invalid, clear auth data
         await logout()
       }
@@ -258,6 +258,77 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
+  const changePassword = async (data: Parameters<typeof authApi.changePassword>[0]) => {
+    try {
+      loading.value = true
+      error.value = null
+      return await authApi.changePassword(data)
+    } catch (err) {
+      error.value = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao alterar senha'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const getNotificationPreferences = async () => {
+    try {
+      return await authApi.getNotificationPreferences()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  const updateNotificationPreferences = async (data: Record<string, boolean>) => {
+    try {
+      loading.value = true
+      return await authApi.updateNotificationPreferences(data)
+    } catch (err) {
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const getPrivacySettings = async () => {
+    try {
+      return await authApi.getPrivacySettings()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  const updatePrivacySettings = async (data: Record<string, boolean>) => {
+    try {
+      loading.value = true
+      return await authApi.updatePrivacySettings(data)
+    } catch (err) {
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const getConnectedAccounts = async () => {
+    try {
+      return await authApi.getConnectedAccounts()
+    } catch (err) {
+      throw err
+    }
+  }
+
+  const deleteAccount = async (data: { password: string }) => {
+    try {
+      loading.value = true
+      await authApi.deleteAccount(data)
+      clearAuth()
+    } catch (err) {
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   // Initialize auth state on store creation
   initializeAuth()
 
@@ -267,12 +338,12 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     loading,
     error,
-    
+
     // Getters
     isAuthenticated,
     isLoading,
     userInitials,
-    
+
     // Actions
     login,
     register,
@@ -280,6 +351,13 @@ export const useAuthStore = defineStore('auth', () => {
     fetchUser,
     updateProfile,
     updateAvatar,
+    changePassword,
+    getNotificationPreferences,
+    updateNotificationPreferences,
+    getPrivacySettings,
+    updatePrivacySettings,
+    getConnectedAccounts,
+    deleteAccount,
     forgotPassword,
     resetPassword,
     handleSocialCallback,

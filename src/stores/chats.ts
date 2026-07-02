@@ -35,7 +35,7 @@ export const useChatsStore = defineStore('chats', () => {
       const response = await api.get('/chats')
       chats.value = response.data.data || response.data
       
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar conversas'
       console.error('Erro ao buscar chats:', err)
       throw err
@@ -53,7 +53,7 @@ export const useChatsStore = defineStore('chats', () => {
       currentChat.value = response.data.data || response.data
       
       return currentChat.value
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar conversa'
       console.error('Erro ao buscar chat:', err)
       throw err
@@ -84,7 +84,7 @@ export const useChatsStore = defineStore('chats', () => {
         messages: newMessages,
         hasMore: response.data.meta?.has_more_pages || false
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar mensagens'
       console.error('Erro ao buscar mensagens:', err)
       throw err
@@ -105,7 +105,7 @@ export const useChatsStore = defineStore('chats', () => {
       currentChat.value = newChat
       
       return newChat
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar conversa'
       console.error('Erro ao criar chat:', err)
       throw err
@@ -137,7 +137,7 @@ export const useChatsStore = defineStore('chats', () => {
       }
       
       return newMessage
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao enviar mensagem'
       console.error('Erro ao enviar mensagem:', err)
       throw err
@@ -163,7 +163,7 @@ export const useChatsStore = defineStore('chats', () => {
           message.read_at = new Date().toISOString()
         })
         
-    } catch (err: any) {
+    } catch (err) {
       console.error('Erro ao marcar como lida:', err)
     }
   }
@@ -186,7 +186,7 @@ export const useChatsStore = defineStore('chats', () => {
       // Remover mensagens do chat
       messages.value = messages.value.filter(message => message.chat_id !== id)
       
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao excluir conversa'
       console.error('Erro ao excluir chat:', err)
       throw err

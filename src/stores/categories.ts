@@ -34,7 +34,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     try {
       const response = await api.get('/categories')
       categories.value = response.data.data || response.data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar categorias'
       throw err
     } finally {
@@ -55,7 +55,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       if (index !== -1) {
         categories.value[index] = currentCategory.value
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar categoria'
       currentCategory.value = null
       throw err
@@ -74,7 +74,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       
       categories.value.push(newCategory)
       return newCategory
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar categoria'
       throw err
     } finally {
@@ -102,7 +102,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       }
       
       return updatedCategory
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao atualizar categoria'
       throw err
     } finally {
@@ -124,7 +124,7 @@ export const useCategoriesStore = defineStore('categories', () => {
       if (currentCategory.value?.id === id) {
         currentCategory.value = null
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao excluir categoria'
       throw err
     } finally {
@@ -141,7 +141,7 @@ export const useCategoriesStore = defineStore('categories', () => {
         params: { q: query }
       })
       return response.data.data || response.data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao buscar categorias'
       throw err
     } finally {
@@ -153,7 +153,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     try {
       const response = await api.get(`/categories/${id}/stats`)
       return response.data.data || response.data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar estatísticas'
       throw err
     }

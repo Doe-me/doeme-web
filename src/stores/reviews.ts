@@ -77,7 +77,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       }
       
       return data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar avaliações'
       console.error('Erro ao buscar avaliações:', err)
       throw err
@@ -104,7 +104,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       }
       
       return data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar avaliações do usuário'
       console.error('Erro ao buscar avaliações do usuário:', err)
       throw err
@@ -122,7 +122,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       reviewStats.value = response.data.data || response.data
       
       return reviewStats.value
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar estatísticas de avaliações'
       console.error('Erro ao buscar estatísticas:', err)
       throw err
@@ -140,7 +140,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       currentReview.value = response.data.data || response.data
       
       return currentReview.value
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar avaliação'
       console.error('Erro ao buscar avaliação:', err)
       throw err
@@ -160,7 +160,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       reviews.value.unshift(newReview)
       
       return newReview
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar avaliação'
       console.error('Erro ao criar avaliação:', err)
       throw err
@@ -189,7 +189,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       }
       
       return updatedReview
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao atualizar avaliação'
       console.error('Erro ao atualizar avaliação:', err)
       throw err
@@ -214,7 +214,7 @@ export const useReviewsStore = defineStore('reviews', () => {
         currentReview.value = null
       }
       
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao excluir avaliação'
       console.error('Erro ao excluir avaliação:', err)
       throw err
@@ -230,7 +230,7 @@ export const useReviewsStore = defineStore('reviews', () => {
       })
       
       return response.data.can_review || false
-    } catch (err: any) {
+    } catch (err) {
       console.error('Erro ao verificar se pode avaliar:', err)
       return false
     }

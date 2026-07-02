@@ -401,7 +401,7 @@ const handleAvatarUpload = async (event: Event) => {
     try {
       await authStore.updateAvatar(file)
       toast.success('Avatar atualizado com sucesso!')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Erro ao atualizar avatar')
     }
   }
@@ -414,7 +414,7 @@ const updatePersonalInfo = async () => {
     await authStore.updateProfile(personalForm)
     toast.success('Informações atualizadas com sucesso!')
     editingPersonal.value = false
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error.message || 'Erro ao atualizar informações')
   } finally {
     loadingPersonal.value = false
@@ -428,7 +428,7 @@ const updateAddress = async () => {
     await authStore.updateAddress(addressForm)
     toast.success('Endereço atualizado com sucesso!')
     editingAddress.value = false
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error.message || 'Erro ao atualizar endereço')
   } finally {
     loadingAddress.value = false
@@ -452,7 +452,7 @@ const changePassword = async () => {
     Object.keys(passwordForm).forEach(key => {
       passwordForm[key as keyof typeof passwordForm] = ''
     })
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error.message || 'Erro ao alterar senha')
   } finally {
     loadingPassword.value = false

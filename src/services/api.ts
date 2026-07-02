@@ -11,7 +11,6 @@ import type {
   ChatMessage,
   Review,
   PaginatedResponse,
-  ApiResponse,
   FilterOptions,
   ReviewStats,
   UpdateProfileData
@@ -57,7 +56,7 @@ api.interceptors.response.use(
     // Handle different error types
     if (error.response) {
       const status = error.response.status
-      const data = error.response.data as any
+      const data = error.response.data as { errors?: Record<string, string[]>; message?: string }
       
       switch (status) {
         case 401:
@@ -142,6 +141,50 @@ export const authApi = {
   updateProfile: async (data: UpdateProfileData): Promise<User> => {
     const response: AxiosResponse<{ user: User }> = await api.put('/auth/profile', data)
     return response.data.user
+  },
+
+  updateAvatar: async (file: File): Promise<User> => {
+    const formData = new FormData()
+    formData.append('avatar', file)
+    const response: AxiosResponse<{ user: User }> = await api.post('/auth/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return response.data.user
+  },
+
+  changePassword: async (data: { current_password: string; password: string; password_confirmation: string }): Promise<{ message: string }> => {
+    const response = await api.post('/auth/change-password', data)
+    return handleApiResponse(response)
+  },
+
+  getNotificationPreferences: async (): Promise<Record<string, boolean>> => {
+    const response = await api.get('/auth/notification-preferences')
+    return response.data.notification_preferences
+  },
+
+  updateNotificationPreferences: async (data: Record<string, boolean>): Promise<Record<string, boolean>> => {
+    const response = await api.put('/auth/notification-preferences', data)
+    return response.data.notification_preferences
+  },
+
+  getPrivacySettings: async (): Promise<Record<string, boolean>> => {
+    const response = await api.get('/auth/privacy-settings')
+    return response.data.privacy_settings
+  },
+
+  updatePrivacySettings: async (data: Record<string, boolean>): Promise<Record<string, boolean>> => {
+    const response = await api.put('/auth/privacy-settings', data)
+    return response.data.privacy_settings
+  },
+
+  getConnectedAccounts: async (): Promise<{ google: boolean; facebook: boolean }> => {
+    const response = await api.get('/auth/connected-accounts')
+    return response.data.connected_accounts
+  },
+
+  deleteAccount: async (data: { password: string }): Promise<{ message: string }> => {
+    const response = await api.delete('/auth/account', { data })
+    return handleApiResponse(response)
   },
 
   // Social auth

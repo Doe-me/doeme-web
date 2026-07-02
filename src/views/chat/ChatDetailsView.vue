@@ -286,7 +286,7 @@ import { useToast } from 'vue-toastification'
 import { useChatsStore } from '@/stores/chats'
 import { useAuthStore } from '@/stores/auth'
 import { useErrorHandler } from '@/utils/errorHandler'
-import type { Chat, ChatMessage, User } from '@/types'
+import type { Chat, ChatMessage } from '@/types'
 
 const route = useRoute()
 const toast = useToast()
@@ -401,7 +401,7 @@ const loadOlderMessages = async () => {
     // Adicionar mensagens antigas ao início do array
     // const olderMessages = await chatsStore.fetchOlderMessages(chat.value.id, messages.value[0]?.id)
     // messages.value.unshift(...olderMessages)
-  } catch (error) {
+  } catch {
     toast.error('Erro ao carregar mensagens antigas')
   } finally {
     loadingOlderMessages.value = false

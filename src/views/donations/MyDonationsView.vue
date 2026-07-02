@@ -299,7 +299,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { useDonationsStore } from '@/stores/donations'
 import { useToast } from 'vue-toastification'
 import { useErrorHandler } from '@/utils/errorHandler'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -326,7 +325,6 @@ import {
 import type { DonationItem, Category } from '@/types'
 
 const authStore = useAuthStore()
-const donationsStore = useDonationsStore()
 const toast = useToast()
 const { handleError } = useErrorHandler()
 
