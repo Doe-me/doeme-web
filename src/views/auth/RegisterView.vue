@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
         <router-link to="/" class="inline-flex items-center">
-          <span class="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+          <span class="text-3xl font-display text-brand-600">
             {{ $t('common.appName') }}
           </span>
         </router-link>
@@ -12,7 +12,7 @@
         </h2>
         <p class="mt-2 text-sm text-gray-600">
           {{ $t('auth.register.or') }}
-          <router-link to="/auth/login" class="font-medium text-green-600 hover:text-green-500 transition-colors">
+          <router-link to="/auth/login" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
             {{ $t('auth.register.loginInstead') }}
           </router-link>
         </p>
@@ -29,7 +29,7 @@
               v-model="form.name"
               type="text"
               required
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
               :placeholder="$t('auth.register.fullNamePlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.name }"
             />
@@ -45,7 +45,7 @@
               v-model="form.email"
               type="email"
               required
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
               :placeholder="$t('auth.register.emailPlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }"
             />
@@ -60,7 +60,7 @@
               id="phone"
               v-model="form.phone"
               type="tel"
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
               :placeholder="$t('auth.register.phonePlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.phone }"
             />
@@ -77,7 +77,7 @@
                 v-model="form.password"
                 :type="showPassword ? 'text' : 'password'"
                 required
-                class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
+                class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
                 :placeholder="$t('auth.register.passwordPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password }"
               />
@@ -103,7 +103,7 @@
                 v-model="form.password_confirmation"
                 :type="showPasswordConfirmation ? 'text' : 'password'"
                 required
-                class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm transition-colors"
+                class="appearance-none relative block w-full px-3 py-3 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
                 :placeholder="$t('auth.register.passwordConfirmationPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.password_confirmation }"
               />
@@ -126,15 +126,15 @@
             v-model="form.terms"
             type="checkbox"
             required
-            class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
           />
           <label for="terms" class="ml-2 block text-sm text-gray-900">
             {{ $t('auth.register.termsAccept') }}
-            <router-link to="/terms" class="text-green-600 hover:text-green-500 font-medium">
+            <router-link to="/terms" class="text-primary-600 hover:text-primary-700 font-medium">
               {{ $t('auth.register.termsOfUse') }}
             </router-link>
             {{ $t('auth.register.and') }}
-            <router-link to="/privacy" class="text-green-600 hover:text-green-500 font-medium">
+            <router-link to="/privacy" class="text-primary-600 hover:text-primary-700 font-medium">
               {{ $t('auth.register.privacyPolicy') }}
             </router-link>
           </label>
@@ -144,10 +144,13 @@
           <button
             type="submit"
             :disabled="loading"
-            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <span v-if="loading" class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+              </svg>
             </span>
             {{ loading ? $t('auth.register.submitting') : $t('auth.register.submit') }}
           </button>
@@ -159,7 +162,7 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-white text-gray-500">{{ $t('auth.register.orRegisterWith') }}</span>
+              <span class="px-2 bg-white text-gray-600">{{ $t('auth.register.orRegisterWith') }}</span>
             </div>
           </div>
 
@@ -201,12 +204,12 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
-import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const toast = useToast()
 const { t } = useI18n()
+const { handleError } = useErrorHandler()
 
 const loading = ref(false)
 const showPassword = ref(false)
@@ -283,10 +286,9 @@ const handleRegister = async () => {
       password_confirmation: form.password_confirmation
     })
 
-    toast.success(t('auth.register.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || t('auth.register.error'))
+    handleError(error, t('auth.register.error'))
 
     if (error.errors) {
       Object.assign(errors, error.errors)
@@ -299,10 +301,9 @@ const handleRegister = async () => {
 const handleSocialLogin = async (provider: 'google' | 'facebook') => {
   try {
     await authStore.socialLogin(provider)
-    toast.success(t('auth.register.success'))
     router.push('/')
   } catch (error: any) {
-    toast.error(error.message || t('auth.register.error'))
+    handleError(error, t('auth.register.error'))
   }
 }
 </script>
