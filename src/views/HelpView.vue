@@ -237,7 +237,7 @@ const toggleFaq = (index: number) => {
   }
 }
 
-const selectCategory = (category: any) => {
+const selectCategory = (category: unknown) => {
   // Implementar navegação para categoria específica
   console.log('Categoria selecionada:', category)
 }

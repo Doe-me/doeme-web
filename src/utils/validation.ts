@@ -5,7 +5,7 @@ export interface ValidationRule {
   minLength?: number
   maxLength?: number
   pattern?: RegExp
-  custom?: (value: any) => boolean | string
+  custom?: (value: unknown) => boolean | string
   message?: string
 }
 
@@ -14,7 +14,7 @@ export interface ValidationResult {
   errors: string[]
 }
 
-export const validateField = (value: any, rules: ValidationRule[]): ValidationResult => {
+export const validateField = (value: unknown, rules: ValidationRule[]): ValidationResult => {
   const errors: string[] = []
 
   for (const rule of rules) {
@@ -150,7 +150,7 @@ export const validateCPF = (cpf: string): boolean => {
 
 // Form validation helper
 export const useFormValidation = () => {
-  const validateForm = (data: Record<string, any>, rules: Record<string, ValidationRule[]>): {
+  const validateForm = (data: Record<string, unknown>, rules: Record<string, ValidationRule[]>): {
     isValid: boolean
     errors: Record<string, string[]>
   } => {
