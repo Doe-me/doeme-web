@@ -209,7 +209,7 @@
         <h2 class="text-2xl lg:text-3xl font-bold mb-4">
           Pronto para Fazer a Diferença?
         </h2>
-        <p class="text-gray-400 mb-8 text-lg leading-relaxed">
+        <p class="text-gray-700 mb-8 text-lg leading-relaxed">
           Junte-se à nossa comunidade e ajude a criar um bairro mais generoso.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">

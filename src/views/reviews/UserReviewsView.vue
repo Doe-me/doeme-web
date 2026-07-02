@@ -18,7 +18,7 @@
               'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm',
               activeTab === 'received'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300'
             ]"
           >
             Recebidas ({{ receivedReviews.length }})
@@ -29,7 +29,7 @@
               'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm',
               activeTab === 'given'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300'
             ]"
           >
             Feitas ({{ givenReviews.length }})
@@ -143,7 +143,7 @@
                     {{ activeTab === 'received' ? 'avaliou você' : 'foi avaliado por você' }}
                   </p>
                 </div>
-                <span class="text-sm text-gray-500">
+                <span class="text-sm text-gray-600">
                   {{ formatDate(review.created_at) }}
                 </span>
               </div>
@@ -272,7 +272,7 @@
                       Excluir avaliação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.
                       </p>
                     </div>

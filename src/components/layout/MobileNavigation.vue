@@ -6,7 +6,7 @@
         :key="item.href"
         :to="item.href"
         class="flex flex-col items-center justify-center space-y-1 text-xs font-medium transition-colors duration-200"
-        :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-500 hover:text-gray-700'"
+        :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-600 hover:text-gray-700'"
       >
         <component
           :is="item.icon"

@@ -74,7 +74,7 @@
                   <h3 class="text-sm font-semibold text-gray-900 truncate">
                     {{ chat.otherUser.name }}
                   </h3>
-                  <span class="text-xs text-gray-500">
+                  <span class="text-xs text-gray-700">
                     {{ formatTime(chat.lastMessage?.created_at) }}
                   </span>
                 </div>
@@ -88,7 +88,7 @@
                 <!-- Last Message -->
                 <div class="flex items-center justify-between">
                   <p class="text-sm text-gray-600 truncate">
-                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-500">
+                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-600">
                       Você: 
                     </span>
                     {{ chat.lastMessage?.message || 'Nenhuma mensagem ainda' }}
@@ -126,7 +126,7 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
@@ -138,7 +138,7 @@
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima
           </button>

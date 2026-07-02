@@ -75,7 +75,7 @@
                 @click="toggleFavorite"
                 :class="[
                   'p-2 rounded-full transition-colors',
-                  isFavorite ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                  isFavorite ? 'text-red-500 bg-red-50' : 'text-gray-600 hover:text-gray-700 hover:bg-gray-100'
                 ]"
               >
                 <HeartIcon :class="['h-6 w-6', isFavorite ? 'fill-current' : '']" />
@@ -222,7 +222,7 @@
                       Demonstrar Interesse
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Você tem interesse neste item? Enviaremos uma mensagem para o doador informando seu interesse.
                       </p>
                     </div>
