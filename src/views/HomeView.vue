@@ -1,151 +1,121 @@
 <template>
-  <div class="home">
-    <!-- Hero Section: amber brand surface, no gradient -->
-    <section class="bg-brand-400">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div class="text-center max-w-3xl mx-auto">
-          <h1 class="font-display text-gray-900 mb-6 leading-none tracking-tight"
-              style="font-size: clamp(2.5rem, 6vw, 4.5rem)">
-            Doe com o coração
-          </h1>
-          <p class="text-lg sm:text-xl text-gray-800 mb-3 max-w-2xl mx-auto leading-relaxed">
-            Conecte-se com pessoas da sua comunidade. Doe o que não usa mais
-            e ajude quem precisa — simples assim.
-          </p>
-          <p class="text-sm text-gray-700 mb-10">
-            Mais de {{ stats[0].value }} itens já encontraram novo lar na vizinhança.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <router-link
-              to="/donations"
-              class="inline-flex items-center justify-center rounded-lg bg-gray-900 text-white text-base font-semibold px-7 py-3 hover:bg-gray-800 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
-            >
-              Ver Doações
-            </router-link>
-            <router-link
-              v-if="isAuthenticated"
-              to="/donations/create"
-              class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-50 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-400"
-            >
-              Fazer Doação
-            </router-link>
-            <router-link
-              v-else
-              to="/register"
-              class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-50 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-400"
-            >
-              Começar Agora
-            </router-link>
-          </div>
+  <div class="pb-24 md:pb-0">
+    <!-- Search Hero: compact amber zone -->
+    <section class="bg-brand-400 pt-5 pb-7 px-4">
+      <div class="max-w-2xl mx-auto">
+        <h1 class="font-display text-gray-900 text-center text-xl sm:text-2xl mb-4 leading-snug">
+          Doe com o coração,<br class="sm:hidden" /> receba com gratidão
+        </h1>
+        <div class="relative">
+          <MagnifyingGlassIcon
+            class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none"
+          />
+          <input
+            v-model="searchQuery"
+            type="search"
+            placeholder="O que você procura?"
+            @keydown.enter="handleSearch"
+            class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-white text-gray-900 placeholder-gray-400 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 focus:ring-offset-brand-400"
+          />
         </div>
       </div>
     </section>
 
-    <!-- How It Works Section: flow without number badges -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
-            Como Funciona
-          </h2>
-          <p class="text-lg text-gray-600 max-w-xl mx-auto">
-            Três passos e um item que estava parado começa uma nova história.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-10 lg:gap-16 relative">
-          <!-- Connector line (desktop only) -->
-          <div class="hidden md:block absolute top-8 left-1/3 right-1/3 h-px bg-gray-200" aria-hidden="true"></div>
-
-          <div v-for="step in howItWorksSteps" :key="step.title" class="flex flex-col items-center text-center fade-in">
-            <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mb-5 shrink-0 relative z-10">
-              <component :is="step.icon" class="w-7 h-7 text-brand-700" />
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ step.title }}</h3>
-            <p class="text-gray-600 text-sm leading-relaxed max-w-xs">{{ step.description }}</p>
-          </div>
-        </div>
-
-        <div class="text-center mt-12">
-          <router-link
-            to="/how-it-works"
-            class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm gap-1 transition-colors"
+    <!-- Category chips: sticky horizontal scroll -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-20">
+      <div class="overflow-x-auto px-4 py-2.5 scrollbar-none">
+        <div class="flex gap-2 w-max">
+          <button
+            @click="browseDonations(null)"
+            :class="[
+              'flex-shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors',
+              activeCategoryId === null
+                ? 'bg-gray-900 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+            ]"
           >
-            Saiba mais
-            <span aria-hidden="true">→</span>
-          </router-link>
+            Todos
+          </button>
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            @click="browseDonations(cat.id)"
+            :class="[
+              'flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
+              activeCategoryId === cat.id
+                ? 'bg-gray-900 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+            ]"
+          >
+            <span v-if="cat.icon" class="leading-none" aria-hidden="true">{{ cat.icon }}</span>
+            {{ cat.name }}
+          </button>
+          <div v-if="loadingCategories" class="flex gap-2">
+            <div v-for="i in 5" :key="i" class="h-8 w-20 rounded-full bg-gray-100 animate-pulse" />
+          </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Featured Donations -->
-    <section class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-end mb-10">
-          <div>
-            <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
-              Doações em Destaque
-            </h2>
-            <p class="text-gray-600">
-              Itens disponíveis agora perto de você
-            </p>
-          </div>
+    <!-- Donations feed -->
+    <section class="py-5 px-4 bg-gray-50 min-h-[60vh]">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-base font-bold text-gray-900">Doações Recentes</h2>
           <router-link
             to="/donations"
-            class="hidden sm:inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm gap-1 transition-colors"
+            class="text-sm text-primary-600 hover:text-primary-700 font-medium"
           >
             Ver todas
-            <span aria-hidden="true">→</span>
           </router-link>
         </div>
 
-        <!-- Loading State -->
-        <div v-if="loadingDonations" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="i in 6" :key="i" class="card animate-pulse">
-            <div class="h-48 bg-gray-200 rounded-t-lg"></div>
-            <div class="card-body">
-              <div class="h-4 bg-gray-200 rounded mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-              <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+        <!-- Loading skeleton -->
+        <div v-if="loadingDonations" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div
+            v-for="i in 8"
+            :key="i"
+            class="rounded-xl bg-white border border-gray-100 animate-pulse"
+          >
+            <div class="aspect-[4/3] bg-gray-200 rounded-t-xl" />
+            <div class="p-3 space-y-2">
+              <div class="h-2.5 bg-gray-200 rounded w-1/3" />
+              <div class="h-3.5 bg-gray-200 rounded" />
+              <div class="h-3.5 bg-gray-200 rounded w-4/5" />
+              <div class="h-2.5 bg-gray-200 rounded w-2/3 mt-1" />
             </div>
           </div>
         </div>
 
-        <!-- Donations Grid -->
-        <div v-else-if="featuredDonations.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Grid 2-col mobile → 3 tablet → 4 desktop -->
+        <div
+          v-else-if="featuredDonations.length > 0"
+          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"
+        >
           <DonationCard
             v-for="donation in featuredDonations"
             :key="donation.id"
             :donation="donation"
-            class="fade-in"
           />
         </div>
 
-        <!-- Empty State -->
-        <div v-else class="text-center py-12">
-          <HeartIcon class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma doação encontrada</h3>
-          <p class="text-gray-600 mb-6">Seja o primeiro a fazer uma doação!</p>
+        <!-- Empty -->
+        <div v-else class="text-center py-16">
+          <HeartIcon class="w-12 h-12 text-gray-300 mx-auto mb-3" />
+          <p class="text-gray-600 mb-4 text-sm">Nenhuma doação disponível ainda.</p>
           <router-link
             v-if="isAuthenticated"
             to="/donations/create"
-            class="btn-primary"
+            class="inline-flex items-center justify-center rounded-lg bg-gray-900 text-white text-sm font-semibold px-5 py-2.5 hover:bg-gray-800 transition-colors"
           >
-            Criar Doação
-          </router-link>
-          <router-link
-            v-else
-            to="/register"
-            class="btn-primary"
-          >
-            Cadastrar-se
+            Fazer a Primeira Doação
           </router-link>
         </div>
 
-        <div class="text-center mt-8 sm:hidden">
+        <div v-if="!loadingDonations && featuredDonations.length > 0" class="mt-6">
           <router-link
             to="/donations"
-            class="btn-outline"
+            class="flex items-center justify-center w-full px-6 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-white transition-colors text-sm"
           >
             Ver Todas as Doações
           </router-link>
@@ -153,143 +123,58 @@
       </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
-          <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
-            Categorias Populares
-          </h2>
-          <p class="text-gray-600">
-            Encontre doações por categoria
-          </p>
-        </div>
-
-        <!-- Loading State -->
-        <div v-if="loadingCategories" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <div v-for="i in 6" :key="i" class="card animate-pulse">
-            <div class="card-body text-center">
-              <div class="w-12 h-12 bg-gray-200 rounded-full mx-auto mb-3"></div>
-              <div class="h-4 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Categories Grid -->
-        <div v-else-if="categories.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <router-link
-            v-for="category in categories"
-            :key="category.id"
-            :to="`/categories/${category.id}`"
-            class="card hover:shadow-md transition-shadow duration-200 fade-in"
-          >
-            <div class="card-body text-center">
-              <div class="w-12 h-12 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span class="text-2xl">{{ category.icon || '📦' }}</span>
-              </div>
-              <h3 class="font-medium text-gray-900 text-sm">{{ category.name }}</h3>
-            </div>
-          </router-link>
-        </div>
-
-        <div class="text-center mt-8">
-          <router-link
-            to="/categories"
-            class="btn-outline"
-          >
-            Ver Todas as Categorias
-          </router-link>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section: dark surface instead of corporate blue -->
-    <section class="py-20 bg-gray-900 text-white">
-      <div class="max-w-2xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl lg:text-3xl font-bold mb-4">
-          Pronto para Fazer a Diferença?
-        </h2>
-        <p class="text-gray-700 mb-8 text-lg leading-relaxed">
-          Junte-se à nossa comunidade e ajude a criar um bairro mais generoso.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <router-link
-            v-if="!isAuthenticated"
-            to="/register"
-            class="inline-flex items-center justify-center rounded-lg bg-white text-gray-900 text-base font-semibold px-7 py-3 hover:bg-gray-100 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          >
-            Criar Conta Grátis
-          </router-link>
-          <router-link
-            to="/donations/create"
-            class="inline-flex items-center justify-center rounded-lg bg-brand-400 text-gray-900 text-base font-semibold px-7 py-3 hover:bg-brand-500 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
-          >
-            {{ isAuthenticated ? 'Fazer Doação' : 'Começar Agora' }}
-          </router-link>
-        </div>
-      </div>
-    </section>
+    <!-- FAB: Quero Doar (mobile only, acima do tab bar) -->
+    <router-link
+      :to="isAuthenticated ? '/donations/create' : '/auth/register'"
+      class="md:hidden fixed bottom-20 right-4 z-30 w-14 h-14 rounded-full bg-brand-500 shadow-lg flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+      aria-label="Quero Doar"
+    >
+      <PlusIcon class="w-6 h-6 text-gray-900" />
+    </router-link>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import {
-  HeartIcon,
-  CameraIcon,
-  ChatBubbleLeftRightIcon,
-  StarIcon
-} from '@heroicons/vue/24/outline'
+import { useRouter } from 'vue-router'
+import { HeartIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
 import { donationItemsApi, categoriesApi } from '@/services/api'
 import type { DonationItem, Category } from '@/types'
 import DonationCard from '@/components/donations/DonationCard.vue'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
-// State
 const featuredDonations = ref<DonationItem[]>([])
 const categories = ref<Category[]>([])
 const loadingDonations = ref(true)
 const loadingCategories = ref(true)
+const searchQuery = ref('')
+const activeCategoryId = ref<number | null>(null)
 
-// Computed
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
-// Static data
-const stats = [
-  { value: '1.2K+', label: 'Doações Realizadas' },
-  { value: '850+', label: 'Pessoas Ajudadas' },
-  { value: '95%', label: 'Satisfação' },
-  { value: '24h', label: 'Resposta Média' },
-]
+const handleSearch = () => {
+  const q = searchQuery.value.trim()
+  if (q) router.push({ path: '/donations', query: { search: q } })
+}
 
-const howItWorksSteps = [
-  {
-    title: 'Cadastre seu Item',
-    description: 'Tire fotos e descreva o item que você quer doar. É rápido e fácil.',
-    icon: CameraIcon,
-  },
-  {
-    title: 'Conecte-se',
-    description: 'Pessoas interessadas entram em contato pelo chat integrado.',
-    icon: ChatBubbleLeftRightIcon,
-  },
-  {
-    title: 'Faça a Diferença',
-    description: 'Combine a entrega e veja o impacto da sua generosidade.',
-    icon: StarIcon,
-  },
-]
+const browseDonations = (categoryId: number | null) => {
+  activeCategoryId.value = categoryId
+  if (categoryId) {
+    router.push({ path: '/donations', query: { category_id: categoryId } })
+  } else {
+    router.push('/donations')
+  }
+}
 
-// Methods
 const loadFeaturedDonations = async () => {
   try {
-    loadingDonations.value = true
-    const response = await donationItemsApi.getAll({ per_page: 6 })
+    const response = await donationItemsApi.getAll({ per_page: 8 })
     featuredDonations.value = response.data
-  } catch (error) {
-    console.error('Erro ao carregar doações:', error)
+  } catch {
+    // fail silently on home page
   } finally {
     loadingDonations.value = false
   }
@@ -297,17 +182,15 @@ const loadFeaturedDonations = async () => {
 
 const loadCategories = async () => {
   try {
-    loadingCategories.value = true
-    const response = await categoriesApi.getAll(false) as Category[]
-    categories.value = response.slice(0, 6)
-  } catch (error) {
-    console.error('Erro ao carregar categorias:', error)
+    const response = (await categoriesApi.getAll(false)) as Category[]
+    categories.value = response
+  } catch {
+    // fail silently
   } finally {
     loadingCategories.value = false
   }
 }
 
-// Lifecycle
 onMounted(() => {
   loadFeaturedDonations()
   loadCategories()
@@ -315,24 +198,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.fade-in {
-  animation: fadeIn 0.5s ease-out both;
+.scrollbar-none {
+  scrollbar-width: none;
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fade-in {
-    animation: none;
-  }
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 </style>
