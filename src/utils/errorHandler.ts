@@ -78,7 +78,7 @@ export const useErrorHandler = () => {
     return defaultMessage
   }
 
-  const getValidationErrors = (error: AxiosError | Error): Record<string, string[]> | null => {
+  const getValidationErrors = (error: AxiosError): Record<string, string[]> | null => {
     if (error.response?.status === 422 && error.response?.data?.errors) {
       return error.response.data.errors
     }

@@ -21,6 +21,37 @@
         </div>
       </div>
 
+      <!-- Category chips: horizontal scroll shortcuts -->
+      <div class="overflow-x-auto mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div class="flex gap-2 w-max pb-1">
+          <button
+            @click="filters.category_id = ''"
+            :class="[
+              'flex-shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors',
+              !filters.category_id
+                ? 'bg-gray-900 text-white'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+            ]"
+          >
+            Todos
+          </button>
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            @click="filters.category_id = String(cat.id)"
+            :class="[
+              'flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
+              filters.category_id === String(cat.id)
+                ? 'bg-gray-900 text-white'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+            ]"
+          >
+            <span v-if="cat.icon" class="leading-none" aria-hidden="true">{{ cat.icon }}</span>
+            {{ cat.name }}
+          </button>
+        </div>
+      </div>
+
       <!-- Filters -->
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -146,12 +177,11 @@
       />
 
       <!-- Items Grid -->
-      <div v-else-if="filteredItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="filteredItems.length > 0" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <DonationCard
           v-for="item in filteredItems"
           :key="item.id"
-          :item="item"
-          @click="goToItem(item)"
+          :donation="item"
         />
       </div>
 
@@ -300,10 +330,6 @@ const requestGeolocation = () => {
     },
     { timeout: 10000, maximumAge: 300000 },
   )
-}
-
-const goToItem = (item: DonationItem) => {
-  router.push(`/donations/${item.id}`)
 }
 
 const clearFilters = () => {

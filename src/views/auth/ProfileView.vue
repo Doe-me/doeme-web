@@ -459,11 +459,11 @@ const changePassword = async () => {
     toast.success('Senha alterada com sucesso!')
     closePasswordModal()
   } catch (error) {
-    const fieldError = error.response?.data?.errors?.current_password?.[0]
+    const fieldError = (error as { response?: { data?: { errors?: { current_password?: string[] } } } }).response?.data?.errors?.current_password?.[0]
     if (fieldError) {
       passwordError.value = fieldError
-    } else if (!error.response?.data?.errors) {
-      toast.error(error.response?.data?.message || 'Erro ao alterar senha')
+    } else {
+      toast.error((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao alterar senha')
     }
   } finally {
     loadingPassword.value = false
