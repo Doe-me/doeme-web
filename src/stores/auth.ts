@@ -239,10 +239,10 @@ export const useAuthStore = defineStore('auth', () => {
       const userData = await authApi.getUser()
       user.value = userData
       localStorage.setItem('user', JSON.stringify(userData))
-    } catch (err: any) {
+    } catch (err) {
       token.value = null
       localStorage.removeItem('auth_token')
-      error.value = err.response?.data?.message || 'Erro ao validar token social'
+      error.value = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao validar token social'
       throw err
     } finally {
       loading.value = false

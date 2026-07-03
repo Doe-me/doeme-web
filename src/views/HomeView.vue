@@ -21,41 +21,45 @@
       </div>
     </section>
 
-    <!-- Category chips: sticky horizontal scroll -->
-    <div class="bg-white border-b border-gray-200 sticky top-0 z-20">
-      <div class="overflow-x-auto px-4 py-2.5 scrollbar-none">
-        <div class="flex gap-2 w-max">
-          <button
-            @click="browseDonations(null)"
-            :class="[
-              'flex-shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors',
-              activeCategoryId === null
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-            ]"
+    <!-- Category grid: OLX-style icon grid -->
+    <section class="bg-white dark:bg-neutral-900 border-b border-gray-100 dark:border-neutral-800 px-4 py-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-sm font-bold text-gray-900 dark:text-white">Explorar por categoria</h2>
+          <router-link
+            to="/categories"
+            class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 font-medium"
           >
-            Todos
-          </button>
+            Ver todas
+          </router-link>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div v-if="loadingCategories" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+          <div v-for="i in 8" :key="i" class="flex flex-col items-center gap-1.5 p-2 rounded-xl">
+            <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-neutral-800 animate-pulse" />
+            <div class="h-3 w-12 rounded bg-gray-100 dark:bg-neutral-800 animate-pulse" />
+          </div>
+        </div>
+
+        <!-- Grid -->
+        <div v-else class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
           <button
             v-for="cat in categories"
             :key="cat.id"
-            @click="browseDonations(cat.id)"
-            :class="[
-              'flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
-              activeCategoryId === cat.id
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-            ]"
+            @click="router.push({ path: '/donations', query: { category_id: cat.id } })"
+            class="flex flex-col items-center gap-1.5 p-2 rounded-xl bg-white dark:bg-neutral-900 hover:bg-brand-50 dark:hover:bg-neutral-800 transition-colors group"
           >
-            <span v-if="cat.icon" class="leading-none" aria-hidden="true">{{ cat.icon }}</span>
-            {{ cat.name }}
+            <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-brand-100 dark:group-hover:bg-neutral-700 transition-colors">
+              <component :is="getCategoryIcon(cat.name)" class="w-5 h-5 text-gray-600 dark:text-neutral-300 group-hover:text-brand-700 dark:group-hover:text-brand-400" />
+            </div>
+            <span class="text-xs text-gray-600 dark:text-neutral-400 font-medium truncate w-full text-center leading-tight">
+              {{ cat.name }}
+            </span>
           </button>
-          <div v-if="loadingCategories" class="flex gap-2">
-            <div v-for="i in 5" :key="i" class="h-8 w-20 rounded-full bg-gray-100 animate-pulse" />
-          </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Donations feed -->
     <section class="py-5 px-4 bg-gray-50 min-h-[60vh]">
@@ -142,6 +146,7 @@ import { useAuthStore } from '@/stores/auth'
 import { donationItemsApi, categoriesApi } from '@/services/api'
 import type { DonationItem, Category } from '@/types'
 import DonationCard from '@/components/donations/DonationCard.vue'
+import { getCategoryIcon } from '@/utils/categoryIcons'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -151,22 +156,12 @@ const categories = ref<Category[]>([])
 const loadingDonations = ref(true)
 const loadingCategories = ref(true)
 const searchQuery = ref('')
-const activeCategoryId = ref<number | null>(null)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const handleSearch = () => {
   const q = searchQuery.value.trim()
   if (q) router.push({ path: '/donations', query: { search: q } })
-}
-
-const browseDonations = (categoryId: number | null) => {
-  activeCategoryId.value = categoryId
-  if (categoryId) {
-    router.push({ path: '/donations', query: { category_id: categoryId } })
-  } else {
-    router.push('/donations')
-  }
 }
 
 const loadFeaturedDonations = async () => {
@@ -197,11 +192,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.scrollbar-none {
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-</style>
