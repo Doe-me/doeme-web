@@ -287,7 +287,7 @@ const handleRegister = async () => {
     })
 
     router.push('/')
-  } catch (error: any) {
+  } catch (error) {
     handleError(error, t('auth.register.error'))
 
     if (error.errors) {
@@ -302,7 +302,7 @@ const handleSocialLogin = async (provider: 'google' | 'facebook') => {
   try {
     await authStore.socialLogin(provider)
     router.push('/')
-  } catch (error: any) {
+  } catch (error) {
     handleError(error, t('auth.register.error'))
   }
 }

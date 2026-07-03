@@ -93,7 +93,7 @@ interface Props {
   loadingText?: string
   loading?: boolean
   type?: 'danger' | 'warning' | 'info' | 'success'
-  icon?: any
+  icon?: object
   showCloseButton?: boolean
   closeOnBackdrop?: boolean
 }

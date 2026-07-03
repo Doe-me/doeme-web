@@ -100,8 +100,8 @@ export interface Review {
   response?: string
   created_at: string
   updated_at: string
-  reviewer?: any
-  reviewed_user?: any
+  reviewer?: Record<string, unknown>
+  reviewed_user?: Record<string, unknown>
   donation_item?: {
     id: number
     title: string
@@ -126,7 +126,7 @@ export interface PaginatedResponse<T> {
   }
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   data?: T
   message?: string
   error?: string
