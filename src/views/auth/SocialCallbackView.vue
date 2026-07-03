@@ -85,6 +85,7 @@ onMounted(async () => {
   try {
     await authStore.setAuthFromToken(token as string)
 
+
     success.value = true
     title.value = 'Autenticação Realizada!'
     message.value = 'Você foi autenticado com sucesso. Redirecionando...'
