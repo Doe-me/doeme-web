@@ -288,8 +288,10 @@
               v-model="passwordForm.current_password"
               type="password"
               required
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              :class="['w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500', passwordError ? 'border-red-500' : 'border-gray-300']"
+              @input="passwordError = ''"
             />
+            <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
@@ -313,7 +315,7 @@
           <div class="flex justify-end space-x-3 pt-4">
             <button
               type="button"
-              @click="showChangePassword = false"
+              @click="closePasswordModal"
               class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Cancelar
@@ -361,11 +363,13 @@ const loadingPassword = ref(false)
 
 const fileInput = ref<HTMLInputElement>()
 
-const userStats = reactive({
-  donations: 12,
-  received: 8,
-  rating: 4.8
-})
+const userStats = computed(() => ({
+  donations: authStore.user?.donations_count ?? 0,
+  received: authStore.user?.received_count ?? 0,
+  rating: authStore.user?.average_rating ?? 0,
+}))
+
+const passwordError = ref('')
 
 const personalForm = reactive({
   name: '',
@@ -435,25 +439,32 @@ const updateAddress = async () => {
   }
 }
 
+const closePasswordModal = () => {
+  showChangePassword.value = false
+  passwordError.value = ''
+  Object.assign(passwordForm, { current_password: '', password: '', password_confirmation: '' })
+}
+
 const changePassword = async () => {
   if (passwordForm.password !== passwordForm.password_confirmation) {
-    toast.error('Senhas não coincidem')
+    toast.error('As senhas não coincidem')
     return
   }
-  
+
   loadingPassword.value = true
-  
+  passwordError.value = ''
+
   try {
     await authStore.changePassword(passwordForm)
     toast.success('Senha alterada com sucesso!')
-    showChangePassword.value = false
-    
-    // Reset form
-    Object.keys(passwordForm).forEach(key => {
-      passwordForm[key as keyof typeof passwordForm] = ''
-    })
+    closePasswordModal()
   } catch (error) {
-    toast.error(error.message || 'Erro ao alterar senha')
+    const fieldError = (error as { response?: { data?: { errors?: { current_password?: string[] } } } }).response?.data?.errors?.current_password?.[0]
+    if (fieldError) {
+      passwordError.value = fieldError
+    } else {
+      toast.error((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao alterar senha')
+    }
   } finally {
     loadingPassword.value = false
   }

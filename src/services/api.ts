@@ -143,6 +143,19 @@ export const authApi = {
     return response.data.user
   },
 
+  updateAddress: async (data: {
+    zip_code?: string
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    state?: string
+  }): Promise<User> => {
+    const response: AxiosResponse<{ user: User }> = await api.put('/auth/address', data)
+    return response.data.user
+  },
+
   updateAvatar: async (file: File): Promise<User> => {
     const formData = new FormData()
     formData.append('avatar', file)
@@ -186,6 +199,7 @@ export const authApi = {
     const response = await api.delete('/auth/account', { data })
     return handleApiResponse(response)
   },
+
 
   // Social auth
   getSocialAuthUrl: (provider: 'google' | 'facebook'): string => {

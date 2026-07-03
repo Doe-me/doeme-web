@@ -331,7 +331,7 @@ const loadChat = async () => {
   try {
     const chatId = route.params.id as string
     chat.value = await chatsStore.fetchChat(chatId)
-  } catch (error) {
+  } catch {
     handleError(error, 'Erro ao carregar conversa')
   }
 }
@@ -340,7 +340,7 @@ const loadMessages = async () => {
   try {
     const chatId = route.params.id as string
     messages.value = await chatsStore.fetchMessages(chatId)
-  } catch (error) {
+  } catch {
     handleError(error, 'Erro ao carregar mensagens')
   }
 }
@@ -357,7 +357,7 @@ const sendMessage = async () => {
 
     await nextTick()
     scrollToBottom()
-  } catch (error) {
+  } catch {
     handleError(error, 'Erro ao enviar mensagem')
   } finally {
     isSending.value = false
