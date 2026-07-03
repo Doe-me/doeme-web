@@ -7,7 +7,7 @@
     Você está offline. Algumas funcionalidades podem estar indisponíveis.
   </div>
 
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50" :class="{ 'top-8': !isOnline }">
+  <header class="bg-white dark:bg-neutral-900 shadow-sm border-b border-gray-200 dark:border-neutral-800 sticky top-0 z-50" :class="{ 'top-8': !isOnline }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Logo e Nome -->
@@ -16,7 +16,7 @@
             <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
               <HeartIcon class="w-5 h-5 text-white" />
             </div>
-            <span class="text-xl font-bold text-gray-900 hidden sm:block">{{ $t('common.appName') }}</span>
+            <span class="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">{{ $t('common.appName') }}</span>
           </router-link>
         </div>
 
@@ -62,6 +62,9 @@
 
           <!-- Idioma -->
           <LanguageSwitcher />
+
+          <!-- Tema -->
+          <ThemeToggle />
 
           <!-- Notificações -->
           <button
@@ -174,7 +177,7 @@
 
     <!-- Menu Mobile -->
     <div v-show="mobileMenuOpen" class="md:hidden">
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800">
         <!-- Busca Mobile -->
         <div class="px-3 py-2">
           <div class="relative">
@@ -228,6 +231,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/auth'
 import LanguageSwitcher from '@/components/common/LanguageSwitcher.vue'
+import ThemeToggle from '@/components/common/ThemeToggle.vue'
 import { useInstallPrompt } from '@/composables/useInstallPrompt'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 
