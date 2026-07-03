@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.list.title') }}</h1>
-            <p class="mt-2 text-gray-600">{{ $t('donations.list.subtitle') }}</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('donations.list.title') }}</h1>
+            <p class="mt-2 text-gray-600 dark:text-neutral-400">{{ $t('donations.list.subtitle') }}</p>
           </div>
 
           <div class="mt-4 sm:mt-0">
@@ -29,8 +29,8 @@
             :class="[
               'flex-shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors',
               !filters.category_id
-                ? 'bg-gray-900 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-neutral-900'
+                : 'bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-700',
             ]"
           >
             Todos
@@ -42,8 +42,8 @@
             :class="[
               'flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               filters.category_id === String(cat.id)
-                ? 'bg-gray-900 text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-neutral-900'
+                : 'bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-700',
             ]"
           >
             <span v-if="cat.icon" class="leading-none" aria-hidden="true">{{ cat.icon }}</span>
@@ -53,7 +53,7 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Search -->
           <div class="lg:col-span-2">
@@ -63,7 +63,7 @@
                 v-model="filters.search"
                 type="text"
                 :placeholder="$t('donations.list.searchPlaceholder')"
-                class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
           </div>
@@ -72,7 +72,7 @@
           <div>
             <select
               v-model="filters.category_id"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="">{{ $t('donations.list.allCategories') }}</option>
               <option
@@ -89,7 +89,7 @@
           <div>
             <select
               v-model="filters.condition"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
               <option value="">{{ $t('donations.list.allConditions') }}</option>
               <option value="Novo">{{ $t('donations.list.conditionNew') }}</option>
@@ -110,7 +110,7 @@
                 type="checkbox"
                 class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <label for="nearby" class="ml-2 text-sm text-gray-700">
+              <label for="nearby" class="ml-2 text-sm text-gray-700 dark:text-neutral-300">
                 {{ $t('donations.list.nearMe') }}
               </label>
             </div>
@@ -137,7 +137,7 @@
                 type="checkbox"
                 class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
-              <label for="available-only" class="ml-2 text-sm text-gray-700">
+              <label for="available-only" class="ml-2 text-sm text-gray-700 dark:text-neutral-300">
                 {{ $t('donations.list.availableOnly') }}
               </label>
             </div>

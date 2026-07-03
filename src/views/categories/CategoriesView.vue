@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Categorias</h1>
-            <p class="mt-2 text-gray-600">Explore doações por categoria</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Categorias</h1>
+            <p class="mt-2 text-gray-600 dark:text-neutral-400">Explore doações por categoria</p>
           </div>
           
           <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-3">
@@ -16,13 +16,13 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Buscar categorias..."
-                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64"
+                class="pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
               />
             </div>
             
             <select
               v-model="sortBy"
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="px-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
             >
               <option value="name">Nome</option>
               <option value="items_count">Mais itens</option>
@@ -50,7 +50,7 @@
           v-for="category in filteredCategories"
           :key="category.id"
           @click="goToCategory(category)"
-          class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 cursor-pointer group"
+          class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200 cursor-pointer group"
         >
           <div class="p-6">
             <!-- Icon -->
@@ -65,16 +65,16 @@
             
             <!-- Content -->
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {{ category.name }}
               </h3>
-              <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+              <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4 line-clamp-2">
                 {{ category.description }}
               </p>
               
               <!-- Stats -->
               <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center text-gray-600">
+                <div class="flex items-center text-gray-600 dark:text-neutral-400">
                   <GiftIcon class="w-4 h-4 mr-1" />
                   <span>{{ category.items_count }} itens</span>
                 </div>
@@ -103,7 +103,7 @@
 
       <!-- Popular Categories Section -->
       <div v-if="!searchQuery && popularCategories.length > 0" class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Categorias Populares</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Categorias Populares</h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div

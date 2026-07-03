@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
         <router-link to="/" class="inline-flex items-center">
@@ -7,10 +7,10 @@
             {{ $t('common.appName') }}
           </span>
         </router-link>
-        <h2 class="mt-6 text-3xl font-bold text-gray-900">
+        <h2 class="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
           {{ $t('auth.login.title') }}
         </h2>
-        <p class="mt-2 text-sm text-gray-600">
+        <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">
           {{ $t('auth.login.or') }}
           <router-link to="/auth/register" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
             {{ $t('auth.login.createAccount') }}
@@ -21,7 +21,7 @@
       <form @submit.prevent="handleLogin" class="mt-8 space-y-6">
         <div class="space-y-4">
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
               {{ $t('auth.login.email') }}
             </label>
             <input
@@ -29,7 +29,7 @@
               v-model="form.email"
               type="email"
               required
-              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
+              class="appearance-none relative block w-full px-3 py-3 border border-gray-300 dark:border-neutral-700 placeholder-gray-500 dark:placeholder-neutral-500 text-gray-900 dark:text-white bg-white dark:bg-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-colors"
               :placeholder="$t('auth.login.emailPlaceholder')"
               :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.email }"
             />
@@ -37,7 +37,7 @@
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
               {{ $t('auth.login.password') }}
             </label>
             <div class="relative">
@@ -71,7 +71,7 @@
               type="checkbox"
               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
             />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+            <label for="remember-me" class="ml-2 block text-sm text-gray-900 dark:text-white">
               {{ $t('auth.login.rememberMe') }}
             </label>
           </div>
@@ -105,7 +105,7 @@
               <div class="w-full border-t border-gray-300" />
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="px-2 bg-white text-gray-600">{{ $t('auth.login.orContinueWith') }}</span>
+              <span class="px-2 bg-gray-50 dark:bg-neutral-950 text-gray-600 dark:text-neutral-400">{{ $t('auth.login.orContinueWith') }}</span>
             </div>
           </div>
 
@@ -113,7 +113,7 @@
             <button
               type="button"
               @click="handleSocialLogin('google')"
-              class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors"
+              class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm bg-white dark:bg-neutral-800 text-sm font-medium text-gray-500 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
             >
               <svg class="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -127,7 +127,7 @@
             <button
               type="button"
               @click="handleSocialLogin('facebook')"
-              class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors"
+              class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm bg-white dark:bg-neutral-800 text-sm font-medium text-gray-500 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>

@@ -1,7 +1,7 @@
 <template>
   <Menu as="div" class="relative inline-block text-left">
     <MenuButton
-      class="flex items-center space-x-1 p-2 text-gray-500 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+      class="flex items-center space-x-1 p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-900 dark:hover:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
     >
       <span class="sr-only">{{ $t('nav.openMainMenu') }}</span>
       <LanguageIcon class="h-5 w-5" />
@@ -16,14 +16,14 @@
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transform opacity-0 scale-95"
     >
-      <MenuItems class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <MenuItems class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white dark:bg-neutral-900 shadow-lg ring-1 ring-black dark:ring-neutral-700 ring-opacity-5 focus:outline-none">
         <div class="py-1">
           <MenuItem v-for="loc in SUPPORTED_LOCALES" :key="loc" v-slot="{ active }">
             <button
               type="button"
               @click="changeLocale(loc)"
               :class="[
-                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                active ? 'bg-gray-100 dark:bg-neutral-800 text-gray-900 dark:text-white' : 'text-gray-700 dark:text-neutral-300',
                 loc === locale ? 'font-semibold' : '',
                 'group flex w-full items-center px-4 py-2 text-sm'
               ]"

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8 flex items-center">
@@ -10,8 +10,8 @@
           <ArrowLeftIcon class="w-5 h-5" />
         </button>
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Editar Doação</h1>
-          <p class="mt-1 text-gray-600">Atualize as informações da sua doação</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Editar Doação</h1>
+          <p class="mt-1 text-gray-600 dark:text-neutral-400">Atualize as informações da sua doação</p>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
 
       <!-- Not found -->
       <div v-else-if="!donation" class="text-center py-20">
-        <p class="text-gray-600 mb-4">Doação não encontrada.</p>
+        <p class="text-gray-600 dark:text-neutral-400 mb-4">Doação não encontrada.</p>
         <router-link
           to="/donations"
           class="inline-block bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors"
@@ -42,13 +42,13 @@
       <!-- Form -->
       <form v-else @submit.prevent="handleSubmit" class="space-y-8">
         <!-- Basic Information -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Informações Básicas</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Informações Básicas</h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Title -->
             <div class="md:col-span-2">
-              <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="title" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 Título da Doação *
               </label>
               <input
@@ -56,7 +56,7 @@
                 v-model="form.title"
                 type="text"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 placeholder="Ex: Sofá em bom estado"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.title }"
               />
@@ -65,14 +65,14 @@
 
             <!-- Category -->
             <div>
-              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="category" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 Categoria *
               </label>
               <select
                 id="category"
                 v-model="form.category_id"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.category_id }"
               >
                 <option value="">Selecione uma categoria</option>
@@ -89,14 +89,14 @@
 
             <!-- Condition -->
             <div>
-              <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 Estado de Conservação *
               </label>
               <select
                 id="condition"
                 v-model="form.condition"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
               >
                 <option value="">Selecione o estado</option>
@@ -110,7 +110,7 @@
 
             <!-- Description -->
             <div class="md:col-span-2">
-              <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="description" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 Descrição *
               </label>
               <textarea
@@ -118,7 +118,7 @@
                 v-model="form.description"
                 rows="4"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 placeholder="Descreva o item, seu estado de conservação e outras informações importantes..."
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
               ></textarea>
@@ -128,7 +128,7 @@
         </div>
 
         <!-- Images -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-2">Fotos</h2>
 
           <!-- Existing saved images -->
@@ -182,8 +182,8 @@
         </div>
 
         <!-- Location -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Localização</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Localização</h2>
 
           <div>
             <label for="location" class="block text-sm font-medium text-gray-700 mb-1">
@@ -203,8 +203,8 @@
         </div>
 
         <!-- Additional Options -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Opções Adicionais</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Opções Adicionais</h2>
 
           <div class="space-y-4">
             <div class="flex items-center">

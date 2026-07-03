@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
@@ -11,8 +11,8 @@
             <ArrowLeftIcon class="w-5 h-5" />
           </button>
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.create.title') }}</h1>
-            <p class="mt-2 text-gray-600">{{ $t('donations.create.subtitle') }}</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $t('donations.create.title') }}</h1>
+            <p class="mt-2 text-gray-600 dark:text-neutral-400">{{ $t('donations.create.subtitle') }}</p>
           </div>
         </div>
 
@@ -25,19 +25,19 @@
               </div>
               <span class="ml-2 text-sm font-medium text-blue-600">{{ $t('donations.create.stepInfo') }}</span>
             </div>
-            <div class="w-16 h-0.5 bg-gray-300"></div>
+            <div class="w-16 h-0.5 bg-gray-300 dark:bg-neutral-700"></div>
             <div class="flex items-center">
-              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
+              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 dark:bg-neutral-700 text-gray-600 dark:text-neutral-400 text-sm font-medium">
                 2
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepPhotos') }}</span>
+              <span class="ml-2 text-sm font-medium text-gray-600 dark:text-neutral-400">{{ $t('donations.create.stepPhotos') }}</span>
             </div>
-            <div class="w-16 h-0.5 bg-gray-300"></div>
+            <div class="w-16 h-0.5 bg-gray-300 dark:bg-neutral-700"></div>
             <div class="flex items-center">
-              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
+              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 dark:bg-neutral-700 text-gray-600 dark:text-neutral-400 text-sm font-medium">
                 3
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepLocation') }}</span>
+              <span class="ml-2 text-sm font-medium text-gray-600 dark:text-neutral-400">{{ $t('donations.create.stepLocation') }}</span>
             </div>
           </div>
         </div>
@@ -45,13 +45,13 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-8">
         <!-- Basic Information -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ $t('donations.create.basicInfo') }}</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">{{ $t('donations.create.basicInfo') }}</h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Title -->
             <div class="md:col-span-2">
-              <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="title" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 {{ $t('donations.create.donationTitle') }} *
               </label>
               <input
@@ -59,7 +59,7 @@
                 v-model="form.title"
                 type="text"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :placeholder="$t('donations.create.donationTitlePlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.title }"
               />
@@ -68,14 +68,14 @@
 
             <!-- Category -->
             <div>
-              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="category" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 {{ $t('donations.create.category') }} *
               </label>
               <select
                 id="category"
                 v-model="form.category_id"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.category_id }"
               >
                 <option value="">{{ $t('donations.create.selectCategory') }}</option>
@@ -92,14 +92,14 @@
 
             <!-- Condition -->
             <div>
-              <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="condition" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 {{ $t('donations.create.condition') }} *
               </label>
               <select
                 id="condition"
                 v-model="form.condition"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
               >
                 <option value="">{{ $t('donations.create.selectCondition') }}</option>
@@ -113,7 +113,7 @@
 
             <!-- Description -->
             <div class="md:col-span-2">
-              <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="description" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 {{ $t('donations.create.description') }} *
               </label>
               <textarea
@@ -121,20 +121,20 @@
                 v-model="form.description"
                 rows="4"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 :placeholder="$t('donations.create.descriptionPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
               ></textarea>
               <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
-              <p class="mt-1 text-sm text-gray-600">{{ $t('donations.create.descriptionMinLength') }}</p>
+              <p class="mt-1 text-sm text-gray-600 dark:text-neutral-400">{{ $t('donations.create.descriptionMinLength') }}</p>
             </div>
           </div>
         </div>
 
         <!-- Images -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('donations.create.photosTitle') }}</h2>
-          <p class="text-sm text-gray-600 mb-4">
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ $t('donations.create.photosTitle') }}</h2>
+          <p class="text-sm text-gray-600 dark:text-neutral-400 mb-4">
             Adicione até 5 fotos. A primeira foto será a principal.
           </p>
 
@@ -144,12 +144,12 @@
         </div>
 
         <!-- Location -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Localização</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Localização</h2>
 
           <div class="space-y-4">
             <div>
-              <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
+              <label for="address" class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">
                 Endereço *
               </label>
               <input
@@ -157,7 +157,7 @@
                 v-model="form.location.address"
                 type="text"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
                 placeholder="Rua, número, bairro, cidade"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.address }"
               />
@@ -169,15 +169,15 @@
                 type="button"
                 @click="getCurrentLocation"
                 :disabled="gettingLocation"
-                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg text-sm font-medium text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800 disabled:opacity-50 transition-colors"
               >
                 <MapPinIcon class="w-4 h-4 mr-2" />
                 {{ gettingLocation ? 'Obtendo localização...' : 'Usar localização atual' }}
               </button>
             </div>
 
-            <div class="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div class="text-center text-gray-600">
+            <div class="h-48 bg-gray-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
+              <div class="text-center text-gray-600 dark:text-neutral-400">
                 <MapIcon class="w-12 h-12 mx-auto mb-2" />
                 <p>Prévia do mapa será exibida aqui</p>
               </div>
@@ -186,8 +186,8 @@
         </div>
 
         <!-- Additional Options -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Opções Adicionais</h2>
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Opções Adicionais</h2>
 
           <div class="space-y-4">
             <div class="flex items-center">
@@ -197,7 +197,7 @@
                 type="checkbox"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label for="allow-pickup" class="ml-2 text-sm text-gray-700">
+              <label for="allow-pickup" class="ml-2 text-sm text-gray-700 dark:text-neutral-300">
                 Permitir retirada no local
               </label>
             </div>
@@ -209,7 +209,7 @@
                 type="checkbox"
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <label for="allow-delivery" class="ml-2 text-sm text-gray-700">
+              <label for="allow-delivery" class="ml-2 text-sm text-gray-700 dark:text-neutral-300">
                 Posso entregar (raio de até 10km)
               </label>
             </div>

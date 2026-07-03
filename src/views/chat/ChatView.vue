@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 flex flex-col">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
       <LoadingSpinner size="lg" />
@@ -16,7 +16,7 @@
     <!-- Chat Interface -->
     <div v-else-if="chat" class="flex flex-col h-screen">
       <!-- Header -->
-      <div class="bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between">
+      <div class="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 px-4 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-4">
           <!-- Back Button -->
           <button
@@ -34,7 +34,7 @@
               class="w-10 h-10 rounded-full object-cover"
             />
             <div>
-              <h2 class="text-lg font-semibold text-gray-900">{{ otherUser?.name }}</h2>
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ otherUser?.name }}</h2>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
       </div>
 
       <!-- Donation Item Info -->
-      <div v-if="donationItem" class="bg-blue-50 border-b border-blue-200 px-4 py-3">
+      <div v-if="donationItem" class="bg-blue-50 dark:bg-blue-950/30 border-b border-blue-200 dark:border-blue-900 px-4 py-3">
         <div class="flex items-center space-x-3">
           <img
             :src="donationItem.images?.[0] || '/placeholder-image.jpg'"
@@ -67,7 +67,7 @@
             class="w-12 h-12 rounded-lg object-cover"
           />
           <div class="flex-1">
-            <h3 class="font-medium text-gray-900">{{ donationItem.title }}</h3>
+            <h3 class="font-medium text-gray-900 dark:text-white">{{ donationItem.title }}</h3>
             <div class="flex items-center space-x-2">
               <span
                 :class="[
@@ -120,7 +120,7 @@
               'max-w-xs lg:max-w-md px-4 py-2 rounded-lg',
               message.user_id === authStore.user?.id
                 ? 'bg-primary-600 text-white'
-                : 'bg-white text-gray-900 border border-gray-200'
+                : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-white border border-gray-200 dark:border-neutral-700'
             ]"
           >
             <p class="text-sm">{{ message.message }}</p>
@@ -145,7 +145,7 @@
       </div>
 
       <!-- Message Input -->
-      <div class="bg-white border-t border-gray-200 px-4 py-4">
+      <div class="bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800 px-4 py-4">
         <form @submit.prevent="handleSendMessage" class="flex items-end space-x-3">
           <div class="flex-1">
             <textarea
@@ -153,7 +153,7 @@
               @keydown="handleKeyDown"
               placeholder="Digite sua mensagem..."
               rows="1"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
               style="min-height: 40px; max-height: 120px;"
             ></textarea>
           </div>

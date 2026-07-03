@@ -10,8 +10,8 @@
       :class="[
         'rounded-lg border-2 border-dashed cursor-pointer transition-colors',
         isDragging
-          ? 'border-primary-500 bg-primary-50'
-          : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+          : 'border-gray-300 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 hover:border-gray-400 dark:hover:border-neutral-600 hover:bg-gray-100 dark:hover:bg-neutral-700'
       ]"
       class="p-6 flex flex-col items-center justify-center text-center"
     >
@@ -29,10 +29,10 @@
           d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
         />
       </svg>
-      <p class="text-sm font-medium text-gray-700">
+      <p class="text-sm font-medium text-gray-700 dark:text-neutral-300">
         <span class="text-primary-600">Clique para selecionar</span> ou arraste imagens aqui
       </p>
-      <p class="mt-1 text-xs text-gray-500">
+      <p class="mt-1 text-xs text-gray-500 dark:text-neutral-400">
         JPG, JPEG, PNG, WebP ou GIF — até {{ maxSizeMb }}MB por arquivo, máximo {{ maxFiles }} fotos
       </p>
     </div>
@@ -95,7 +95,7 @@
       </div>
     </div>
 
-    <p v-if="modelValue.length > 0" class="mt-2 text-xs text-gray-500">
+    <p v-if="modelValue.length > 0" class="mt-2 text-xs text-gray-500 dark:text-neutral-400">
       {{ modelValue.length }}/{{ maxFiles }} foto(s) selecionada(s)
     </p>
   </div>

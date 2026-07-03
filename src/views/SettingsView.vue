@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Configurações</h1>
-        <p class="mt-2 text-gray-600">Gerencie suas preferências e dados da conta</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Configurações</h1>
+        <p class="mt-2 text-gray-600 dark:text-neutral-400">Gerencie suas preferências e dados da conta</p>
       </div>
 
       <div class="grid lg:grid-cols-4 gap-6">
         <!-- Menu Lateral -->
         <div class="lg:col-span-1">
-          <nav class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <nav class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-4">
             <ul class="space-y-1">
               <li v-for="tab in tabs" :key="tab.id">
                 <button
@@ -17,8 +17,8 @@
                   :class="[
                     'w-full text-left flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors',
                     activeTab === tab.id
-                      ? 'bg-primary-50 text-primary-700'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                      : 'text-gray-700 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-neutral-800'
                   ]"
                 >
                   <component :is="tab.icon" class="w-4 h-4 mr-2 flex-shrink-0" />
@@ -33,8 +33,8 @@
         <div class="lg:col-span-3">
 
           <!-- Perfil -->
-          <div v-if="activeTab === 'profile'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Informações do Perfil</h2>
+          <div v-if="activeTab === 'profile'" class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Informações do Perfil</h2>
 
             <form @submit.prevent="updateProfile" class="space-y-5">
               <!-- Avatar -->
@@ -84,37 +84,37 @@
 
               <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nome</label>
                   <input
                     v-model="profileForm.name"
                     type="text"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">E-mail</label>
                   <input
                     v-model="profileForm.email"
                     type="email"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Telefone</label>
                   <input
                     v-model="profileForm.phone"
                     type="tel"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Localização</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Localização</label>
                   <input
                     v-model="profileForm.location"
                     type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                 </div>
               </div>
@@ -132,12 +132,12 @@
           </div>
 
           <!-- Senha -->
-          <div v-if="activeTab === 'password'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Alterar Senha</h2>
+          <div v-if="activeTab === 'password'" class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Alterar Senha</h2>
 
             <form @submit.prevent="changePassword" class="space-y-4 max-w-md">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Senha Atual</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Senha Atual</label>
                 <input
                   v-model="passwordForm.currentPassword"
                   type="password"
@@ -148,21 +148,21 @@
                 <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nova Senha</label>
                 <input
                   v-model="passwordForm.newPassword"
                   type="password"
                   required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nova Senha</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Confirmar Nova Senha</label>
                 <input
                   v-model="passwordForm.confirmPassword"
                   type="password"
                   required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div class="flex justify-end">
@@ -178,8 +178,8 @@
           </div>
 
           <!-- Notificações -->
-          <div v-if="activeTab === 'notifications'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Preferências de Notificação</h2>
+          <div v-if="activeTab === 'notifications'" class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Preferências de Notificação</h2>
 
             <div v-if="loadingNotifications" class="flex justify-center py-8">
               <LoadingSpinner />
@@ -189,15 +189,15 @@
               <div>
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">E-mail</h3>
                 <div class="space-y-3">
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
-                    <span class="text-sm text-gray-700">Novas mensagens</span>
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
+                    <span class="text-sm text-gray-700 dark:text-neutral-300">Novas mensagens</span>
                     <input v-model="notifications.email_new_message" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Interesse em suas doações</span>
                     <input v-model="notifications.email_donation_interest" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Newsletter semanal</span>
                     <input v-model="notifications.email_newsletter" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
@@ -207,15 +207,15 @@
               <div>
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Push</h3>
                 <div class="space-y-3">
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
-                    <span class="text-sm text-gray-700">Novas mensagens</span>
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
+                    <span class="text-sm text-gray-700 dark:text-neutral-300">Novas mensagens</span>
                     <input v-model="notifications.push_new_message" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Interesse em suas doações</span>
                     <input v-model="notifications.push_donation_interest" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Novas avaliações</span>
                     <input v-model="notifications.push_new_reviews" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
@@ -235,8 +235,8 @@
           </div>
 
           <!-- Privacidade -->
-          <div v-if="activeTab === 'privacy'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Configurações de Privacidade</h2>
+          <div v-if="activeTab === 'privacy'" class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Configurações de Privacidade</h2>
 
             <div v-if="loadingPrivacy" class="flex justify-center py-8">
               <LoadingSpinner />
@@ -246,15 +246,15 @@
               <div>
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Visibilidade</h3>
                 <div class="space-y-3">
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Mostrar e-mail no perfil público</span>
                     <input v-model="privacy.show_email" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Mostrar telefone no perfil público</span>
                     <input v-model="privacy.show_phone" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Mostrar localização aproximada</span>
                     <input v-model="privacy.show_location" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
@@ -264,11 +264,11 @@
               <div>
                 <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Comunicação</h3>
                 <div class="space-y-3">
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Permitir mensagens de outros usuários</span>
                     <input v-model="privacy.allow_messages" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
-                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200">
+                  <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-neutral-700">
                     <span class="text-sm text-gray-700">Mostrar status online</span>
                     <input v-model="privacy.online_status" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
                   </label>
@@ -290,7 +290,7 @@
           <!-- Conta -->
           <div v-if="activeTab === 'account'" class="space-y-6">
             <!-- Contas Conectadas -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
               <h2 class="text-xl font-semibold text-gray-900 mb-4">Contas Conectadas</h2>
 
               <div v-if="loadingConnected" class="flex justify-center py-4">
@@ -384,7 +384,7 @@
         </p>
 
         <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Senha</label>
           <input
             v-model="deletePasswordInput"
             type="password"

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
       <LoadingSpinner size="xl" />
@@ -27,7 +27,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Image Gallery -->
         <div class="lg:col-span-2">
-          <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm overflow-hidden">
             <div class="aspect-w-16 aspect-h-9 bg-gray-200">
               <img
                 :src="currentImage"
@@ -58,10 +58,10 @@
         <!-- Donation Info -->
         <div class="space-y-6">
           <!-- Main Info Card -->
-          <div class="bg-white rounded-xl shadow-sm p-6">
+          <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
             <div class="flex items-start justify-between mb-4">
               <div>
-                <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ donation.title }}</h1>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ donation.title }}</h1>
                 <span
                   :class="[
                     'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
@@ -82,12 +82,12 @@
               </button>
             </div>
 
-            <p class="text-gray-600 mb-6">{{ donation.description }}</p>
+            <p class="text-gray-600 dark:text-neutral-400 mb-6">{{ donation.description }}</p>
 
             <!-- Category -->
             <div class="flex items-center mb-4">
               <TagIcon class="h-5 w-5 text-gray-400 mr-2" />
-              <span class="text-sm text-gray-600">{{ donation.category?.name }}</span>
+              <span class="text-sm text-gray-600 dark:text-neutral-400">{{ donation.category?.name }}</span>
             </div>
 
             <!-- Location -->
@@ -122,7 +122,7 @@
 
               <button
                 @click="shareItem"
-                class="w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center"
+                class="w-full bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-neutral-300 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors flex items-center justify-center"
               >
                 <ShareIcon class="h-5 w-5 mr-2" />
                 Compartilhar
@@ -131,8 +131,8 @@
           </div>
 
           <!-- Donor Info Card -->
-          <div class="bg-white rounded-xl shadow-sm p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Doador</h3>
+          <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Doador</h3>
             <div class="flex items-center space-x-3">
               <img
                 :src="donation.user?.avatar || '/default-avatar.png'"

@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <div class="container mx-auto px-4 py-8">
       <!-- Header -->
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Mensagens</h1>
-          <p class="text-gray-600 mt-2">Suas conversas sobre doações</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Mensagens</h1>
+          <p class="text-gray-600 dark:text-neutral-400 mt-2">Suas conversas sobre doações</p>
         </div>
         
         <!-- Search -->
@@ -15,7 +15,7 @@
             v-model="searchQuery"
             type="text"
             placeholder="Buscar conversas..."
-            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64"
+            class="pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
           />
         </div>
       </div>
@@ -46,13 +46,13 @@
       </EmptyState>
 
       <!-- Chats List -->
-      <div v-else class="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div class="divide-y divide-gray-200">
+      <div v-else class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm overflow-hidden">
+        <div class="divide-y divide-gray-200 dark:divide-neutral-800">
           <div
             v-for="chat in filteredChats"
             :key="chat.id"
             @click="openChat(chat)"
-            class="p-6 hover:bg-gray-50 cursor-pointer transition-colors"
+            class="p-6 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer transition-colors"
           >
             <div class="flex items-start space-x-4">
               <!-- Avatar -->
@@ -71,25 +71,25 @@
               <!-- Chat Info -->
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mb-1">
-                  <h3 class="text-sm font-semibold text-gray-900 truncate">
+                  <h3 class="text-sm font-semibold text-gray-900 dark:text-white truncate">
                     {{ chat.otherUser.name }}
                   </h3>
-                  <span class="text-xs text-gray-700">
+                  <span class="text-xs text-gray-700 dark:text-neutral-400">
                     {{ formatTime(chat.lastMessage?.created_at) }}
                   </span>
                 </div>
 
                 <!-- Donation Item -->
-                <div class="flex items-center text-sm text-gray-600 mb-2">
+                <div class="flex items-center text-sm text-gray-600 dark:text-neutral-400 mb-2">
                   <GiftIcon class="h-4 w-4 mr-1 flex-shrink-0" />
                   <span class="truncate">{{ chat.donationItem.title }}</span>
                 </div>
 
                 <!-- Last Message -->
                 <div class="flex items-center justify-between">
-                  <p class="text-sm text-gray-600 truncate">
-                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-600">
-                      Você: 
+                  <p class="text-sm text-gray-600 dark:text-neutral-400 truncate">
+                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-600 dark:text-neutral-400">
+                      Você:
                     </span>
                     {{ chat.lastMessage?.message || 'Nenhuma mensagem ainda' }}
                   </p>
@@ -126,19 +126,19 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-neutral-300 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 rounded-md hover:bg-gray-50 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
-          
-          <span class="px-4 py-2 text-sm font-medium text-gray-700">
+
+          <span class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-neutral-400">
             Página {{ currentPage }} de {{ totalPages }}
           </span>
-          
+
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-neutral-300 bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-700 rounded-md hover:bg-gray-50 dark:hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima
           </button>

@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <div class="container mx-auto px-4 py-8">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Avaliações</h1>
-          <p class="text-gray-600 mt-2">Veja o que outros usuários estão dizendo</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Avaliações</h1>
+          <p class="text-gray-600 dark:text-neutral-400 mt-2">Veja o que outros usuários estão dizendo</p>
         </div>
         
         <!-- Filters -->
         <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
           <select
             v-model="filters.rating"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="px-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
           >
             <option value="">Todas as avaliações</option>
             <option value="5">5 estrelas</option>
@@ -28,7 +28,7 @@
               v-model="filters.search"
               type="text"
               placeholder="Buscar avaliações..."
-              class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64"
+              class="pl-10 pr-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent w-64 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
             />
           </div>
         </div>
@@ -36,14 +36,14 @@
 
       <!-- Stats Cards -->
       <div v-if="reviewStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-yellow-100 rounded-lg">
               <StarIcon class="h-6 w-6 text-yellow-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Avaliação Média</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-neutral-400">Avaliação Média</p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
                 {{ reviewStats.average_rating.toFixed(1) }}
               </p>
             </div>
@@ -56,8 +56,8 @@
               <ChatBubbleLeftRightIcon class="h-6 w-6 text-blue-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Total de Avaliações</p>
-              <p class="text-2xl font-bold text-gray-900">{{ reviewStats.total_reviews }}</p>
+              <p class="text-sm font-medium text-gray-600 dark:text-neutral-400">Total de Avaliações</p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ reviewStats.total_reviews }}</p>
             </div>
           </div>
         </div>
@@ -68,8 +68,8 @@
               <HandThumbUpIcon class="h-6 w-6 text-green-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Avaliações Positivas</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-neutral-400">Avaliações Positivas</p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
                 {{ reviewStats.rating_distribution[4] + reviewStats.rating_distribution[5] }}
               </p>
             </div>
@@ -82,8 +82,8 @@
               <UsersIcon class="h-6 w-6 text-purple-600" />
             </div>
             <div class="ml-4">
-              <p class="text-sm font-medium text-gray-600">Usuários Avaliados</p>
-              <p class="text-2xl font-bold text-gray-900">
+              <p class="text-sm font-medium text-gray-600 dark:text-neutral-400">Usuários Avaliados</p>
+              <p class="text-2xl font-bold text-gray-900 dark:text-white">
                 {{ new Set(reviews.map(r => r.reviewed_user_id)).size }}
               </p>
             </div>
@@ -119,7 +119,7 @@
         <div
           v-for="review in filteredReviews"
           :key="review.id"
-          class="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+          class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
         >
           <div class="flex items-start space-x-4">
             <!-- Reviewer Avatar -->
@@ -133,10 +133,10 @@
               <!-- Header -->
               <div class="flex items-center justify-between mb-2">
                 <div>
-                  <h3 class="text-lg font-semibold text-gray-900">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     {{ review.reviewer?.name }}
                   </h3>
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-neutral-400">
                     avaliou 
                     <router-link
                       :to="`/profile/${review.reviewed_user_id}`"
@@ -146,7 +146,7 @@
                     </router-link>
                   </p>
                 </div>
-                <span class="text-sm text-gray-600">
+                <span class="text-sm text-gray-600 dark:text-neutral-400">
                   {{ formatDate(review.created_at) }}
                 </span>
               </div>
@@ -163,22 +163,22 @@
                     ]"
                   />
                 </div>
-                <span class="ml-2 text-sm font-medium text-gray-900">
+                <span class="ml-2 text-sm font-medium text-gray-900 dark:text-white">
                   {{ review.rating }}/5
                 </span>
               </div>
 
               <!-- Comment -->
-              <p v-if="review.comment" class="text-gray-700 mb-4">
+              <p v-if="review.comment" class="text-gray-700 dark:text-neutral-300 mb-4">
                 {{ review.comment }}
               </p>
 
               <!-- Donation Item -->
-              <div v-if="review.donation_item" class="bg-gray-50 rounded-lg p-3">
+              <div v-if="review.donation_item" class="bg-gray-50 dark:bg-neutral-800 rounded-lg p-3">
                 <div class="flex items-center space-x-3">
                   <GiftIcon class="h-5 w-5 text-gray-400 flex-shrink-0" />
                   <div>
-                    <p class="text-sm font-medium text-gray-900">
+                    <p class="text-sm font-medium text-gray-900 dark:text-white">
                       Sobre a doação: {{ review.donation_item.title }}
                     </p>
                     <router-link
@@ -195,7 +195,7 @@
               <div v-if="authStore.user?.id === review.reviewer_id" class="flex items-center space-x-4 mt-4">
                 <button
                   @click="editReview(review)"
-                  class="text-sm text-gray-600 hover:text-gray-800 font-medium"
+                  class="text-sm text-gray-600 dark:text-neutral-400 hover:text-gray-800 dark:hover:text-neutral-200 font-medium"
                 >
                   Editar
                 </button>
@@ -249,17 +249,17 @@
               leave-from="opacity-100 translate-y-0 sm:scale-100"
               leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white dark:bg-neutral-900 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div class="sm:flex sm:items-start">
                   <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                     <ExclamationTriangleIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
                   </div>
                   <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">
+                    <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                       Excluir avaliação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-600">
+                      <p class="text-sm text-gray-600 dark:text-neutral-400">
                         Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.
                       </p>
                     </div>
@@ -275,7 +275,7 @@
                   </button>
                   <button
                     type="button"
-                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-neutral-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-neutral-300 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700 sm:mt-0 sm:w-auto"
                     @click="showDeleteModal = false"
                   >
                     Cancelar
