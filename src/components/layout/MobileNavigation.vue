@@ -1,12 +1,12 @@
 <template>
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom z-40">
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800 safe-area-bottom z-40">
     <div class="grid grid-cols-5 h-16">
       <router-link
         v-for="item in navigationItems"
         :key="item.href"
         :to="item.href"
         class="flex flex-col items-center justify-center space-y-1 text-xs font-medium transition-colors duration-200"
-        :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-600 hover:text-gray-700'"
+        :class="isActive(item.href) ? 'text-primary-600' : 'text-gray-600 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200'"
       >
         <component
           :is="item.icon"

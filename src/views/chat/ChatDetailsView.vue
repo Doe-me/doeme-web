@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen flex flex-col bg-gray-50">
+  <div class="h-screen flex flex-col bg-gray-50 dark:bg-neutral-950">
     <!-- Header do Chat -->
-    <div class="bg-white border-b px-4 py-3 flex items-center justify-between">
+    <div class="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <router-link
           to="/chats"
@@ -26,8 +26,8 @@
           </div>
           
           <div>
-            <h2 class="font-semibold text-gray-900">{{ otherUser?.name }}</h2>
-            <p class="text-sm text-gray-600">
+            <h2 class="font-semibold text-gray-900 dark:text-white">{{ otherUser?.name }}</h2>
+            <p class="text-sm text-gray-600 dark:text-neutral-400">
               {{ otherUser?.isOnline ? 'Online' : `Visto por último ${formatLastSeen(otherUser?.lastSeen)}` }}
             </p>
           </div>
@@ -37,7 +37,7 @@
       <div class="flex items-center space-x-2">
         <button
           @click="toggleUserInfo"
-          class="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+          class="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -47,7 +47,7 @@
         <div class="relative">
           <button
             @click="showOptions = !showOptions"
-            class="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+            class="p-2 text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
@@ -56,7 +56,7 @@
           
           <div
             v-if="showOptions"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border"
+            class="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-900 rounded-md shadow-lg z-10 border dark:border-neutral-800"
           >
             <button
               @click="blockUser"
@@ -66,7 +66,7 @@
             </button>
             <button
               @click="reportUser"
-              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+              class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-800"
             >
               Denunciar
             </button>
@@ -103,7 +103,7 @@
             'max-w-xs lg:max-w-md px-4 py-2 rounded-lg',
             message.sender_id === currentUserId
               ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-900 border'
+              : 'bg-white dark:bg-neutral-800 text-gray-900 dark:text-white border dark:border-neutral-700'
           ]"
         >
           <p class="text-sm">{{ message.content }}</p>
@@ -149,7 +149,7 @@
       
       <!-- Indicador de digitação -->
       <div v-if="isTyping" class="flex justify-start">
-        <div class="bg-white border rounded-lg px-4 py-2 max-w-xs">
+        <div class="bg-white dark:bg-neutral-800 border dark:border-neutral-700 rounded-lg px-4 py-2 max-w-xs">
           <div class="flex space-x-1">
             <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></div>
             <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
@@ -160,7 +160,7 @@
     </div>
     
     <!-- Input de Mensagem -->
-    <div class="bg-white border-t p-4">
+    <div class="bg-white dark:bg-neutral-900 border-t border-gray-200 dark:border-neutral-800 p-4">
       <form @submit.prevent="sendMessage" class="flex items-end space-x-3">
         <div class="flex-1">
           <textarea
@@ -169,7 +169,7 @@
             @input="handleTyping"
             placeholder="Digite sua mensagem..."
             rows="1"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
             style="min-height: 40px; max-height: 120px;"
           ></textarea>
         </div>
@@ -204,14 +204,14 @@
     <!-- Sidebar de Informações do Usuário -->
     <div
       v-if="showUserInfo"
-      class="fixed inset-y-0 right-0 w-80 bg-white border-l shadow-lg z-20 transform transition-transform lg:relative lg:w-1/3"
+      class="fixed inset-y-0 right-0 w-80 bg-white dark:bg-neutral-900 border-l dark:border-neutral-800 shadow-lg z-20 transform transition-transform lg:relative lg:w-1/3"
     >
-      <div class="p-4 border-b">
+      <div class="p-4 border-b dark:border-neutral-800">
         <div class="flex items-center justify-between">
-          <h3 class="text-lg font-semibold">Informações</h3>
+          <h3 class="text-lg font-semibold dark:text-white">Informações</h3>
           <button
             @click="showUserInfo = false"
-            class="text-gray-500 hover:text-gray-700"
+            class="text-gray-500 dark:text-neutral-400 hover:text-gray-700 dark:hover:text-neutral-200"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -227,13 +227,13 @@
             :alt="otherUser.name"
             class="w-20 h-20 rounded-full object-cover mx-auto mb-3"
           />
-          <h4 class="text-lg font-semibold">{{ otherUser.name }}</h4>
-          <p class="text-sm text-gray-600">{{ otherUser.email }}</p>
+          <h4 class="text-lg font-semibold dark:text-white">{{ otherUser.name }}</h4>
+          <p class="text-sm text-gray-600 dark:text-neutral-400">{{ otherUser.email }}</p>
         </div>
         
         <div class="space-y-3">
           <div>
-            <label class="text-sm font-medium text-gray-700">Avaliação</label>
+            <label class="text-sm font-medium text-gray-700 dark:text-neutral-300">Avaliação</label>
             <div class="flex items-center space-x-1 mt-1">
               <div class="flex">
                 <svg
@@ -249,24 +249,24 @@
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                 </svg>
               </div>
-              <span class="text-sm text-gray-600">
+              <span class="text-sm text-gray-600 dark:text-neutral-400">
                 ({{ otherUser.reviewsCount || 0 }} avaliações)
               </span>
             </div>
           </div>
           
           <div>
-            <label class="text-sm font-medium text-gray-700">Localização</label>
-            <p class="text-sm text-gray-600 mt-1">{{ otherUser.city }}, {{ otherUser.state }}</p>
+            <label class="text-sm font-medium text-gray-700 dark:text-neutral-300">Localização</label>
+            <p class="text-sm text-gray-600 dark:text-neutral-400 mt-1">{{ otherUser.city }}, {{ otherUser.state }}</p>
           </div>
-          
+
           <div>
-            <label class="text-sm font-medium text-gray-700">Membro desde</label>
-            <p class="text-sm text-gray-600 mt-1">{{ formatDate(otherUser.created_at) }}</p>
+            <label class="text-sm font-medium text-gray-700 dark:text-neutral-300">Membro desde</label>
+            <p class="text-sm text-gray-600 dark:text-neutral-400 mt-1">{{ formatDate(otherUser.created_at) }}</p>
           </div>
         </div>
         
-        <div class="pt-4 border-t">
+        <div class="pt-4 border-t dark:border-neutral-800">
           <router-link
             :to="`/users/${otherUser.id}/reviews`"
             class="block w-full bg-blue-600 text-white text-center py-2 rounded-md hover:bg-blue-700"

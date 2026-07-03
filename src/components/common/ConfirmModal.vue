@@ -12,13 +12,13 @@
         <!-- Modal -->
         <div
           ref="modalRef"
-          class="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-auto transform transition-all"
+          class="relative bg-white dark:bg-neutral-900 rounded-lg shadow-xl max-w-md w-full mx-auto transform transition-all"
           @click.stop
         >
           <!-- Header -->
-          <div class="px-6 py-4 border-b">
+          <div class="px-6 py-4 border-b dark:border-neutral-800">
             <div class="flex items-center justify-between">
-              <h3 class="text-lg font-semibold text-gray-900">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ title }}
               </h3>
               <button
@@ -41,7 +41,7 @@
               </div>
             </div>
             
-            <p class="text-gray-600 leading-relaxed">
+            <p class="text-gray-600 dark:text-neutral-400 leading-relaxed">
               {{ message }}
             </p>
             
@@ -49,10 +49,10 @@
           </div>
           
           <!-- Footer -->
-          <div class="px-6 py-4 border-t bg-gray-50 flex flex-col-reverse sm:flex-row sm:justify-end space-y-2 space-y-reverse sm:space-y-0 sm:space-x-3">
+          <div class="px-6 py-4 border-t dark:border-neutral-800 bg-gray-50 dark:bg-neutral-800 flex flex-col-reverse sm:flex-row sm:justify-end space-y-2 space-y-reverse sm:space-y-0 sm:space-x-3">
             <button
               @click="$emit('cancel')"
-              class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 dark:text-neutral-300 bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 rounded-md hover:bg-gray-50 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               {{ cancelText }}
             </button>

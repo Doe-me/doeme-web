@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group cursor-pointer bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-200"
+    class="group cursor-pointer bg-white dark:bg-neutral-800 rounded-xl overflow-hidden border border-gray-100 dark:border-neutral-700 hover:shadow-md transition-shadow duration-200"
     @click="goToDetails"
   >
     <!-- Image -->
@@ -39,7 +39,7 @@
     <!-- Body -->
     <div class="p-3">
       <p class="text-xs font-semibold text-brand-600 mb-0.5">Gratuito</p>
-      <h3 class="font-semibold text-gray-900 text-sm leading-snug line-clamp-2 mb-2">
+      <h3 class="font-semibold text-gray-900 dark:text-white text-sm leading-snug line-clamp-2 mb-2">
         {{ donation.title }}
       </h3>
       <div class="flex items-center gap-1 text-xs text-gray-500 min-w-0">

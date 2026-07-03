@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-neutral-950">
     <div class="max-w-md w-full text-center">
       <div class="mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
@@ -11,11 +11,11 @@
           <XCircleIcon v-else class="w-8 h-8 text-red-600" />
         </div>
 
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {{ title }}
         </h1>
 
-        <p class="text-gray-600">
+        <p class="text-gray-600 dark:text-neutral-400">
           {{ message }}
         </p>
       </div>

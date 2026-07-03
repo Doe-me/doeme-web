@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <div class="container mx-auto px-4 py-8">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Minhas Doações</h1>
-          <p class="text-gray-600 mt-2">Gerencie seus itens doados</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Minhas Doações</h1>
+          <p class="text-gray-600 dark:text-neutral-400 mt-2">Gerencie seus itens doados</p>
         </div>
         <router-link
           to="/donations/create"
@@ -18,7 +18,7 @@
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-blue-100 rounded-lg">
               <GiftIcon class="h-6 w-6 text-blue-600" />
@@ -30,7 +30,7 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-green-100 rounded-lg">
               <CheckCircleIcon class="h-6 w-6 text-green-600" />
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-yellow-100 rounded-lg">
               <ClockIcon class="h-6 w-6 text-yellow-600" />
@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-purple-100 rounded-lg">
               <HeartIcon class="h-6 w-6 text-purple-600" />
@@ -68,13 +68,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6 mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
           <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <!-- Status Filter -->
             <select
               v-model="filters.status"
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="px-4 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="">Todos os status</option>
               <option value="available">Disponível</option>
@@ -85,7 +85,7 @@
             <!-- Category Filter -->
             <select
               v-model="filters.category"
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="px-4 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="">Todas as categorias</option>
               <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -137,7 +137,7 @@
         <div
           v-for="donation in filteredDonations"
           :key="donation.id"
-          class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+          class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
         >
           <!-- Image -->
           <div class="aspect-w-16 aspect-h-9 bg-gray-200">
@@ -151,7 +151,7 @@
           <!-- Content -->
           <div class="p-6">
             <div class="flex items-start justify-between mb-3">
-              <h3 class="text-lg font-semibold text-gray-900 line-clamp-2">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
                 {{ donation.title }}
               </h3>
               <span
@@ -164,7 +164,7 @@
               </span>
             </div>
 
-            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+            <p class="text-gray-600 dark:text-neutral-400 text-sm mb-4 line-clamp-2">
               {{ donation.description }}
             </p>
 
@@ -181,7 +181,7 @@
             <div class="flex space-x-2">
               <router-link
                 :to="`/donations/${donation.id}`"
-                class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors"
+                class="flex-1 bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 py-2 px-4 rounded-lg text-center font-medium hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors"
               >
                 Ver Detalhes
               </router-link>

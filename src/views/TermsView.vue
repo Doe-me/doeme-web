@@ -1,9 +1,10 @@
 <template>
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
   <div class="container mx-auto p-4 max-w-4xl">
-    <h1 class="text-3xl font-bold mb-6">Termos de Uso</h1>
-    
-    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
-      <p class="text-sm text-blue-800">
+    <h1 class="text-3xl font-bold mb-6 dark:text-white">Termos de Uso</h1>
+
+    <div class="bg-blue-50 dark:bg-blue-950/30 border-l-4 border-blue-400 p-4 mb-6">
+      <p class="text-sm text-blue-800 dark:text-blue-300">
         <strong>Última atualização:</strong> {{ lastUpdated }}
       </p>
     </div>

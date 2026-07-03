@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center py-24">
       <LoadingSpinner size="lg" />
@@ -46,7 +46,7 @@
 
       <!-- Filters and Search -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6 mb-8">
           <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <!-- Search -->
             <div class="relative flex-1 max-w-md">
@@ -55,7 +55,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Buscar itens nesta categoria..."
-                class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
               />
             </div>
             
@@ -63,7 +63,7 @@
             <div class="flex flex-wrap gap-3">
               <select
                 v-model="filters.condition"
-                class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
               >
                 <option value="">Todas as condições</option>
                 <option value="new">Novo</option>
@@ -74,7 +74,7 @@
               
               <select
                 v-model="filters.location"
-                class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
               >
                 <option value="">Todas as localidades</option>
                 <option value="nearby">Próximo a mim</option>
@@ -84,7 +84,7 @@
               
               <select
                 v-model="sortBy"
-                class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="px-3 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
               >
                 <option value="created_at">Mais recentes</option>
                 <option value="title">Nome A-Z</option>

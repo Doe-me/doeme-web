@@ -22,7 +22,7 @@
     </section>
 
     <!-- Category chips: sticky horizontal scroll -->
-    <div class="bg-white border-b border-gray-200 sticky top-0 z-20">
+    <div class="bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 sticky top-0 z-20">
       <div class="overflow-x-auto px-4 py-2.5 scrollbar-none">
         <div class="flex gap-2 w-max">
           <button
@@ -58,10 +58,10 @@
     </div>
 
     <!-- Donations feed -->
-    <section class="py-5 px-4 bg-gray-50 min-h-[60vh]">
+    <section class="py-5 px-4 bg-gray-50 dark:bg-neutral-950 min-h-[60vh]">
       <div class="max-w-7xl mx-auto">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-base font-bold text-gray-900">Doações Recentes</h2>
+          <h2 class="text-base font-bold text-gray-900 dark:text-white">Doações Recentes</h2>
           <router-link
             to="/donations"
             class="text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -75,7 +75,7 @@
           <div
             v-for="i in 8"
             :key="i"
-            class="rounded-xl bg-white border border-gray-100 animate-pulse"
+            class="rounded-xl bg-white dark:bg-neutral-800 border border-gray-100 dark:border-neutral-700 animate-pulse"
           >
             <div class="aspect-[4/3] bg-gray-200 rounded-t-xl" />
             <div class="p-3 space-y-2">

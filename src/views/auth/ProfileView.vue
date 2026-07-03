@@ -1,16 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Meu Perfil</h1>
-        <p class="mt-2 text-gray-600">Gerencie suas informações pessoais e configurações da conta</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Meu Perfil</h1>
+        <p class="mt-2 text-gray-600 dark:text-neutral-400">Gerencie suas informações pessoais e configurações da conta</p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Sidebar -->
         <div class="lg:col-span-1">
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
             <!-- Avatar -->
             <div class="text-center mb-6">
               <div class="relative inline-block">
@@ -40,8 +40,8 @@
                   class="hidden"
                 />
               </div>
-              <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ user?.name }}</h3>
-              <p class="text-gray-600">{{ user?.email }}</p>
+              <h3 class="mt-4 text-lg font-semibold text-gray-900 dark:text-white">{{ user?.name }}</h3>
+              <p class="text-gray-600 dark:text-neutral-400">{{ user?.email }}</p>
             </div>
 
             <!-- Stats -->
@@ -75,9 +75,9 @@
         <div class="lg:col-span-2">
           <div class="space-y-6">
             <!-- Personal Information -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">Informações Pessoais</h2>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Informações Pessoais</h2>
                 <button
                   @click="editingPersonal = !editingPersonal"
                   class="text-blue-600 hover:text-blue-700 font-medium transition-colors"
@@ -89,50 +89,50 @@
               <form @submit.prevent="updatePersonalInfo" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nome</label>
                     <input
                       v-model="personalForm.name"
                       type="text"
                       :disabled="!editingPersonal"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">E-mail</label>
                     <input
                       v-model="personalForm.email"
                       type="email"
                       :disabled="!editingPersonal"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Telefone</label>
                     <input
                       v-model="personalForm.phone"
                       type="tel"
                       :disabled="!editingPersonal"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Data de Nascimento</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Data de Nascimento</label>
                     <input
                       v-model="personalForm.birth_date"
                       type="date"
                       :disabled="!editingPersonal"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Bio</label>
                   <textarea
                     v-model="personalForm.bio"
                     rows="3"
                     :disabled="!editingPersonal"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     placeholder="Conte um pouco sobre você..."
                   ></textarea>
                 </div>
@@ -157,9 +157,9 @@
             </div>
 
             <!-- Address Information -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
               <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-gray-900">Endereço</h2>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Endereço</h2>
                 <button
                   @click="editingAddress = !editingAddress"
                   class="text-blue-600 hover:text-blue-700 font-medium transition-colors"
@@ -171,48 +171,48 @@
               <form @submit.prevent="updateAddress" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Rua</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Rua</label>
                     <input
                       v-model="addressForm.street"
                       type="text"
                       :disabled="!editingAddress"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Número</label>
                     <input
                       v-model="addressForm.number"
                       type="text"
                       :disabled="!editingAddress"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Bairro</label>
                     <input
                       v-model="addressForm.neighborhood"
                       type="text"
                       :disabled="!editingAddress"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Cidade</label>
                     <input
                       v-model="addressForm.city"
                       type="text"
                       :disabled="!editingAddress"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">CEP</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">CEP</label>
                     <input
                       v-model="addressForm.zip_code"
                       type="text"
                       :disabled="!editingAddress"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-neutral-900 disabled:text-gray-500 dark:disabled:text-neutral-500"
                     />
                   </div>
                 </div>
@@ -237,7 +237,7 @@
             </div>
 
             <!-- Security -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-800 p-6">
               <h2 class="text-xl font-semibold text-gray-900 mb-6">Segurança</h2>
               
               <div class="space-y-4">
@@ -278,23 +278,23 @@
 
     <!-- Change Password Modal -->
     <div v-if="showChangePassword" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div class="bg-white rounded-lg max-w-md w-full p-6">
+      <div class="bg-white dark:bg-neutral-900 rounded-lg max-w-md w-full p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Alterar Senha</h3>
         
         <form @submit.prevent="changePassword" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Senha Atual</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Senha Atual</label>
             <input
               v-model="passwordForm.current_password"
               type="password"
               required
-              :class="['w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500', passwordError ? 'border-red-500' : 'border-gray-300']"
+              :class="['w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white', passwordError ? 'border-red-500' : 'border-gray-300 dark:border-neutral-700']"
               @input="passwordError = ''"
             />
             <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Nova Senha</label>
             <input
               v-model="passwordForm.password"
               type="password"
@@ -303,7 +303,7 @@
             />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Nova Senha</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-neutral-300 mb-1">Confirmar Nova Senha</label>
             <input
               v-model="passwordForm.password_confirmation"
               type="password"

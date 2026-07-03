@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
     <div class="container mx-auto px-4 py-8">
       <!-- Header -->
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Minhas Avaliações</h1>
-          <p class="text-gray-600 mt-2">Avaliações que você fez e recebeu</p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Minhas Avaliações</h1>
+          <p class="text-gray-600 dark:text-neutral-400 mt-2">Avaliações que você fez e recebeu</p>
         </div>
       </div>
 
@@ -18,7 +18,7 @@
               'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm',
               activeTab === 'received'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-gray-600 dark:text-neutral-400 hover:text-gray-700 hover:border-gray-300 dark:hover:text-neutral-200'
             ]"
           >
             Recebidas ({{ receivedReviews.length }})
@@ -29,7 +29,7 @@
               'whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm',
               activeTab === 'given'
                 ? 'border-primary-500 text-primary-600'
-                : 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300'
+                : 'border-transparent text-gray-600 dark:text-neutral-400 hover:text-gray-700 hover:border-gray-300 dark:hover:text-neutral-200'
             ]"
           >
             Feitas ({{ givenReviews.length }})
@@ -39,7 +39,7 @@
 
       <!-- Stats Cards for Received Reviews -->
       <div v-if="activeTab === 'received' && reviewStats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white dark:bg-neutral-900 rounded-xl shadow-sm p-6">
           <div class="flex items-center">
             <div class="p-2 bg-yellow-100 rounded-lg">
               <StarIcon class="h-6 w-6 text-yellow-600" />

@@ -1,6 +1,7 @@
 <template>
+  <div class="min-h-screen bg-gray-50 dark:bg-neutral-950">
   <div class="container mx-auto p-4 max-w-4xl">
-    <h1 class="text-3xl font-bold mb-6">Central de Ajuda</h1>
+    <h1 class="text-3xl font-bold mb-6 dark:text-white">Central de Ajuda</h1>
     
     <!-- Busca -->
     <div class="mb-8">
@@ -9,7 +10,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="Buscar por ajuda..."
-          class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full px-4 py-3 pl-10 border border-gray-300 dark:border-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-neutral-500"
         />
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,18 +22,18 @@
     
     <!-- Perguntas Frequentes -->
     <div class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Perguntas Frequentes</h2>
+      <h2 class="text-2xl font-semibold mb-4 dark:text-white">Perguntas Frequentes</h2>
       <div class="space-y-4">
         <div
           v-for="(faq, index) in filteredFaqs"
           :key="index"
-          class="bg-white rounded-lg shadow-md"
+          class="bg-white dark:bg-neutral-900 rounded-lg shadow-md"
         >
           <button
             @click="toggleFaq(index)"
-            class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none"
+            class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 dark:hover:bg-neutral-800 focus:outline-none"
           >
-            <span class="font-medium">{{ faq.question }}</span>
+            <span class="font-medium dark:text-white">{{ faq.question }}</span>
             <svg
               :class="{ 'rotate-180': openFaqs.includes(index) }"
               class="h-5 w-5 text-gray-500 transform transition-transform"
@@ -45,7 +46,7 @@
           </button>
           <div
             v-show="openFaqs.includes(index)"
-            class="px-6 pb-4 text-gray-600"
+            class="px-6 pb-4 text-gray-600 dark:text-neutral-400"
           >
             {{ faq.answer }}
           </div>
@@ -55,31 +56,31 @@
     
     <!-- Categorias de Ajuda -->
     <div class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Categorias de Ajuda</h2>
+      <h2 class="text-2xl font-semibold mb-4 dark:text-white">Categorias de Ajuda</h2>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="category in helpCategories"
           :key="category.id"
-          class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+          class="bg-white dark:bg-neutral-900 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
           @click="selectCategory(category)"
         >
           <div class="text-3xl mb-3">{{ category.icon }}</div>
-          <h3 class="text-lg font-semibold mb-2">{{ category.title }}</h3>
-          <p class="text-gray-600 text-sm">{{ category.description }}</p>
+          <h3 class="text-lg font-semibold mb-2 dark:text-white">{{ category.title }}</h3>
+          <p class="text-gray-600 dark:text-neutral-400 text-sm">{{ category.description }}</p>
         </div>
       </div>
     </div>
     
     <!-- Guias Rápidos -->
     <div class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Guias Rápidos</h2>
+      <h2 class="text-2xl font-semibold mb-4 dark:text-white">Guias Rápidos</h2>
       <div class="grid md:grid-cols-2 gap-6">
         <div
           v-for="guide in quickGuides"
           :key="guide.id"
-          class="bg-white rounded-lg shadow-md p-6"
+          class="bg-white dark:bg-neutral-900 rounded-lg shadow-md p-6"
         >
-          <h3 class="text-lg font-semibold mb-3">{{ guide.title }}</h3>
+          <h3 class="text-lg font-semibold mb-3 dark:text-white">{{ guide.title }}</h3>
           <ol class="space-y-2">
             <li
               v-for="(step, stepIndex) in guide.steps"
@@ -89,7 +90,7 @@
               <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full mr-3 mt-0.5">
                 {{ stepIndex + 1 }}
               </span>
-              <span class="text-gray-700">{{ step }}</span>
+              <span class="text-gray-700 dark:text-neutral-300">{{ step }}</span>
             </li>
           </ol>
         </div>
@@ -97,9 +98,9 @@
     </div>
     
     <!-- Contato para Suporte -->
-    <div class="bg-blue-50 rounded-lg p-6">
-      <h2 class="text-xl font-semibold mb-3">Ainda precisa de ajuda?</h2>
-      <p class="text-gray-600 mb-4">
+    <div class="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-6">
+      <h2 class="text-xl font-semibold mb-3 dark:text-white">Ainda precisa de ajuda?</h2>
+      <p class="text-gray-600 dark:text-neutral-400 mb-4">
         Não encontrou o que procurava? Nossa equipe de suporte está pronta para ajudar!
       </p>
       <div class="flex flex-col sm:flex-row gap-4">
@@ -117,6 +118,7 @@
         </a>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
