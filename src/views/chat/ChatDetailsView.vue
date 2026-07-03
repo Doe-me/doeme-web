@@ -27,7 +27,7 @@
           
           <div>
             <h2 class="font-semibold text-gray-900">{{ otherUser?.name }}</h2>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-600">
               {{ otherUser?.isOnline ? 'Online' : `Visto por último ${formatLastSeen(otherUser?.lastSeen)}` }}
             </p>
           </div>
@@ -83,7 +83,10 @@
     >
       <!-- Loading de mensagens antigas -->
       <div v-if="loadingOlderMessages" class="text-center py-2">
-        <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+        <svg class="animate-spin h-6 w-6 text-primary-600 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
       </div>
       
       <!-- Mensagens -->
@@ -107,7 +110,7 @@
           <div
             :class="[
               'flex items-center justify-between mt-1 text-xs',
-              message.sender_id === currentUserId ? 'text-blue-100' : 'text-gray-500'
+              message.sender_id === currentUserId ? 'text-blue-100' : 'text-gray-600'
             ]"
           >
             <span>{{ formatMessageTime(message.created_at) }}</span>
@@ -148,9 +151,9 @@
       <div v-if="isTyping" class="flex justify-start">
         <div class="bg-white border rounded-lg px-4 py-2 max-w-xs">
           <div class="flex space-x-1">
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
+            <div class="w-2 h-2 bg-gray-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
           </div>
         </div>
       </div>
@@ -225,7 +228,7 @@
             class="w-20 h-20 rounded-full object-cover mx-auto mb-3"
           />
           <h4 class="text-lg font-semibold">{{ otherUser.name }}</h4>
-          <p class="text-sm text-gray-500">{{ otherUser.email }}</p>
+          <p class="text-sm text-gray-600">{{ otherUser.email }}</p>
         </div>
         
         <div class="space-y-3">
@@ -282,12 +285,14 @@ import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useChatsStore } from '@/stores/chats'
 import { useAuthStore } from '@/stores/auth'
-import type { Chat, ChatMessage, User } from '@/types'
+import { useErrorHandler } from '@/utils/errorHandler'
+import type { Chat, ChatMessage } from '@/types'
 
 const route = useRoute()
 const toast = useToast()
 const chatsStore = useChatsStore()
 const authStore = useAuthStore()
+const { handleError } = useErrorHandler()
 
 const chat = ref<Chat | null>(null)
 const messages = ref<ChatMessage[]>([])
@@ -326,8 +331,8 @@ const loadChat = async () => {
   try {
     const chatId = route.params.id as string
     chat.value = await chatsStore.fetchChat(chatId)
-  } catch (error) {
-    toast.error('Erro ao carregar conversa')
+  } catch {
+    handleError(error, 'Erro ao carregar conversa')
   }
 }
 
@@ -335,25 +340,25 @@ const loadMessages = async () => {
   try {
     const chatId = route.params.id as string
     messages.value = await chatsStore.fetchMessages(chatId)
-  } catch (error) {
-    toast.error('Erro ao carregar mensagens')
+  } catch {
+    handleError(error, 'Erro ao carregar mensagens')
   }
 }
 
 const sendMessage = async () => {
   if (!newMessage.value.trim() || !chat.value) return
-  
+
   isSending.value = true
-  
+
   try {
     const message = await chatsStore.sendMessage(chat.value.id, newMessage.value.trim())
     messages.value.push(message)
     newMessage.value = ''
-    
+
     await nextTick()
     scrollToBottom()
-  } catch (error) {
-    toast.error('Erro ao enviar mensagem')
+  } catch {
+    handleError(error, 'Erro ao enviar mensagem')
   } finally {
     isSending.value = false
   }
@@ -396,7 +401,7 @@ const loadOlderMessages = async () => {
     // Adicionar mensagens antigas ao início do array
     // const olderMessages = await chatsStore.fetchOlderMessages(chat.value.id, messages.value[0]?.id)
     // messages.value.unshift(...olderMessages)
-  } catch (error) {
+  } catch {
     toast.error('Erro ao carregar mensagens antigas')
   } finally {
     loadingOlderMessages.value = false

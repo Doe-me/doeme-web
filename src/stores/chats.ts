@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
+import { getEcho } from '@/services/echo'
 import type { Chat, ChatMessage, CreateChatRequest, SendMessageRequest } from '@/types'
 
 export const useChatsStore = defineStore('chats', () => {
@@ -34,7 +35,7 @@ export const useChatsStore = defineStore('chats', () => {
       const response = await api.get('/chats')
       chats.value = response.data.data || response.data
       
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar conversas'
       console.error('Erro ao buscar chats:', err)
       throw err
@@ -52,7 +53,7 @@ export const useChatsStore = defineStore('chats', () => {
       currentChat.value = response.data.data || response.data
       
       return currentChat.value
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar conversa'
       console.error('Erro ao buscar chat:', err)
       throw err
@@ -83,7 +84,7 @@ export const useChatsStore = defineStore('chats', () => {
         messages: newMessages,
         hasMore: response.data.meta?.has_more_pages || false
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar mensagens'
       console.error('Erro ao buscar mensagens:', err)
       throw err
@@ -104,7 +105,7 @@ export const useChatsStore = defineStore('chats', () => {
       currentChat.value = newChat
       
       return newChat
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar conversa'
       console.error('Erro ao criar chat:', err)
       throw err
@@ -136,7 +137,7 @@ export const useChatsStore = defineStore('chats', () => {
       }
       
       return newMessage
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao enviar mensagem'
       console.error('Erro ao enviar mensagem:', err)
       throw err
@@ -162,7 +163,7 @@ export const useChatsStore = defineStore('chats', () => {
           message.read_at = new Date().toISOString()
         })
         
-    } catch (err: any) {
+    } catch (err) {
       console.error('Erro ao marcar como lida:', err)
     }
   }
@@ -185,7 +186,7 @@ export const useChatsStore = defineStore('chats', () => {
       // Remover mensagens do chat
       messages.value = messages.value.filter(message => message.chat_id !== id)
       
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao excluir conversa'
       console.error('Erro ao excluir chat:', err)
       throw err
@@ -203,25 +204,74 @@ export const useChatsStore = defineStore('chats', () => {
     messages.value = []
   }
 
-  // Real-time updates (WebSocket simulation)
+  // Real-time updates (mensagens recebidas via WebSocket - Laravel Echo/Reverb)
   const addMessage = (message: ChatMessage) => {
+    // Evita duplicar mensagem já adicionada otimisticamente pelo próprio remetente
+    if (messages.value.some(existing => existing.id === message.id)) {
+      return
+    }
+
     messages.value.push(message)
-    
+
     // Atualizar última mensagem do chat
     const chatIndex = chats.value.findIndex(chat => chat.id === message.chat_id)
     if (chatIndex !== -1) {
       chats.value[chatIndex].lastMessage = message
       chats.value[chatIndex].updated_at = message.created_at
-      
+
       // Incrementar contador de não lidas se não for do usuário atual
-      if (message.user_id !== currentChat.value?.otherUser.id) {
+      if (message.user_id !== currentChat.value?.otherUser?.id) {
         chats.value[chatIndex].unreadCount = (chats.value[chatIndex].unreadCount || 0) + 1
       }
-      
+
       // Mover chat para o topo da lista
       const chat = chats.value.splice(chatIndex, 1)[0]
       chats.value.unshift(chat)
     }
+  }
+
+  let subscribedChatId: number | null = null
+
+  /**
+   * Escuta o canal privado do chat e adiciona novas mensagens em tempo real,
+   * sem precisar dar refresh/poll na página (evento "message.sent" da API).
+   */
+  const subscribeToChat = (chatId: number) => {
+    if (subscribedChatId === chatId) {
+      return
+    }
+
+    unsubscribeFromChat()
+
+    getEcho()
+      .private(`chat.${chatId}`)
+      .listen('.message.sent', (payload: {
+        id: number
+        chat_id: number
+        message: string
+        user: { id: number; name: string; avatar?: string }
+        created_at: string
+      }) => {
+        addMessage({
+          id: payload.id,
+          chat_id: payload.chat_id,
+          user_id: payload.user.id,
+          message: payload.message,
+          created_at: payload.created_at,
+          user: payload.user as ChatMessage['user'],
+        })
+      })
+
+    subscribedChatId = chatId
+  }
+
+  const unsubscribeFromChat = () => {
+    if (subscribedChatId === null) {
+      return
+    }
+
+    getEcho().leave(`chat.${subscribedChatId}`)
+    subscribedChatId = null
   }
 
   const updateUserOnlineStatus = (userId: number, isOnline: boolean) => {
@@ -263,7 +313,9 @@ export const useChatsStore = defineStore('chats', () => {
     clearError,
     clearCurrentChat,
     addMessage,
-    updateUserOnlineStatus
+    updateUserOnlineStatus,
+    subscribeToChat,
+    unsubscribeFromChat
   }
 })
 

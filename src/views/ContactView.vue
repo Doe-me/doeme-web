@@ -152,7 +152,7 @@ const submitForm = async () => {
       subject: '',
       message: ''
     }
-  } catch (error) {
+  } catch {
     toast.error('Erro ao enviar mensagem. Tente novamente.')
   } finally {
     isSubmitting.value = false

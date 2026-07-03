@@ -109,27 +109,28 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
 
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="loadData"
+      />
+
       <!-- Empty State -->
-      <div v-else-if="filteredDonations.length === 0" class="text-center py-12">
-        <GiftIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ donations.length === 0 ? 'Nenhuma doação encontrada' : 'Nenhum item corresponde aos filtros' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ donations.length === 0 ? 'Comece criando sua primeira doação!' : 'Tente ajustar os filtros de busca.' }}
-        </p>
-        <router-link
-          v-if="donations.length === 0"
-          to="/donations/create"
-          class="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-flex items-center"
-        >
-          <PlusIcon class="h-5 w-5 mr-2" />
-          Criar Primeira Doação
-        </router-link>
-      </div>
+      <EmptyState
+        v-else-if="filteredDonations.length === 0"
+        :title="donationsStore.userItems.length === 0 ? 'Nenhuma doação ainda' : 'Nenhum item corresponde aos filtros'"
+        :description="donationsStore.userItems.length === 0 ? 'Comece criando sua primeira doação!' : 'Tente ajustar os filtros de busca.'"
+        :action-text="donationsStore.userItems.length === 0 ? 'Criar Primeira Doação' : undefined"
+        :action-to="donationsStore.userItems.length === 0 ? '/donations/create' : undefined"
+      >
+        <template #icon>
+          <GiftIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Donations Grid -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -141,7 +142,7 @@
           <!-- Image -->
           <div class="aspect-w-16 aspect-h-9 bg-gray-200">
             <img
-              :src="donation.images?.[0] || '/placeholder-image.jpg'"
+              :src="firstImage(donation)"
               :alt="donation.title"
               class="w-full h-48 object-cover"
             />
@@ -167,14 +168,13 @@
               {{ donation.description }}
             </p>
 
-            <div class="flex items-center text-sm text-gray-500 mb-4">
+            <div class="flex items-center text-sm text-gray-600 mb-4">
               <MapPinIcon class="h-4 w-4 mr-1" />
               {{ donation.location }}
             </div>
 
-            <div class="flex items-center justify-between text-sm text-gray-500 mb-6">
-              <span>{{ formatDate(donation.created_at) }}</span>
-              <span>{{ donation.views || 0 }} visualizações</span>
+            <div class="text-sm text-gray-600 mb-6">
+              {{ formatDate(donation.created_at) }}
             </div>
 
             <!-- Action Buttons -->
@@ -193,7 +193,7 @@
               </router-link>
               <button
                 @click="confirmDelete(donation)"
-                class="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                class="px-4 py-2 text-red-600 hover:text-red-700 rounded-lg transition-colors"
               >
                 <TrashIcon class="h-5 w-5" />
               </button>
@@ -208,19 +208,19 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
-          
+
           <span class="px-4 py-2 text-sm font-medium text-gray-700">
             Página {{ currentPage }} de {{ totalPages }}
           </span>
-          
+
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima
           </button>
@@ -264,7 +264,7 @@
                       Excluir doação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Tem certeza que deseja excluir "{{ donationToDelete?.title }}"? Esta ação não pode ser desfeita.
                       </p>
                     </div>
@@ -273,14 +273,20 @@
                 <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                    :disabled="isDeleting"
+                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto disabled:opacity-60"
                     @click="deleteDonation"
                   >
-                    Excluir
+                    <svg v-if="isDeleting" class="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
+                    {{ isDeleting ? 'Excluindo...' : 'Excluir' }}
                   </button>
                   <button
                     type="button"
-                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    :disabled="isDeleting"
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto disabled:opacity-60"
                     @click="showDeleteModal = false"
                   >
                     Cancelar
@@ -297,9 +303,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useAuthStore } from '@/stores/auth'
 import { useDonationsStore } from '@/stores/donations'
+import { useCategoriesStore } from '@/stores/categories'
+import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   PlusIcon,
   GiftIcon,
@@ -318,15 +329,17 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
-import type { DonationItem, Category } from '@/types'
+import type { DonationItem } from '@/types'
 
-const authStore = useAuthStore()
 const donationsStore = useDonationsStore()
+const categoriesStore = useCategoriesStore()
+const authStore = useAuthStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
-const donations = ref<DonationItem[]>([])
-const categories = ref<Category[]>([])
+const errorMessage = ref('')
+const isDeleting = ref(false)
 const currentPage = ref(1)
 const itemsPerPage = 9
 const showDeleteModal = ref(false)
@@ -338,29 +351,29 @@ const filters = ref({
   search: ''
 })
 
-const statusLabels = {
+const statusLabels: Record<string, string> = {
   available: 'Disponível',
   reserved: 'Reservado',
   donated: 'Doado'
 }
 
-const statusClasses = {
+const statusClasses: Record<string, string> = {
   available: 'bg-green-100 text-green-800',
   reserved: 'bg-yellow-100 text-yellow-800',
   donated: 'bg-gray-100 text-gray-800'
 }
 
-const stats = computed(() => {
-  return {
-    total: donations.value.length,
-    available: donations.value.filter(d => d.status === 'available').length,
-    reserved: donations.value.filter(d => d.status === 'reserved').length,
-    donated: donations.value.filter(d => d.status === 'donated').length
-  }
-})
+const categories = computed(() => categoriesStore.categories)
 
-const filteredDonations = computed(() => {
-  let filtered = donations.value
+const stats = computed(() => ({
+  total: donationsStore.userItems.length,
+  available: donationsStore.userItems.filter(d => d.status === 'available').length,
+  reserved: donationsStore.userItems.filter(d => d.status === 'reserved').length,
+  donated: donationsStore.userItems.filter(d => d.status === 'donated').length,
+}))
+
+const allFiltered = computed(() => {
+  let filtered = donationsStore.userItems
 
   if (filters.value.status) {
     filtered = filtered.filter(d => d.status === filters.value.status)
@@ -372,154 +385,54 @@ const filteredDonations = computed(() => {
 
   if (filters.value.search) {
     const search = filters.value.search.toLowerCase()
-    filtered = filtered.filter(d => 
+    filtered = filtered.filter(d =>
       d.title.toLowerCase().includes(search) ||
       d.description.toLowerCase().includes(search)
     )
   }
 
-  // Pagination
+  return filtered
+})
+
+const filteredDonations = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return filtered.slice(start, end)
+  return allFiltered.value.slice(start, start + itemsPerPage)
 })
 
-const totalPages = computed(() => {
-  const filtered = donations.value.filter(d => {
-    if (filters.value.status && d.status !== filters.value.status) return false
-    if (filters.value.category && d.category?.id !== parseInt(filters.value.category)) return false
-    if (filters.value.search) {
-      const search = filters.value.search.toLowerCase()
-      return d.title.toLowerCase().includes(search) || d.description.toLowerCase().includes(search)
-    }
-    return true
-  })
-  return Math.ceil(filtered.length / itemsPerPage)
-})
+const totalPages = computed(() => Math.ceil(allFiltered.value.length / itemsPerPage))
 
-// Reset page when filters change
-watch(filters, () => {
-  currentPage.value = 1
-}, { deep: true })
+watch(filters, () => { currentPage.value = 1 }, { deep: true })
 
 onMounted(async () => {
   await loadData()
 })
 
 const loadData = async () => {
+  loading.value = true
+  errorMessage.value = ''
   try {
-    loading.value = true
-    
-    // Simular carregamento
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Mock data - substituir pela chamada real da API
-    donations.value = [
-      {
-        id: 1,
-        title: 'Sofá 3 lugares em ótimo estado',
-        description: 'Sofá de 3 lugares em excelente estado de conservação. Cor bege, muito confortável.',
-        images: ['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400'],
-        category: { id: 1, name: 'Móveis' },
-        condition: 'like_new',
-        status: 'available',
-        location: 'São Paulo, SP',
-        user_id: authStore.user?.id || 1,
-        views: 45,
-        created_at: '2024-01-15T10:00:00Z',
-        updated_at: '2024-01-15T10:00:00Z'
-      },
-      {
-        id: 2,
-        title: 'Livros de programação',
-        description: 'Coleção de livros sobre desenvolvimento web e mobile.',
-        images: ['https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400'],
-        category: { id: 2, name: 'Livros' },
-        condition: 'good',
-        status: 'reserved',
-        location: 'São Paulo, SP',
-        user_id: authStore.user?.id || 1,
-        views: 23,
-        created_at: '2024-01-14T10:00:00Z',
-        updated_at: '2024-01-14T10:00:00Z'
-      },
-      {
-        id: 3,
-        title: 'Roupas infantis',
-        description: 'Lote de roupas infantis de 2 a 4 anos, em bom estado.',
-        images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400'],
-        category: { 
-          id: 3, 
-          name: 'Roupas',
-          slug: 'roupas',
-          active: true,
-          created_at: '2024-01-01T00:00:00Z',
-          updated_at: '2024-01-01T00:00:00Z'
-        },
-        condition: 'Usado - Bom estado',
-        status: 'donated',
-        location: 'São Paulo, SP',
-        user_id: authStore.user?.id || 1,
-        views: 67,
-        created_at: '2024-01-13T10:00:00Z',
-        updated_at: '2024-01-13T10:00:00Z'
-      }
-    ]
-
-    const mockCategories = ref([
-      { 
-        id: 1, 
-        name: 'Móveis',
-        slug: 'moveis',
-        active: true,
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      { 
-        id: 2, 
-        name: 'Livros',
-        slug: 'livros',
-        active: true,
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      { 
-        id: 3, 
-        name: 'Roupas',
-        slug: 'roupas',
-        active: true,
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      { 
-        id: 4, 
-        name: 'Eletrônicos',
-        slug: 'eletronicos',
-        active: true,
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      },
-      { 
-        id: 5, 
-        name: 'Brinquedos',
-        slug: 'brinquedos',
-        active: true,
-        created_at: '2024-01-01T00:00:00Z',
-        updated_at: '2024-01-01T00:00:00Z'
-      }
+    await Promise.all([
+      donationsStore.fetchUserItems(),
+      categoriesStore.fetchCategories(),
     ])
-    
   } catch (error) {
-    console.error('Erro ao carregar dados:', error)
-    toast.error('Erro ao carregar suas doações')
+    handleError(error, 'Erro ao carregar suas doações')
+    errorMessage.value = 'Não foi possível carregar suas doações.'
   } finally {
     loading.value = false
   }
 }
 
+const firstImage = (donation: DonationItem): string => {
+  if (donation.donation_images?.length) {
+    return donation.donation_images[0].url ?? donation.donation_images[0].path
+  }
+  if (donation.images?.length) return donation.images[0]
+  return '/placeholder-image.jpg'
+}
+
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('pt-BR')
+  return new Date(dateString).toLocaleDateString('pt-BR')
 }
 
 const confirmDelete = (donation: DonationItem) => {
@@ -529,21 +442,22 @@ const confirmDelete = (donation: DonationItem) => {
 
 const deleteDonation = async () => {
   if (!donationToDelete.value) return
-  
+
+  isDeleting.value = true
   try {
-    // Simular exclusão
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
-    donations.value = donations.value.filter(d => d.id !== donationToDelete.value?.id)
+    await donationsStore.deleteItem(String(donationToDelete.value.id))
+    // Also remove from userItems (store.deleteItem only filters items[], not userItems[])
+    donationsStore.userItems.splice(
+      donationsStore.userItems.findIndex(d => d.id === donationToDelete.value!.id),
+      1
+    )
     toast.success('Doação excluída com sucesso!')
-    
   } catch (error) {
-    console.error('Erro ao excluir doação:', error)
-    toast.error('Erro ao excluir doação')
+    handleError(error, 'Erro ao excluir doação')
   } finally {
+    isDeleting.value = false
     showDeleteModal.value = false
     donationToDelete.value = null
   }
 }
 </script>
-

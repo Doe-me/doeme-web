@@ -5,19 +5,50 @@
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Doações Disponíveis</h1>
-            <p class="mt-2 text-gray-600">Encontre itens incríveis doados pela comunidade</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.list.title') }}</h1>
+            <p class="mt-2 text-gray-600">{{ $t('donations.list.subtitle') }}</p>
           </div>
-          
+
           <div class="mt-4 sm:mt-0">
             <router-link
               to="/donations/create"
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 transition-all duration-200 transform hover:scale-105"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 transition-colors duration-200"
             >
               <PlusIcon class="w-4 h-4 mr-2" />
-              Fazer uma doação
+              {{ $t('donations.list.makeADonation') }}
             </router-link>
           </div>
+        </div>
+      </div>
+
+      <!-- Category chips: horizontal scroll shortcuts -->
+      <div class="overflow-x-auto mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div class="flex gap-2 w-max pb-1">
+          <button
+            @click="filters.category_id = ''"
+            :class="[
+              'flex-shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors',
+              !filters.category_id
+                ? 'bg-gray-900 text-white'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+            ]"
+          >
+            Todos
+          </button>
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            @click="filters.category_id = String(cat.id)"
+            :class="[
+              'flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
+              filters.category_id === String(cat.id)
+                ? 'bg-gray-900 text-white'
+                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50',
+            ]"
+          >
+            <span v-if="cat.icon" class="leading-none" aria-hidden="true">{{ cat.icon }}</span>
+            {{ cat.name }}
+          </button>
         </div>
       </div>
 
@@ -31,19 +62,19 @@
               <input
                 v-model="filters.search"
                 type="text"
-                placeholder="Buscar itens..."
-                class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                :placeholder="$t('donations.list.searchPlaceholder')"
+                class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
           </div>
-          
+
           <!-- Category Filter -->
           <div>
             <select
               v-model="filters.category_id"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="">Todas as categorias</option>
+              <option value="">{{ $t('donations.list.allCategories') }}</option>
               <option
                 v-for="category in categories"
                 :key="category.id"
@@ -53,22 +84,22 @@
               </option>
             </select>
           </div>
-          
+
           <!-- Condition Filter -->
           <div>
             <select
               v-model="filters.condition"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="">Todas as condições</option>
-              <option value="new">Novo</option>
-              <option value="like_new">Seminovo</option>
-              <option value="good">Bom estado</option>
-              <option value="fair">Estado regular</option>
+              <option value="">{{ $t('donations.list.allConditions') }}</option>
+              <option value="Novo">{{ $t('donations.list.conditionNew') }}</option>
+              <option value="Usado - Excelente estado">{{ $t('donations.list.conditionLikeNew') }}</option>
+              <option value="Usado - Bom estado">{{ $t('donations.list.conditionGood') }}</option>
+              <option value="Usado - Estado regular">{{ $t('donations.list.conditionFair') }}</option>
             </select>
           </div>
         </div>
-        
+
         <!-- Advanced Filters -->
         <div class="mt-4 pt-4 border-t border-gray-200">
           <div class="flex flex-wrap items-center gap-4">
@@ -77,162 +108,118 @@
                 id="nearby"
                 v-model="filters.nearby"
                 type="checkbox"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
               <label for="nearby" class="ml-2 text-sm text-gray-700">
-                Próximo a mim
+                {{ $t('donations.list.nearMe') }}
               </label>
             </div>
-            
+
+            <!-- Radius input: only shown when nearby is enabled -->
+            <div v-if="filters.nearby" class="flex items-center gap-2">
+              <label for="radius" class="text-sm text-gray-700 whitespace-nowrap">Raio (km):</label>
+              <input
+                id="radius"
+                v-model.number="filters.radius"
+                type="number"
+                min="1"
+                max="500"
+                class="w-24 px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+              />
+              <span v-if="locationError" class="text-xs text-red-500">{{ locationError }}</span>
+              <span v-if="gettingLocation" class="text-xs text-gray-500">Obtendo localização...</span>
+            </div>
+
             <div class="flex items-center">
               <input
                 id="available-only"
                 v-model="filters.available_only"
                 type="checkbox"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
               <label for="available-only" class="ml-2 text-sm text-gray-700">
-                Apenas disponíveis
+                {{ $t('donations.list.availableOnly') }}
               </label>
             </div>
-            
+
             <select
               v-model="filters.sort_by"
-              class="px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              class="px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
             >
-              <option value="created_at">Mais recentes</option>
-              <option value="title">Nome A-Z</option>
-              <option value="distance">Mais próximos</option>
+              <option value="created_at">{{ $t('donations.list.sortRecent') }}</option>
+              <option value="title">{{ $t('donations.list.sortNameAZ') }}</option>
+              <option value="distance">{{ $t('donations.list.sortNearest') }}</option>
             </select>
-            
+
             <button
               v-if="hasActiveFilters"
               @click="clearFilters"
-              class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              class="text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
-              Limpar filtros
+              {{ $t('donations.list.clearFilters') }}
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <GiftIcon class="h-8 w-8 text-blue-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Total de Itens</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ stats.total }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <CheckCircleIcon class="h-8 w-8 text-green-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Disponíveis</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ stats.available }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <ClockIcon class="h-8 w-8 text-yellow-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Reservados</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ stats.reserved }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <HeartIcon class="h-8 w-8 text-red-600" />
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-gray-500">Doados</p>
-              <p class="text-2xl font-semibold text-gray-900">{{ stats.donated }}</p>
-            </div>
-          </div>
-        </div>
+      <!-- Loading State -->
+      <div v-if="loading" class="py-16 flex justify-center">
+        <LoadingSpinner size="lg" :text="$t('donations.list.loading')" />
       </div>
 
-      <!-- Loading State -->
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div v-for="i in 9" :key="i" class="animate-pulse">
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <div class="h-48 bg-gray-200"></div>
-            <div class="p-4">
-              <div class="h-4 bg-gray-200 rounded mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-2/3 mb-4"></div>
-              <div class="flex items-center justify-between">
-                <div class="h-3 bg-gray-200 rounded w-1/3"></div>
-                <div class="h-3 bg-gray-200 rounded w-1/4"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="fetchError"
+        :title="$t('donations.list.errorTitle') || 'Erro ao carregar doações'"
+        :description="fetchError"
+        :show-retry="true"
+        @retry="fetchItems"
+      />
 
       <!-- Items Grid -->
-      <div v-else-if="filteredItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="filteredItems.length > 0" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <DonationCard
           v-for="item in filteredItems"
           :key="item.id"
-          :item="item"
-          @click="goToItem(item)"
+          :donation="item"
         />
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12">
-        <GiftIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ hasActiveFilters ? 'Nenhum item encontrado' : 'Nenhuma doação disponível' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ hasActiveFilters 
-            ? 'Tente ajustar seus filtros de busca.' 
-            : 'Seja o primeiro a fazer uma doação!' 
-          }}
-        </p>
-        <div class="space-x-3">
-          <button
-            v-if="hasActiveFilters"
-            @click="clearFilters"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Limpar filtros
-          </button>
-          <router-link
-            to="/donations/create"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-          >
-            <PlusIcon class="w-4 h-4 mr-2" />
-            Fazer uma doação
-          </router-link>
-        </div>
-      </div>
+      <EmptyState
+        v-else
+        :title="hasActiveFilters ? $t('donations.list.noItemsFound') : $t('donations.list.noDonationsAvailable')"
+        :description="hasActiveFilters ? $t('donations.list.tryAdjustFilters') : $t('donations.list.beFirstToDonate')"
+      >
+        <template #action>
+          <div class="space-x-3">
+            <button
+              v-if="hasActiveFilters"
+              @click="clearFilters"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              {{ $t('donations.list.clearFilters') }}
+            </button>
+            <router-link
+              to="/donations/create"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 transition-colors"
+            >
+              <PlusIcon class="w-4 h-4 mr-2" />
+              {{ $t('donations.list.makeADonation') }}
+            </router-link>
+          </div>
+        </template>
+      </EmptyState>
 
       <!-- Load More -->
-      <div v-if="hasMoreItems" class="text-center mt-8">
+      <div v-if="hasMoreItems && !loading" class="text-center mt-8">
         <button
           @click="loadMoreItems"
           :disabled="loadingMore"
           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
         >
-          <span v-if="loadingMore" class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></span>
-          {{ loadingMore ? 'Carregando...' : 'Carregar mais itens' }}
+          <svg v-if="loadingMore" class="animate-spin h-4 w-4 mr-2 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          {{ loadingMore ? $t('donations.list.loading') : $t('donations.list.loadMore') }}
         </button>
       </div>
     </div>
@@ -241,87 +228,133 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useDonationsStore } from '@/stores/donations'
 import { useCategoriesStore } from '@/stores/categories'
+import { useErrorHandler } from '@/utils/errorHandler'
 import DonationCard from '@/components/donations/DonationCard.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
+import type { DonationItem, FilterOptions } from '@/types'
 import {
   MagnifyingGlassIcon,
   PlusIcon,
-  GiftIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  HeartIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
+const route = useRoute()
 const donationsStore = useDonationsStore()
 const categoriesStore = useCategoriesStore()
+const { handleError, getErrorMessage } = useErrorHandler()
 
 const loading = ref(true)
 const loadingMore = ref(false)
+const fetchError = ref<string | null>(null)
+const gettingLocation = ref(false)
+const locationError = ref<string | null>(null)
 
-const filters = ref({
-  search: '',
-  category_id: '',
-  condition: '',
-  nearby: false,
-  available_only: true,
-  sort_by: 'created_at'
+// Geolocation coordinates kept in memory (not encoded in URL)
+const userLatitude = ref<number | null>(null)
+const userLongitude = ref<number | null>(null)
+
+// Initialize filters from URL query params on first load
+const initFiltersFromRoute = () => ({
+  search: (route.query.search as string) || '',
+  category_id: (route.query.category_id as string) || '',
+  condition: (route.query.condition as string) || '',
+  nearby: route.query.nearby === 'true',
+  available_only: route.query.available_only !== 'false', // default true
+  sort_by: (route.query.sort_by as string) || 'created_at',
+  radius: route.query.radius ? Number(route.query.radius) : 25,
 })
 
-const stats = ref({
-  total: 0,
-  available: 0,
-  reserved: 0,
-  donated: 0
-})
+const filters = ref(initFiltersFromRoute())
 
 const items = computed(() => donationsStore.items)
 const categories = computed(() => categoriesStore.categories)
 const hasMoreItems = computed(() => donationsStore.hasMoreItems)
 
-const hasActiveFilters = computed(() => 
-  filters.value.search || 
-  filters.value.category_id || 
-  filters.value.condition ||
-  filters.value.nearby
+const hasActiveFilters = computed(() =>
+  !!filters.value.search ||
+  !!filters.value.category_id ||
+  !!filters.value.condition ||
+  filters.value.nearby,
 )
 
 const filteredItems = computed(() => {
   let filtered = items.value
-
-  // Apply client-side filters if needed
   if (filters.value.available_only) {
-    filtered = filtered.filter(item => item.is_available)
+    filtered = filtered.filter((item: DonationItem) => item.status === 'available')
   }
-
   return filtered
 })
 
-const goToItem = (item: any) => {
-  router.push(`/donations/${item.id}`)
+// Reflect current filters in URL query params (makes URLs shareable/bookmarkable)
+const syncFiltersToUrl = () => {
+  const query: Record<string, string> = {}
+
+  if (filters.value.search) query.search = filters.value.search
+  if (filters.value.category_id) query.category_id = String(filters.value.category_id)
+  if (filters.value.condition) query.condition = filters.value.condition
+  if (filters.value.nearby) query.nearby = 'true'
+  if (!filters.value.available_only) query.available_only = 'false'
+  if (filters.value.sort_by && filters.value.sort_by !== 'created_at') query.sort_by = filters.value.sort_by
+  if (filters.value.nearby && filters.value.radius !== 25) query.radius = String(filters.value.radius)
+
+  router.replace({ query })
+}
+
+// Request browser geolocation when nearby is toggled on
+const requestGeolocation = () => {
+  if (!navigator.geolocation) {
+    locationError.value = 'Geolocalização não suportada pelo navegador.'
+    filters.value.nearby = false
+    return
+  }
+
+  gettingLocation.value = true
+  locationError.value = null
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      userLatitude.value = position.coords.latitude
+      userLongitude.value = position.coords.longitude
+      gettingLocation.value = false
+    },
+    (error) => {
+      gettingLocation.value = false
+      locationError.value = 'Não foi possível obter sua localização. Verifique as permissões do navegador.'
+      console.error('Geolocation error:', error)
+      filters.value.nearby = false
+    },
+    { timeout: 10000, maximumAge: 300000 },
+  )
 }
 
 const clearFilters = () => {
+  userLatitude.value = null
+  userLongitude.value = null
+  locationError.value = null
   filters.value = {
     search: '',
     category_id: '',
     condition: '',
     nearby: false,
     available_only: true,
-    sort_by: 'created_at'
+    sort_by: 'created_at',
+    radius: 25,
   }
 }
 
 const loadMoreItems = async () => {
   if (loadingMore.value) return
-  
+
   loadingMore.value = true
   try {
     await donationsStore.loadMoreItems()
   } catch (error) {
-    console.error('Error loading more items:', error)
+    handleError(error, 'Erro ao carregar mais itens')
   } finally {
     loadingMore.value = false
   }
@@ -329,38 +362,60 @@ const loadMoreItems = async () => {
 
 const fetchItems = async () => {
   loading.value = true
+  fetchError.value = null
+
   try {
-    await donationsStore.fetchItems(filters.value)
+    const apiFilters: FilterOptions = {
+      search: filters.value.search || undefined,
+      category_id: filters.value.category_id ? Number(filters.value.category_id) : undefined,
+      condition: filters.value.condition || undefined,
+      sort_by: filters.value.sort_by || undefined,
+    }
+
+    if (filters.value.nearby && userLatitude.value !== null && userLongitude.value !== null) {
+      apiFilters.latitude = userLatitude.value
+      apiFilters.longitude = userLongitude.value
+      apiFilters.radius = filters.value.radius
+    }
+
+    await donationsStore.fetchItems(apiFilters)
   } catch (error) {
-    console.error('Error fetching items:', error)
+    fetchError.value = getErrorMessage(error, 'Erro ao carregar as doações. Tente novamente.')
+    handleError(error, 'Erro ao carregar as doações')
   } finally {
     loading.value = false
   }
 }
 
-const fetchStats = async () => {
-  try {
-    const response = await donationsStore.fetchStats()
-    stats.value = response
-  } catch (error) {
-    console.error('Error fetching stats:', error)
-  }
-}
+// Watch filters: update URL and re-fetch items
+watch(
+  filters,
+  (newVal, oldVal) => {
+    // Request geolocation when nearby is first toggled on
+    if (newVal.nearby && !oldVal.nearby) {
+      requestGeolocation()
+    }
+    syncFiltersToUrl()
+    fetchItems()
+  },
+  { deep: true },
+)
 
-// Watch filters and refetch items
-watch(filters, () => {
-  fetchItems()
-}, { deep: true })
+// Re-fetch once coordinates are available (nearby already on)
+watch([userLatitude, userLongitude], ([lat, lon]) => {
+  if (lat !== null && lon !== null && filters.value.nearby) {
+    fetchItems()
+  }
+})
 
 onMounted(async () => {
   try {
     await Promise.all([
       categoriesStore.fetchCategories(),
       fetchItems(),
-      fetchStats()
     ])
   } catch (error) {
-    console.error('Error loading data:', error)
+    handleError(error, 'Erro ao carregar dados iniciais')
   }
 })
 </script>

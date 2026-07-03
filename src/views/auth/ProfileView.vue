@@ -22,7 +22,7 @@
                 />
                 <div
                   v-else
-                  class="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                  class="w-24 h-24 rounded-full bg-primary-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg"
                 >
                   {{ user?.name?.charAt(0).toUpperCase() }}
                 </div>
@@ -250,7 +250,7 @@
                       <LockClosedIcon class="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <p class="font-medium text-gray-900">Alterar Senha</p>
-                        <p class="text-sm text-gray-500">Última alteração há 30 dias</p>
+                        <p class="text-sm text-gray-600">Última alteração há 30 dias</p>
                       </div>
                     </div>
                     <ChevronRightIcon class="w-5 h-5 text-gray-400" />
@@ -263,7 +263,7 @@
                       <ShieldCheckIcon class="w-5 h-5 text-gray-400 mr-3" />
                       <div>
                         <p class="font-medium text-gray-900">Autenticação em Duas Etapas</p>
-                        <p class="text-sm text-gray-500">Adicione uma camada extra de segurança</p>
+                        <p class="text-sm text-gray-600">Adicione uma camada extra de segurança</p>
                       </div>
                     </div>
                     <ChevronRightIcon class="w-5 h-5 text-gray-400" />
@@ -288,8 +288,10 @@
               v-model="passwordForm.current_password"
               type="password"
               required
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              :class="['w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500', passwordError ? 'border-red-500' : 'border-gray-300']"
+              @input="passwordError = ''"
             />
+            <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nova Senha</label>
@@ -313,7 +315,7 @@
           <div class="flex justify-end space-x-3 pt-4">
             <button
               type="button"
-              @click="showChangePassword = false"
+              @click="closePasswordModal"
               class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Cancelar
@@ -361,11 +363,13 @@ const loadingPassword = ref(false)
 
 const fileInput = ref<HTMLInputElement>()
 
-const userStats = reactive({
-  donations: 12,
-  received: 8,
-  rating: 4.8
-})
+const userStats = computed(() => ({
+  donations: authStore.user?.donations_count ?? 0,
+  received: authStore.user?.received_count ?? 0,
+  rating: authStore.user?.average_rating ?? 0,
+}))
+
+const passwordError = ref('')
 
 const personalForm = reactive({
   name: '',
@@ -401,7 +405,7 @@ const handleAvatarUpload = async (event: Event) => {
     try {
       await authStore.updateAvatar(file)
       toast.success('Avatar atualizado com sucesso!')
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || 'Erro ao atualizar avatar')
     }
   }
@@ -414,7 +418,7 @@ const updatePersonalInfo = async () => {
     await authStore.updateProfile(personalForm)
     toast.success('Informações atualizadas com sucesso!')
     editingPersonal.value = false
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error.message || 'Erro ao atualizar informações')
   } finally {
     loadingPersonal.value = false
@@ -428,32 +432,39 @@ const updateAddress = async () => {
     await authStore.updateAddress(addressForm)
     toast.success('Endereço atualizado com sucesso!')
     editingAddress.value = false
-  } catch (error: any) {
+  } catch (error) {
     toast.error(error.message || 'Erro ao atualizar endereço')
   } finally {
     loadingAddress.value = false
   }
 }
 
+const closePasswordModal = () => {
+  showChangePassword.value = false
+  passwordError.value = ''
+  Object.assign(passwordForm, { current_password: '', password: '', password_confirmation: '' })
+}
+
 const changePassword = async () => {
   if (passwordForm.password !== passwordForm.password_confirmation) {
-    toast.error('Senhas não coincidem')
+    toast.error('As senhas não coincidem')
     return
   }
-  
+
   loadingPassword.value = true
-  
+  passwordError.value = ''
+
   try {
     await authStore.changePassword(passwordForm)
     toast.success('Senha alterada com sucesso!')
-    showChangePassword.value = false
-    
-    // Reset form
-    Object.keys(passwordForm).forEach(key => {
-      passwordForm[key as keyof typeof passwordForm] = ''
-    })
-  } catch (error: any) {
-    toast.error(error.message || 'Erro ao alterar senha')
+    closePasswordModal()
+  } catch (error) {
+    const fieldError = (error as { response?: { data?: { errors?: { current_password?: string[] } } } }).response?.data?.errors?.current_password?.[0]
+    if (fieldError) {
+      passwordError.value = fieldError
+    } else {
+      toast.error((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao alterar senha')
+    }
   } finally {
     loadingPassword.value = false
   }

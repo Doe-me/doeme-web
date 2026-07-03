@@ -1,31 +1,15 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="loading" class="animate-pulse">
-      <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-64"></div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
-        <div class="h-4 bg-gray-200 rounded w-2/3 mb-8"></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="i in 6" :key="i" class="bg-white rounded-lg p-6">
-            <div class="h-48 bg-gray-200 rounded mb-4"></div>
-            <div class="h-4 bg-gray-200 rounded mb-2"></div>
-            <div class="h-3 bg-gray-200 rounded w-2/3"></div>
-          </div>
-        </div>
-      </div>
+    <div v-if="loading" class="flex justify-center items-center py-24">
+      <LoadingSpinner size="lg" />
     </div>
 
     <!-- Content -->
     <div v-else-if="category">
       <!-- Hero Section -->
-      <div class="relative bg-gradient-to-r from-blue-500 to-purple-600 overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-          <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill=\"%23ffffff\" fill-opacity=\"0.1\"><circle cx=\"30\" cy=\"30\" r=\"4\"/></g></g></svg>')"></div>
-        </div>
-        
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="bg-primary-600 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div class="text-center text-white">
             <!-- Icon -->
             <div class="flex items-center justify-center w-20 h-20 mx-auto mb-6 bg-white bg-opacity-20 rounded-full">
@@ -121,34 +105,18 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="text-center py-12">
-          <FolderIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            {{ searchQuery || hasActiveFilters ? 'Nenhum item encontrado' : 'Nenhum item nesta categoria' }}
-          </h3>
-          <p class="text-gray-600 mb-6">
-            {{ searchQuery || hasActiveFilters 
-              ? 'Tente ajustar seus filtros de busca.' 
-              : 'Seja o primeiro a fazer uma doação nesta categoria!' 
-            }}
-          </p>
-          <div class="space-x-3">
-            <button
-              v-if="searchQuery || hasActiveFilters"
-              @click="clearFilters"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Limpar filtros
-            </button>
-            <router-link
-              to="/donations/create"
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-            >
-              <PlusIcon class="w-4 h-4 mr-2" />
-              Fazer uma doação
-            </router-link>
-          </div>
-        </div>
+        <EmptyState
+          v-else
+          :title="searchQuery || hasActiveFilters ? 'Nenhum item encontrado' : 'Nenhum item nesta categoria'"
+          :description="searchQuery || hasActiveFilters ? 'Tente ajustar seus filtros de busca.' : 'Seja o primeiro a fazer uma doação nesta categoria!'"
+          :action-text="searchQuery || hasActiveFilters ? 'Limpar filtros' : 'Fazer uma doação'"
+          :action-to="searchQuery || hasActiveFilters ? undefined : '/donations/create'"
+          :action-click="searchQuery || hasActiveFilters ? clearFilters : undefined"
+        >
+          <template #icon>
+            <FolderIcon class="h-full w-full" />
+          </template>
+        </EmptyState>
 
         <!-- Load More -->
         <div v-if="hasMoreItems" class="text-center mt-8">
@@ -157,7 +125,10 @@
             :disabled="loadingMore"
             class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
           >
-            <span v-if="loadingMore" class="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></span>
+            <svg v-if="loadingMore" class="animate-spin h-4 w-4 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
             {{ loadingMore ? 'Carregando...' : 'Carregar mais itens' }}
           </button>
         </div>
@@ -165,17 +136,14 @@
     </div>
 
     <!-- Error State -->
-    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-      <ExclamationTriangleIcon class="mx-auto h-12 w-12 text-red-400 mb-4" />
-      <h3 class="text-lg font-medium text-gray-900 mb-2">Categoria não encontrada</h3>
-      <p class="text-gray-600 mb-6">A categoria que você está procurando não existe ou foi removida.</p>
-      <router-link
-        to="/categories"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-      >
-        <ArrowLeftIcon class="w-4 h-4 mr-2" />
-        Voltar às categorias
-      </router-link>
+    <div v-else class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <ErrorState
+        title="Categoria não encontrada"
+        description="A categoria que você está procurando não existe ou foi removida."
+        :show-retry="false"
+        action-text="Voltar às categorias"
+        action-to="/categories"
+      />
     </div>
   </div>
 </template>
@@ -185,13 +153,14 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCategoriesStore } from '@/stores/categories'
 import { useDonationsStore } from '@/stores/donations'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import DonationCard from '@/components/donations/DonationCard.vue'
 import {
   MagnifyingGlassIcon,
   FolderIcon,
-  PlusIcon,
-  ExclamationTriangleIcon,
-  ArrowLeftIcon,
   HomeIcon,
   ShirtIcon,
   BookOpenIcon,
@@ -207,6 +176,7 @@ const route = useRoute()
 const router = useRouter()
 const categoriesStore = useCategoriesStore()
 const donationsStore = useDonationsStore()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
 const loadingMore = ref(false)
@@ -277,7 +247,7 @@ const getCategoryIcon = (iconName: string) => {
   return iconMap[iconName as keyof typeof iconMap] || GiftIcon
 }
 
-const goToItem = (item: any) => {
+const goToItem = (item: { id: number }) => {
   router.push(`/donations/${item.id}`)
 }
 
@@ -289,12 +259,12 @@ const clearFilters = () => {
 
 const loadMoreItems = async () => {
   if (loadingMore.value) return
-  
+
   loadingMore.value = true
   try {
     await donationsStore.loadMoreCategoryItems(route.params.id as string)
   } catch (error) {
-    console.error('Error loading more items:', error)
+    handleError(error, 'Erro ao carregar mais itens')
   } finally {
     loadingMore.value = false
   }
@@ -310,7 +280,7 @@ watch(() => route.params.id, async (newId) => {
         donationsStore.fetchCategoryItems(newId as string)
       ])
     } catch (error) {
-      console.error('Error loading category:', error)
+      handleError(error, 'Erro ao carregar categoria')
     } finally {
       loading.value = false
     }
@@ -326,7 +296,7 @@ onMounted(async () => {
         donationsStore.fetchCategoryItems(categoryId)
       ])
     } catch (error) {
-      console.error('Error loading category:', error)
+      handleError(error, 'Erro ao carregar categoria')
     } finally {
       loading.value = false
     }

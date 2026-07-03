@@ -30,3 +30,4 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+i18n-extract-report.json

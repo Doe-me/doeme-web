@@ -11,11 +11,11 @@
             <ArrowLeftIcon class="w-5 h-5" />
           </button>
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Fazer uma Doação</h1>
-            <p class="mt-2 text-gray-600">Compartilhe um item que você não usa mais</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ $t('donations.create.title') }}</h1>
+            <p class="mt-2 text-gray-600">{{ $t('donations.create.subtitle') }}</p>
           </div>
         </div>
-        
+
         <!-- Progress Steps -->
         <div class="flex items-center justify-center mb-8">
           <div class="flex items-center space-x-4">
@@ -23,21 +23,21 @@
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-medium">
                 1
               </div>
-              <span class="ml-2 text-sm font-medium text-blue-600">Informações</span>
+              <span class="ml-2 text-sm font-medium text-blue-600">{{ $t('donations.create.stepInfo') }}</span>
             </div>
             <div class="w-16 h-0.5 bg-gray-300"></div>
             <div class="flex items-center">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
                 2
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">Fotos</span>
+              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepPhotos') }}</span>
             </div>
             <div class="w-16 h-0.5 bg-gray-300"></div>
             <div class="flex items-center">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600 text-sm font-medium">
                 3
               </div>
-              <span class="ml-2 text-sm font-medium text-gray-600">Localização</span>
+              <span class="ml-2 text-sm font-medium text-gray-600">{{ $t('donations.create.stepLocation') }}</span>
             </div>
           </div>
         </div>
@@ -46,13 +46,13 @@
       <form @submit.prevent="handleSubmit" class="space-y-8">
         <!-- Basic Information -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Informações Básicas</h2>
-          
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ $t('donations.create.basicInfo') }}</h2>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Title -->
             <div class="md:col-span-2">
               <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
-                Título da doação *
+                {{ $t('donations.create.donationTitle') }} *
               </label>
               <input
                 id="title"
@@ -60,7 +60,7 @@
                 type="text"
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Ex: Sofá 3 lugares em bom estado"
+                :placeholder="$t('donations.create.donationTitlePlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.title }"
               />
               <p v-if="errors.title" class="mt-1 text-sm text-red-600">{{ errors.title }}</p>
@@ -69,7 +69,7 @@
             <!-- Category -->
             <div>
               <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
-                Categoria *
+                {{ $t('donations.create.category') }} *
               </label>
               <select
                 id="category"
@@ -78,7 +78,7 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.category_id }"
               >
-                <option value="">Selecione uma categoria</option>
+                <option value="">{{ $t('donations.create.selectCategory') }}</option>
                 <option
                   v-for="category in categories"
                   :key="category.id"
@@ -93,7 +93,7 @@
             <!-- Condition -->
             <div>
               <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">
-                Estado do item *
+                {{ $t('donations.create.condition') }} *
               </label>
               <select
                 id="condition"
@@ -102,11 +102,11 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.condition }"
               >
-                <option value="">Selecione o estado</option>
-                <option value="new">Novo</option>
-                <option value="like_new">Seminovo</option>
-                <option value="good">Bom estado</option>
-                <option value="fair">Estado regular</option>
+                <option value="">{{ $t('donations.create.selectCondition') }}</option>
+                <option value="Novo">{{ $t('donations.list.conditionNew') }}</option>
+                <option value="Usado - Excelente estado">{{ $t('donations.list.conditionLikeNew') }}</option>
+                <option value="Usado - Bom estado">{{ $t('donations.list.conditionGood') }}</option>
+                <option value="Usado - Estado regular">{{ $t('donations.list.conditionFair') }}</option>
               </select>
               <p v-if="errors.condition" class="mt-1 text-sm text-red-600">{{ errors.condition }}</p>
             </div>
@@ -114,7 +114,7 @@
             <!-- Description -->
             <div class="md:col-span-2">
               <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
-                Descrição *
+                {{ $t('donations.create.description') }} *
               </label>
               <textarea
                 id="description"
@@ -122,74 +122,32 @@
                 rows="4"
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Descreva o item, suas características, motivo da doação, etc."
+                :placeholder="$t('donations.create.descriptionPlaceholder')"
                 :class="{ 'border-red-300 focus:border-red-500 focus:ring-red-500': errors.description }"
               ></textarea>
               <p v-if="errors.description" class="mt-1 text-sm text-red-600">{{ errors.description }}</p>
-              <p class="mt-1 text-sm text-gray-500">Mínimo 20 caracteres</p>
+              <p class="mt-1 text-sm text-gray-600">{{ $t('donations.create.descriptionMinLength') }}</p>
             </div>
           </div>
         </div>
 
         <!-- Images -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">Fotos do Item</h2>
-          
-          <!-- Image Upload Area -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            <!-- Existing Images -->
-            <div
-              v-for="(image, index) in form.images"
-              :key="index"
-              class="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group"
-            >
-              <img
-                :src="getImageUrl(image)"
-                :alt="`Imagem ${index + 1}`"
-                class="w-full h-full object-cover"
-              />
-              <button
-                type="button"
-                @click="removeImage(index)"
-                class="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <XMarkIcon class="w-4 h-4" />
-              </button>
-            </div>
-            
-            <!-- Upload Button -->
-            <button
-              v-if="form.images.length < 5"
-              type="button"
-              @click="triggerFileUpload"
-              class="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:text-gray-600 hover:border-gray-400 transition-colors"
-            >
-              <CameraIcon class="w-8 h-8 mb-2" />
-              <span class="text-sm font-medium">Adicionar foto</span>
-            </button>
-          </div>
-          
-          <input
-            ref="fileInput"
-            type="file"
-            accept="image/*"
-            multiple
-            @change="handleImageUpload"
-            class="hidden"
-          />
-          
-          <p class="text-sm text-gray-500">
+          <h2 class="text-xl font-semibold text-gray-900 mb-2">{{ $t('donations.create.photosTitle') }}</h2>
+          <p class="text-sm text-gray-600 mb-4">
             Adicione até 5 fotos. A primeira foto será a principal.
           </p>
-          <p v-if="errors.images" class="mt-1 text-sm text-red-600">{{ errors.images }}</p>
+
+          <ImageUpload v-model="selectedFiles" :max-files="5" :max-size-mb="5" />
+
+          <p v-if="errors.images" class="mt-2 text-sm text-red-600">{{ errors.images }}</p>
         </div>
 
         <!-- Location -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-6">Localização</h2>
-          
+
           <div class="space-y-4">
-            <!-- Address -->
             <div>
               <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
                 Endereço *
@@ -206,7 +164,6 @@
               <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
             </div>
 
-            <!-- Use Current Location -->
             <div class="flex items-center">
               <button
                 type="button"
@@ -219,9 +176,8 @@
               </button>
             </div>
 
-            <!-- Map Preview (placeholder) -->
             <div class="h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-              <div class="text-center text-gray-500">
+              <div class="text-center text-gray-600">
                 <MapIcon class="w-12 h-12 mx-auto mb-2" />
                 <p>Prévia do mapa será exibida aqui</p>
               </div>
@@ -232,7 +188,7 @@
         <!-- Additional Options -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h2 class="text-xl font-semibold text-gray-900 mb-6">Opções Adicionais</h2>
-          
+
           <div class="space-y-4">
             <div class="flex items-center">
               <input
@@ -245,7 +201,7 @@
                 Permitir retirada no local
               </label>
             </div>
-            
+
             <div class="flex items-center">
               <input
                 id="allow-delivery"
@@ -272,10 +228,18 @@
           <button
             type="submit"
             :disabled="loading"
-            class="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+            class="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg disabled:opacity-50 transition-colors"
           >
             <span v-if="loading" class="inline-flex items-center">
-              <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <svg
+                class="animate-spin w-4 h-4 mr-2 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
               Publicando...
             </span>
             <span v-else>Publicar Doação</span>
@@ -292,29 +256,29 @@ import { useRouter } from 'vue-router'
 import { useDonationsStore } from '@/stores/donations'
 import { useCategoriesStore } from '@/stores/categories'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
 import {
   ArrowLeftIcon,
-  CameraIcon,
-  XMarkIcon,
   MapPinIcon,
   MapIcon
 } from '@heroicons/vue/24/outline'
+import ImageUpload from '@/components/donations/ImageUpload.vue'
 
 const router = useRouter()
 const donationsStore = useDonationsStore()
 const categoriesStore = useCategoriesStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(false)
 const gettingLocation = ref(false)
-const fileInput = ref<HTMLInputElement>()
+const selectedFiles = ref<File[]>([])
 
 const form = reactive({
   title: '',
   description: '',
   category_id: '',
   condition: '',
-  images: [] as (File | string)[],
   location: {
     address: '',
     latitude: 0,
@@ -336,7 +300,6 @@ const errors = reactive({
 const categories = computed(() => categoriesStore.categories)
 
 const validateForm = () => {
-  // Reset errors
   Object.keys(errors).forEach(key => {
     errors[key as keyof typeof errors] = ''
   })
@@ -366,7 +329,7 @@ const validateForm = () => {
     isValid = false
   }
 
-  if (form.images.length === 0) {
+  if (selectedFiles.value.length === 0) {
     errors.images = 'Pelo menos uma foto é obrigatória'
     isValid = false
   }
@@ -379,38 +342,6 @@ const validateForm = () => {
   return isValid
 }
 
-const triggerFileUpload = () => {
-  fileInput.value?.click()
-}
-
-const handleImageUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const files = Array.from(target.files || [])
-  
-  if (files.length + form.images.length > 5) {
-    toast.error('Máximo de 5 fotos permitidas')
-    return
-  }
-  
-  form.images.push(...files)
-  
-  // Reset input
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
-}
-
-const removeImage = (index: number) => {
-  form.images.splice(index, 1)
-}
-
-const getImageUrl = (image: File | string) => {
-  if (typeof image === 'string') {
-    return image
-  }
-  return URL.createObjectURL(image)
-}
-
 const getCurrentLocation = () => {
   if (!navigator.geolocation) {
     toast.error('Geolocalização não é suportada pelo seu navegador')
@@ -420,20 +351,16 @@ const getCurrentLocation = () => {
   gettingLocation.value = true
 
   navigator.geolocation.getCurrentPosition(
-    async (position) => {
+    (position) => {
       form.location.latitude = position.coords.latitude
       form.location.longitude = position.coords.longitude
-      
-      // Here you would typically reverse geocode to get the address
-      // For now, we'll just show a placeholder
       form.location.address = `Lat: ${position.coords.latitude.toFixed(6)}, Lng: ${position.coords.longitude.toFixed(6)}`
-      
       gettingLocation.value = false
       toast.success('Localização obtida com sucesso!')
     },
-    (error) => {
+    (geoError) => {
       gettingLocation.value = false
-      toast.error('Erro ao obter localização: ' + error.message)
+      toast.error('Erro ao obter localização: ' + geoError.message)
     }
   )
 }
@@ -444,35 +371,44 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
+    // Step 1: create item without images
     const formData = new FormData()
-    
-    // Add basic fields
     formData.append('title', form.title)
     formData.append('description', form.description)
     formData.append('category_id', form.category_id)
     formData.append('condition', form.condition)
-    formData.append('location[address]', form.location.address)
-    formData.append('location[latitude]', form.location.latitude.toString())
-    formData.append('location[longitude]', form.location.longitude.toString())
+    formData.append('location', form.location.address)
+    if (form.location.latitude) {
+      formData.append('latitude', form.location.latitude.toString())
+    }
+    if (form.location.longitude) {
+      formData.append('longitude', form.location.longitude.toString())
+    }
     formData.append('allow_pickup', form.allow_pickup.toString())
     formData.append('allow_delivery', form.allow_delivery.toString())
-    
-    // Add images
-    form.images.forEach((image, index) => {
-      if (image instanceof File) {
-        formData.append(`images[${index}]`, image)
-      }
-    })
 
-    await donationsStore.createItem(formData)
-    
+    const newItem = await donationsStore.createItem(formData)
+
+    // Step 2: upload images to dedicated endpoint
+    if (selectedFiles.value.length > 0) {
+      try {
+        await donationsStore.uploadImages(newItem.id, selectedFiles.value)
+      } catch (uploadErr) {
+        toast.warning('Doação criada, mas houve um erro ao enviar as fotos. Você pode adicioná-las editando a doação.')
+        handleError(uploadErr, 'Erro ao enviar fotos')
+        router.push('/donations')
+        return
+      }
+    }
+
     toast.success('Doação publicada com sucesso!')
     router.push('/donations')
-  } catch (error: any) {
-    toast.error(error.message || 'Erro ao publicar doação')
-    
-    if (error.errors) {
-      Object.assign(errors, error.errors)
+  } catch (error) {
+    handleError(error, 'Erro ao publicar doação')
+
+    const apiError = error as { errors?: Record<string, string> }
+    if (apiError.errors) {
+      Object.assign(errors, apiError.errors)
     }
   } finally {
     loading.value = false

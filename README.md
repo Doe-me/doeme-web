@@ -288,13 +288,14 @@ npm run test:e2e
 
 ## 🌐 Internacionalização
 
-A aplicação suporta múltiplos idiomas:
+A aplicação usa [vue-i18n](https://vue-i18n.intlify.dev/) com arquivos de tradução em `src/locales/`. O seletor de idioma fica no header (`src/components/common/LanguageSwitcher.vue`) e a escolha do usuário é persistida em `localStorage`.
 
 ```bash
-# Adicionar novo idioma
-npm run i18n:add <locale>
+# Adicionar novo idioma (cria src/locales/<locale>.json a partir do pt-BR.json)
+npm run i18n:add -- <locale>
+# Exemplo: npm run i18n:add -- fr-FR
 
-# Extrair strings para tradução
+# Verificar chaves de tradução faltando/não usadas nos componentes .vue
 npm run i18n:extract
 ```
 
@@ -302,6 +303,8 @@ Idiomas suportados:
 - Português (pt-BR) - Padrão
 - Inglês (en-US)
 - Espanhol (es-ES)
+
+Ao adicionar um locale novo, depois de traduzir o JSON gerado, registre-o em `src/locales/index.ts` (`SUPPORTED_LOCALES`, `LOCALE_LABELS` e `messages`).
 
 ## 📈 Performance
 

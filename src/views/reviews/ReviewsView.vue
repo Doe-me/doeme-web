@@ -93,19 +93,26 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
 
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="loadData"
+      />
+
       <!-- Empty State -->
-      <div v-else-if="filteredReviews.length === 0" class="text-center py-12">
-        <StarIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ reviews.length === 0 ? 'Nenhuma avaliação ainda' : 'Nenhuma avaliação encontrada' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ reviews.length === 0 ? 'Seja o primeiro a avaliar um usuário!' : 'Tente ajustar os filtros de busca.' }}
-        </p>
-      </div>
+      <EmptyState
+        v-else-if="filteredReviews.length === 0"
+        :title="reviews.length === 0 ? 'Nenhuma avaliação ainda' : 'Nenhuma avaliação encontrada'"
+        :description="reviews.length === 0 ? 'Seja o primeiro a avaliar um usuário!' : 'Tente ajustar os filtros de busca.'"
+      >
+        <template #icon>
+          <StarIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Reviews List -->
       <div v-else class="space-y-6">
@@ -139,7 +146,7 @@
                     </router-link>
                   </p>
                 </div>
-                <span class="text-sm text-gray-500">
+                <span class="text-sm text-gray-600">
                   {{ formatDate(review.created_at) }}
                 </span>
               </div>
@@ -252,7 +259,7 @@
                       Excluir avaliação
                     </DialogTitle>
                     <div class="mt-2">
-                      <p class="text-sm text-gray-500">
+                      <p class="text-sm text-gray-600">
                         Tem certeza que deseja excluir esta avaliação? Esta ação não pode ser desfeita.
                       </p>
                     </div>
@@ -289,6 +296,10 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useReviewsStore } from '@/stores/reviews'
 import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   MagnifyingGlassIcon,
   StarIcon,
@@ -311,8 +322,10 @@ const router = useRouter()
 const authStore = useAuthStore()
 const reviewsStore = useReviewsStore()
 const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
+const errorMessage = ref('')
 const showDeleteModal = ref(false)
 const reviewToDelete = ref<Review | null>(null)
 
@@ -361,16 +374,16 @@ onMounted(async () => {
 const loadData = async () => {
   try {
     loading.value = true
-    
-    // Carregar avaliações e estatísticas
+    errorMessage.value = ''
+
     await Promise.all([
       reviewsStore.fetchReviews({ page: 1 }),
       loadReviewStats()
     ])
-    
+
   } catch (error) {
-    console.error('Erro ao carregar dados:', error)
-    toast.error('Erro ao carregar avaliações')
+    handleError(error, 'Erro ao carregar avaliações')
+    errorMessage.value = 'Não foi possível carregar as avaliações.'
   } finally {
     loading.value = false
   }
@@ -400,8 +413,7 @@ const loadMoreReviews = async () => {
     const nextPage = pagination.value.current_page + 1
     await reviewsStore.fetchReviews({ page: nextPage })
   } catch (error) {
-    console.error('Erro ao carregar mais avaliações:', error)
-    toast.error('Erro ao carregar mais avaliações')
+    handleError(error, 'Erro ao carregar mais avaliações')
   }
 }
 
@@ -425,13 +437,12 @@ const confirmDeleteReview = (review: Review) => {
 
 const deleteReview = async () => {
   if (!reviewToDelete.value) return
-  
+
   try {
     await reviewsStore.deleteReview(reviewToDelete.value.id)
     toast.success('Avaliação excluída com sucesso!')
   } catch (error) {
-    console.error('Erro ao excluir avaliação:', error)
-    toast.error('Erro ao excluir avaliação')
+    handleError(error, 'Erro ao excluir avaliação')
   } finally {
     showDeleteModal.value = false
     reviewToDelete.value = null

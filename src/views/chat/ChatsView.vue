@@ -22,27 +22,28 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <LoadingSpinner size="lg" />
       </div>
 
+      <!-- Error State -->
+      <ErrorState
+        v-else-if="errorMessage"
+        :description="errorMessage"
+        @retry="loadChats"
+      />
+
       <!-- Empty State -->
-      <div v-else-if="filteredChats.length === 0" class="text-center py-12">
-        <ChatBubbleLeftRightIcon class="mx-auto h-12 w-12 text-gray-400 mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 mb-2">
-          {{ chats.length === 0 ? 'Nenhuma conversa ainda' : 'Nenhuma conversa encontrada' }}
-        </h3>
-        <p class="text-gray-600 mb-6">
-          {{ chats.length === 0 ? 'Comece uma conversa demonstrando interesse em uma doação!' : 'Tente ajustar sua busca.' }}
-        </p>
-        <router-link
-          v-if="chats.length === 0"
-          to="/donations"
-          class="bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors inline-flex items-center"
-        >
-          <GiftIcon class="h-5 w-5 mr-2" />
-          Explorar Doações
-        </router-link>
-      </div>
+      <EmptyState
+        v-else-if="filteredChats.length === 0"
+        :title="chats.length === 0 ? 'Nenhuma conversa ainda' : 'Nenhuma conversa encontrada'"
+        :description="chats.length === 0 ? 'Comece uma conversa demonstrando interesse em uma doação!' : 'Tente ajustar sua busca.'"
+        :action-text="chats.length === 0 ? 'Explorar Doações' : undefined"
+        :action-to="chats.length === 0 ? '/donations' : undefined"
+      >
+        <template #icon>
+          <ChatBubbleLeftRightIcon class="h-full w-full" />
+        </template>
+      </EmptyState>
 
       <!-- Chats List -->
       <div v-else class="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -73,7 +74,7 @@
                   <h3 class="text-sm font-semibold text-gray-900 truncate">
                     {{ chat.otherUser.name }}
                   </h3>
-                  <span class="text-xs text-gray-500">
+                  <span class="text-xs text-gray-700">
                     {{ formatTime(chat.lastMessage?.created_at) }}
                   </span>
                 </div>
@@ -87,7 +88,7 @@
                 <!-- Last Message -->
                 <div class="flex items-center justify-between">
                   <p class="text-sm text-gray-600 truncate">
-                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-500">
+                    <span v-if="chat.lastMessage?.user_id === authStore.user?.id" class="text-gray-600">
                       Você: 
                     </span>
                     {{ chat.lastMessage?.message || 'Nenhuma mensagem ainda' }}
@@ -125,7 +126,7 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
           </button>
@@ -137,7 +138,7 @@
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima
           </button>
@@ -151,7 +152,10 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useToast } from 'vue-toastification'
+import { useErrorHandler } from '@/utils/errorHandler'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import ErrorState from '@/components/common/ErrorState.vue'
 import {
   MagnifyingGlassIcon,
   ChatBubbleLeftRightIcon,
@@ -161,9 +165,10 @@ import type { Chat } from '@/types'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const toast = useToast()
+const { handleError } = useErrorHandler()
 
 const loading = ref(true)
+const errorMessage = ref('')
 const chats = ref<Chat[]>([])
 const searchQuery = ref('')
 const currentPage = ref(1)
@@ -311,8 +316,8 @@ const loadChats = async () => {
     ]
     
   } catch (error) {
-    console.error('Erro ao carregar chats:', error)
-    toast.error('Erro ao carregar conversas')
+    handleError(error, 'Erro ao carregar conversas')
+    errorMessage.value = 'Não foi possível carregar suas conversas.'
   } finally {
     loading.value = false
   }

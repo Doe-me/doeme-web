@@ -1,9 +1,12 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="max-w-md w-full text-center">
       <div class="mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-          <div v-if="loading" class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
+          <svg v-if="loading" class="animate-spin w-8 h-8 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
           <CheckCircleIcon v-else-if="success" class="w-8 h-8 text-green-600" />
           <XCircleIcon v-else class="w-8 h-8 text-red-600" />
         </div>
@@ -21,7 +24,7 @@
         <button
           v-if="success"
           @click="goToHome"
-          class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-medium"
         >
           Ir para o Início
         </button>

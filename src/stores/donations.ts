@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import type { DonationItem, PaginatedResponse, FilterOptions } from '@/types'
+import type { DonationItem, FilterOptions } from '@/types'
 
 export const useDonationsStore = defineStore('donations', () => {
   // State
@@ -20,7 +20,7 @@ export const useDonationsStore = defineStore('donations', () => {
 
   // Getters
   const getItemById = computed(() => {
-    return (id: string) => items.value.find(item => item.id === id)
+    return (id: string | number) => items.value.find(item => String(item.id) === String(id))
   })
 
   const availableItems = computed(() => {
@@ -64,7 +64,7 @@ export const useDonationsStore = defineStore('donations', () => {
           total: data.total
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar itens'
       throw err
     } finally {
@@ -85,7 +85,7 @@ export const useDonationsStore = defineStore('donations', () => {
       if (index !== -1) {
         items.value[index] = currentItem.value
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar item'
       currentItem.value = null
       throw err
@@ -108,7 +108,7 @@ export const useDonationsStore = defineStore('donations', () => {
       
       items.value.unshift(newItem)
       return newItem
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao criar item'
       throw err
     } finally {
@@ -140,7 +140,7 @@ export const useDonationsStore = defineStore('donations', () => {
       }
       
       return updatedItem
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao atualizar item'
       throw err
     } finally {
@@ -162,7 +162,7 @@ export const useDonationsStore = defineStore('donations', () => {
       if (currentItem.value?.id === id) {
         currentItem.value = null
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao excluir item'
       throw err
     } finally {
@@ -195,7 +195,7 @@ export const useDonationsStore = defineStore('donations', () => {
           total: data.total
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar itens da categoria'
       throw err
     } finally {
@@ -218,7 +218,7 @@ export const useDonationsStore = defineStore('donations', () => {
       const data = response.data.data || response.data
 
       categoryItems.value.push(...(data.data || data))
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar mais itens'
       throw err
     }
@@ -234,7 +234,7 @@ export const useDonationsStore = defineStore('donations', () => {
       const data = response.data.data || response.data
 
       userItems.value = data.data || data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar itens do usuário'
       throw err
     } finally {
@@ -248,7 +248,7 @@ export const useDonationsStore = defineStore('donations', () => {
     try {
       const nextPage = pagination.value.current_page + 1
       await fetchItems({ page: nextPage })
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar mais itens'
       throw err
     }
@@ -281,7 +281,7 @@ export const useDonationsStore = defineStore('donations', () => {
       }
 
       return data.data || data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao buscar itens'
       throw err
     } finally {
@@ -306,7 +306,7 @@ export const useDonationsStore = defineStore('donations', () => {
       }
       
       return updatedItem
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao reservar item'
       throw err
     }
@@ -329,7 +329,7 @@ export const useDonationsStore = defineStore('donations', () => {
       }
       
       return updatedItem
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao cancelar reserva'
       throw err
     }
@@ -354,17 +354,26 @@ export const useDonationsStore = defineStore('donations', () => {
       }
       
       return updatedItem
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao marcar como doado'
       throw err
     }
+  }
+
+  const uploadImages = async (itemId: string | number, files: File[]) => {
+    const formData = new FormData()
+    files.forEach(file => formData.append('images[]', file))
+    const response = await api.post(`/donation-items/${itemId}/images`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    return response.data.data || response.data
   }
 
   const fetchStats = async () => {
     try {
       const response = await api.get('/donation-items/stats')
       return response.data.data || response.data
-    } catch (err: any) {
+    } catch (err) {
       error.value = err.response?.data?.message || 'Erro ao carregar estatísticas'
       throw err
     }
@@ -407,6 +416,7 @@ export const useDonationsStore = defineStore('donations', () => {
     fetchItem,
     createItem,
     updateItem,
+    uploadImages,
     deleteItem,
     fetchCategoryItems,
     loadMoreCategoryItems,
