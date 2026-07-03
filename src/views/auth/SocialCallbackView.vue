@@ -68,23 +68,17 @@ const goToLogin = () => {
 
 onMounted(async () => {
   try {
-    const { code, state, error, error_description } = route.query
-    
+    const { token: callbackToken, error, error_description } = route.query
+
     if (error) {
-      throw new Error(error_description as string || 'Erro na autenticação social')
+      throw new Error((error_description as string) || 'Erro na autenticação social')
     }
-    
-    if (!code) {
-      throw new Error('Código de autorização não encontrado')
+
+    if (!callbackToken) {
+      throw new Error('Token não recebido — tente novamente')
     }
-    
-    // Determinar o provider baseado no state ou rota
-    const provider = (state as string)?.includes('google') ? 'google' : 'facebook'
-    
-    await authStore.handleSocialCallback(provider, {
-      code: code as string,
-      state: state as string
-    })
+
+    await authStore.loginWithToken(callbackToken as string)
     
     success.value = true
     title.value = 'Autenticação Realizada!'

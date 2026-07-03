@@ -206,11 +206,6 @@ export const authApi = {
     return `${api.defaults.baseURL}/auth/${provider}/redirect`
   },
 
-  handleSocialCallback: async (provider: string, code: string): Promise<AuthResponse> => {
-    const response: AxiosResponse<AuthResponse> = await api.post(`/auth/${provider}/callback`, { code })
-    return handleApiResponse(response)
-  },
-
   // Password reset
   forgotPassword: async (email: string): Promise<{ message: string }> => {
     const response = await api.post('/auth/forgot-password', { email })

@@ -222,27 +222,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const handleSocialCallback = async (provider: string, code: string) => {
-    try {
-      loading.value = true
-      error.value = null
-      
-      const response = await authApi.handleSocialCallback(provider, code)
-      
-      // Store token and user data
-      token.value = response.token
-      user.value = response.user
-      
-      localStorage.setItem('auth_token', response.token)
-      localStorage.setItem('user', JSON.stringify(response.user))
-      
-      return response
-    } catch (err) {
-      error.value = err.response?.data?.message || 'Erro na autenticação social'
-      throw err
-    } finally {
-      loading.value = false
-    }
+  const loginWithToken = async (callbackToken: string) => {
+    token.value = callbackToken
+    localStorage.setItem('auth_token', callbackToken)
+    await fetchUser()
   }
 
   const getSocialAuthUrl = (provider: 'google' | 'facebook'): string => {
@@ -288,19 +271,6 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     localStorage.removeItem('auth_token')
     localStorage.removeItem('user')
-  }
-
-  const changePassword = async (data: Parameters<typeof authApi.changePassword>[0]) => {
-    try {
-      loading.value = true
-      error.value = null
-      return await authApi.changePassword(data)
-    } catch (err) {
-      error.value = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Erro ao alterar senha'
-      throw err
-    } finally {
-      loading.value = false
-    }
   }
 
   const getNotificationPreferences = async () => {
@@ -385,7 +355,6 @@ export const useAuthStore = defineStore('auth', () => {
     updateAddress,
     changePassword,
     updateAvatar,
-    changePassword,
     getNotificationPreferences,
     updateNotificationPreferences,
     getPrivacySettings,
@@ -394,7 +363,7 @@ export const useAuthStore = defineStore('auth', () => {
     deleteAccount,
     forgotPassword,
     resetPassword,
-    handleSocialCallback,
+    loginWithToken,
     getSocialAuthUrl,
     socialLogin,
     initializeAuth,
