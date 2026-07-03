@@ -10,11 +10,11 @@
           <CheckCircleIcon v-else-if="success" class="w-8 h-8 text-green-600" />
           <XCircleIcon v-else class="w-8 h-8 text-red-600" />
         </div>
-        
+
         <h1 class="text-2xl font-bold text-gray-900 mb-2">
           {{ title }}
         </h1>
-        
+
         <p class="text-gray-600">
           {{ message }}
         </p>
@@ -28,7 +28,7 @@
         >
           Ir para o Início
         </button>
-        
+
         <button
           v-else
           @click="goToLogin"
@@ -58,45 +58,45 @@ const success = ref(false)
 const title = ref('Processando...')
 const message = ref('Aguarde enquanto processamos sua autenticação.')
 
-const goToHome = () => {
-  router.push('/')
-}
-
-const goToLogin = () => {
-  router.push('/auth/login')
-}
+const goToHome = () => router.push('/')
+const goToLogin = () => router.push('/auth/login')
 
 onMounted(async () => {
+  const { token, error } = route.query
+
+  if (error) {
+    success.value = false
+    title.value = 'Erro na Autenticação'
+    message.value = decodeURIComponent(error as string) || 'Ocorreu um erro durante a autenticação. Tente novamente.'
+    toast.error(message.value)
+    loading.value = false
+    return
+  }
+
+  if (!token) {
+    success.value = false
+    title.value = 'Erro na Autenticação'
+    message.value = 'Token de autenticação não encontrado.'
+    toast.error(message.value)
+    loading.value = false
+    return
+  }
+
   try {
-    const { token: callbackToken, error, error_description } = route.query
+    await authStore.setAuthFromToken(token as string)
 
-    if (error) {
-      throw new Error((error_description as string) || 'Erro na autenticação social')
-    }
 
-    if (!callbackToken) {
-      throw new Error('Token não recebido — tente novamente')
-    }
-
-    await authStore.loginWithToken(callbackToken as string)
-    
     success.value = true
     title.value = 'Autenticação Realizada!'
     message.value = 'Você foi autenticado com sucesso. Redirecionando...'
-    
     toast.success('Login realizado com sucesso!')
-    
-    // Redirecionar após 2 segundos
-    setTimeout(() => {
-      router.push('/')
-    }, 2000)
-    
-  } catch (error) {
+
+    setTimeout(() => router.push('/'), 2000)
+  } catch {
     success.value = false
     title.value = 'Erro na Autenticação'
-    message.value = error.message || 'Ocorreu um erro durante a autenticação. Tente novamente.'
-    
-    toast.error(error.message || 'Erro na autenticação social')
+    message.value = authStore.error || 'Ocorreu um erro durante a autenticação. Tente novamente.'
+    toast.error(message.value)
   } finally {
     loading.value = false
   }

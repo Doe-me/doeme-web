@@ -228,6 +228,27 @@ export const useAuthStore = defineStore('auth', () => {
     await fetchUser()
   }
 
+  const setAuthFromToken = async (rawToken: string) => {
+    try {
+      loading.value = true
+      error.value = null
+
+      token.value = rawToken
+      localStorage.setItem('auth_token', rawToken)
+
+      const userData = await authApi.getUser()
+      user.value = userData
+      localStorage.setItem('user', JSON.stringify(userData))
+    } catch (err: any) {
+      token.value = null
+      localStorage.removeItem('auth_token')
+      error.value = err.response?.data?.message || 'Erro ao validar token social'
+      throw err
+    } finally {
+      loading.value = false
+    }
+  }
+
   const getSocialAuthUrl = (provider: 'google' | 'facebook'): string => {
     return authApi.getSocialAuthUrl(provider)
   }
@@ -364,6 +385,7 @@ export const useAuthStore = defineStore('auth', () => {
     forgotPassword,
     resetPassword,
     loginWithToken,
+    setAuthFromToken,
     getSocialAuthUrl,
     socialLogin,
     initializeAuth,
