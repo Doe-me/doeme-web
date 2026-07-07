@@ -77,9 +77,9 @@
           </div>
 
           <div class="text-sm">
-            <a href="#" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
+            <router-link to="/forgot-password" class="font-medium text-primary-600 hover:text-primary-700 transition-colors">
               {{ $t('auth.login.forgotPassword') }}
-            </a>
+            </router-link>
           </div>
         </div>
 

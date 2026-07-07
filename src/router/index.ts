@@ -23,6 +23,18 @@ const router = createRouter({
       meta: { title: 'Cadastrar', guest: true }
     },
     {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('@/views/auth/ForgotPasswordView.vue'),
+      meta: { title: 'Recuperar senha', guest: true }
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: () => import('@/views/auth/ResetPasswordView.vue'),
+      meta: { title: 'Redefinir senha', guest: true }
+    },
+    {
       path: '/profile',
       name: 'profile',
       component: () => import('@/views/auth/ProfileView.vue'),
