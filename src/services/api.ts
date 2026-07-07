@@ -290,13 +290,18 @@ export const donationItemsApi = {
   },
 
   // Additional endpoints
-  markAsReserved: async (id: number, userId: number): Promise<DonationItem> => {
-    const response = await api.post(`/donation-items/${id}/reserve`, { user_id: userId })
+  markAsReserved: async (id: number): Promise<DonationItem> => {
+    const response = await api.post(`/donation-items/${id}/reserve`)
     return handleApiResponse(response)
   },
 
-  markAsDonated: async (id: number, userId: number): Promise<DonationItem> => {
-    const response = await api.post(`/donation-items/${id}/donate`, { user_id: userId })
+  cancelReservation: async (id: number): Promise<DonationItem> => {
+    const response = await api.post(`/donation-items/${id}/cancel-reservation`)
+    return handleApiResponse(response)
+  },
+
+  markAsDonated: async (id: number, recipientId: number): Promise<DonationItem> => {
+    const response = await api.post(`/donation-items/${id}/donate`, { recipient_id: recipientId })
     return handleApiResponse(response)
   },
 
