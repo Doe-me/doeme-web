@@ -105,6 +105,15 @@
             <!-- Action Buttons -->
             <div class="space-y-3">
               <button
+                v-if="isRecipient"
+                @click="showReviewModal = true"
+                class="w-full bg-yellow-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-yellow-600 transition-colors inline-flex items-center justify-center"
+              >
+                <StarIcon class="h-5 w-5 mr-2" />
+                Avaliar o doador
+              </button>
+
+              <button
                 v-if="!isOwner && donation.status === 'available'"
                 @click="showContactModal = true"
                 class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-primary-700 transition-colors"
@@ -255,6 +264,17 @@
         </div>
       </Dialog>
     </TransitionRoot>
+
+    <!-- Review Donor Modal (para quem recebeu a doação) -->
+    <ReviewFormModal
+      v-if="donation?.status === 'donated' && donation.user_id"
+      :open="showReviewModal"
+      :reviewed-user-id="donation.user_id"
+      :donation-item-id="donation.id"
+      :reviewed-user-name="donation.user?.name"
+      @close="showReviewModal = false"
+      @saved="loadDonation"
+    />
   </div>
 </template>
 
@@ -285,6 +305,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import DonationCard from '@/components/donations/DonationCard.vue'
+import ReviewFormModal from '@/components/reviews/ReviewFormModal.vue'
 import type { DonationItem } from '@/types'
 
 const route = useRoute()
@@ -300,6 +321,7 @@ const similarItems = ref<DonationItem[]>([])
 const currentImage = ref('')
 const isFavorite = ref(false)
 const showContactModal = ref(false)
+const showReviewModal = ref(false)
 const confirmingInterest = ref(false)
 
 const statusLabels: Record<string, string> = {
@@ -341,6 +363,13 @@ const allImages = computed<string[]>(() => {
 
 const isOwner = computed(() => {
   return authStore.user?.id === donation.value?.user_id
+})
+
+const isRecipient = computed(() => {
+  return (
+    donation.value?.status === 'donated' &&
+    authStore.user?.id === donation.value?.donated_to_user_id
+  )
 })
 
 onMounted(async () => {

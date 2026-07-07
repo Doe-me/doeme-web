@@ -177,6 +177,26 @@
               {{ formatDate(donation.created_at) }}
             </div>
 
+            <!-- Conclude donation (available/reserved) -->
+            <button
+              v-if="donation.status !== 'donated'"
+              @click="openConclude(donation)"
+              class="w-full mb-2 bg-green-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:bg-green-700 transition-colors inline-flex items-center justify-center"
+            >
+              <CheckCircleIcon class="h-5 w-5 mr-2" />
+              Concluir doação
+            </button>
+
+            <!-- Review recipient (donated) -->
+            <button
+              v-else-if="donation.donated_to_user_id"
+              @click="openReview(donation)"
+              class="w-full mb-2 bg-yellow-500 text-white py-2 px-4 rounded-lg text-center font-medium hover:bg-yellow-600 transition-colors inline-flex items-center justify-center"
+            >
+              <StarIcon class="h-5 w-5 mr-2" />
+              Avaliar quem recebeu
+            </button>
+
             <!-- Action Buttons -->
             <div class="flex space-x-2">
               <router-link
@@ -186,12 +206,14 @@
                 Ver Detalhes
               </router-link>
               <router-link
+                v-if="donation.status !== 'donated'"
                 :to="`/donations/${donation.id}/edit`"
                 class="flex-1 bg-primary-600 text-white py-2 px-4 rounded-lg text-center font-medium hover:bg-primary-700 transition-colors"
               >
                 Editar
               </router-link>
               <button
+                v-if="donation.status !== 'donated'"
                 @click="confirmDelete(donation)"
                 class="px-4 py-2 text-red-600 hover:text-red-700 rounded-lg transition-colors"
               >
@@ -298,6 +320,25 @@
         </div>
       </Dialog>
     </TransitionRoot>
+
+    <!-- Conclude Donation Modal -->
+    <ConcludeDonationModal
+      :open="showConcludeModal"
+      :item="itemToConclude"
+      @close="showConcludeModal = false"
+      @done="loadData"
+    />
+
+    <!-- Review Recipient Modal -->
+    <ReviewFormModal
+      v-if="itemToReview?.donated_to_user_id"
+      :open="showReviewModal"
+      :reviewed-user-id="itemToReview.donated_to_user_id"
+      :donation-item-id="itemToReview.id"
+      :reviewed-user-name="itemToReview.donated_to_user?.name"
+      @close="showReviewModal = false"
+      @saved="onReviewSaved"
+    />
   </div>
 </template>
 
@@ -319,7 +360,8 @@ import {
   MagnifyingGlassIcon,
   MapPinIcon,
   TrashIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  StarIcon
 } from '@heroicons/vue/24/outline'
 import {
   Dialog,
@@ -328,6 +370,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue'
+import ConcludeDonationModal from '@/components/donations/ConcludeDonationModal.vue'
+import ReviewFormModal from '@/components/reviews/ReviewFormModal.vue'
 import type { DonationItem } from '@/types'
 
 const donationsStore = useDonationsStore()
@@ -342,6 +386,10 @@ const currentPage = ref(1)
 const itemsPerPage = 9
 const showDeleteModal = ref(false)
 const donationToDelete = ref<DonationItem | null>(null)
+const showConcludeModal = ref(false)
+const itemToConclude = ref<DonationItem | null>(null)
+const showReviewModal = ref(false)
+const itemToReview = ref<DonationItem | null>(null)
 
 const filters = ref({
   status: '',
@@ -436,6 +484,21 @@ const formatDate = (dateString: string) => {
 const confirmDelete = (donation: DonationItem) => {
   donationToDelete.value = donation
   showDeleteModal.value = true
+}
+
+const openConclude = (donation: DonationItem) => {
+  itemToConclude.value = donation
+  showConcludeModal.value = true
+}
+
+const openReview = (donation: DonationItem) => {
+  itemToReview.value = donation
+  showReviewModal.value = true
+}
+
+const onReviewSaved = () => {
+  showReviewModal.value = false
+  toast.success('Obrigado por avaliar!')
 }
 
 const deleteDonation = async () => {
