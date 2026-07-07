@@ -351,14 +351,9 @@ export const chatApi = {
     })
     return handleApiResponse(response)
   },
-
-  markAsRead: async (chatId: number): Promise<void> => {
-    await api.post(`/chats/${chatId}/mark-as-read`)
-  },
-
-  delete: async (id: number): Promise<void> => {
-    await api.delete(`/chats/${id}`)
-  },
+  // Nota: não há endpoint de "marcar como lido" — as mensagens são marcadas
+  // como lidas no backend ao abrir o chat (GET /chats/{id}). E não há exclusão
+  // de chat na API; ambos foram removidos para o contrato refletir a realidade.
 }
 
 // Reviews API
@@ -415,31 +410,14 @@ export const reviewsApi = {
 }
 
 // Users API
+// Não há endpoint público GET /users/{id} nem POST /upload genérico na API;
+// o avatar é atualizado via POST /auth/avatar (usuário autenticado).
 export const usersApi = {
-  getById: async (id: number): Promise<User> => {
-    const response = await api.get(`/users/${id}`)
-    return handleApiResponse(response)
-  },
-
   updateAvatar: async (avatar: File): Promise<User> => {
     const formData = new FormData()
     formData.append('avatar', avatar)
-    
-    const response = await api.post('/auth/avatar', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-    return handleApiResponse(response)
-  },
-}
 
-// File upload utility
-export const uploadApi = {
-  uploadFile: async (file: File, type: 'avatar' | 'donation'): Promise<{ url: string }> => {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('type', type)
-    
-    const response = await api.post('/upload', formData, {
+    const response = await api.post('/auth/avatar', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     return handleApiResponse(response)

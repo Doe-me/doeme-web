@@ -146,54 +146,9 @@ export const useChatsStore = defineStore('chats', () => {
     }
   }
 
-  const markAsRead = async (chatId: number) => {
-    try {
-      await api.post(`/chats/${chatId}/mark-as-read`)
-      
-      // Atualizar contador de não lidas
-      const chatIndex = chats.value.findIndex(chat => chat.id === chatId)
-      if (chatIndex !== -1) {
-        chats.value[chatIndex].unreadCount = 0
-      }
-      
-      // Marcar mensagens como lidas
-      messages.value
-        .filter(message => message.chat_id === chatId && !message.read_at)
-        .forEach(message => {
-          message.read_at = new Date().toISOString()
-        })
-        
-    } catch (err) {
-      console.error('Erro ao marcar como lida:', err)
-    }
-  }
-
-  const deleteChat = async (id: number) => {
-    try {
-      loading.value = true
-      error.value = null
-      
-      await api.delete(`/chats/${id}`)
-      
-      // Remover chat da lista
-      chats.value = chats.value.filter(chat => chat.id !== id)
-      
-      // Limpar chat atual se for o mesmo
-      if (currentChat.value?.id === id) {
-        currentChat.value = null
-      }
-      
-      // Remover mensagens do chat
-      messages.value = messages.value.filter(message => message.chat_id !== id)
-      
-    } catch (err) {
-      error.value = err.response?.data?.message || 'Erro ao excluir conversa'
-      console.error('Erro ao excluir chat:', err)
-      throw err
-    } finally {
-      loading.value = false
-    }
-  }
+  // Não há endpoint de "marcar como lido": as mensagens são marcadas como lidas
+  // no backend ao abrir o chat (GET /chats/{id}). Também não há exclusão de chat
+  // na API. Ambos os métodos foram removidos (ver TCK-036).
 
   const clearError = () => {
     error.value = null
@@ -308,8 +263,6 @@ export const useChatsStore = defineStore('chats', () => {
     fetchMessages,
     createChat,
     sendMessage,
-    markAsRead,
-    deleteChat,
     clearError,
     clearCurrentChat,
     addMessage,
