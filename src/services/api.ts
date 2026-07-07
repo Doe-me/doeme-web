@@ -312,10 +312,8 @@ export const donationItemsApi = {
     return handleApiResponse(response)
   },
 
-  deleteImage: async (id: number, imageUrl: string): Promise<void> => {
-    await api.delete(`/donation-items/${id}/images`, {
-      data: { image_url: imageUrl }
-    })
+  deleteImage: async (id: number, imageId: number): Promise<void> => {
+    await api.delete(`/donation-items/${id}/images/${imageId}`)
   },
 }
 

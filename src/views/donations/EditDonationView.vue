@@ -387,7 +387,7 @@ const deleteExistingImage = async (img: DonationImage) => {
   if (!donation.value) return
   deletingImageId.value = img.id
   try {
-    await donationItemsApi.deleteImage(donation.value.id, img.url ?? img.path)
+    await donationItemsApi.deleteImage(donation.value.id, img.id)
     existingImages.value = existingImages.value.filter(i => i.id !== img.id)
   } catch (err) {
     handleError(err, 'Erro ao remover foto')
